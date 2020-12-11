@@ -1,4 +1,5 @@
 const userModel = require("../models").users;
+const userInfoModel = require("../models").userInfomations;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -16,15 +17,23 @@ const resolver = {
             username: USER.username,
             userInfo: USER.userInfoID,
           });
-          return { token };
+          const userInfo = await userInfoModel.findOne({ userID: USER._id });
+          console.log(userInfo);
+          return {
+            token,
+            status: true,
+            firstname: userInfo.firstname,
+            lastname: userInfo.lastname,
+            role: userInfo.role,
+          };
         } else {
-          return { token: "wrong password" };
+          return { token: "wrong password", status: false };
         }
       } catch (error) {
         throw error;
       }
     } else {
-      return { token: "wrong username" };
+      return { token: "wrong username", status: false };
     }
   },
   register: async ({ REGISTER }) => {

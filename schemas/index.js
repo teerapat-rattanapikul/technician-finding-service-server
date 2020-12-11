@@ -46,6 +46,10 @@ const schema = buildSchema(`
 
     type TOKEN{
       token:String
+      status:Boolean
+      firstname: String
+      lastname:String
+      role:String
     }
     type AddressOUT{
       lat:Float
