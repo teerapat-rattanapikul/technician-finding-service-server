@@ -3,7 +3,7 @@ const schema = buildSchema(`
     type Query{
       getAllInformation: [USERINFO]
       getInformation: USERINFO
-      uploadImg: String
+      getTechnicianInfo(_id:ID):TECHNICIANINFO
     }
 
     type Mutation{
@@ -14,6 +14,9 @@ const schema = buildSchema(`
       insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
       updateTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
       sendOTP(phone:String):OTP
+      addForm(INFORMATION:FORMINPUT):FORM
+      deleteForm(INFORMATION:FORMINPUT):FORM
+
       getOTP(AUT:OTPINPUT):OTP
     }
 
@@ -42,6 +45,11 @@ const schema = buildSchema(`
 
     type OTP{
       code: String
+    }
+
+    type FORM{
+      title:String
+      image: String
     }
 
     type TOKEN{
@@ -88,6 +96,10 @@ const schema = buildSchema(`
       phone: String
     }
     
+    input FORMINPUT{
+      title:String
+      image:String
+    }
 `);
 
 module.exports = schema;

@@ -1,17 +1,15 @@
 const imageModel = require("../models").images;
 
-const resolver = {
-  uploadImg: async (args, req) => {
+module.exports = {
+  uploadImg: async (req, res, next) => {
     try {
-      console.log(req.file.path);
-      const IMAGE = await image.create({
-        img: req.file.path,
+      const IMAGE = await imageModel.create({
+        image: req.file.path,
       });
-      return IMAGE.img;
+      console.log(IMAGE);
+      res.json(IMAGE);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
 };
-
-module.exports = { resolver };

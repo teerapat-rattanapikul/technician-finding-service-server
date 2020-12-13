@@ -4,16 +4,15 @@ module.exports = () => (req, res, next) => {
   try {
     const authorization = req.header("Authorization");
     if (authorization === undefined) {
-      res.json("ต้องมี Authorization header");
+      // res.json("ต้องมี Authorization header");
+    } else {
+      const token = authorization.replace("Bearer ", "");
+      const decoded = jwt.verify(token, "secret_key");
+      const user = decoded.user;
+      req.userID = user.userID;
+      req.username = user.username;
+      req.userInfoID = user.userInfoID;
     }
-
-    const token = authorization.replace("Bearer ", "");
-    const decoded = jwt.verify(token, "secret_key");
-    const user = decoded.user;
-    console.log(user);
-    req.userID = user.userID;
-    req.username = user.username;
-    req.userInfo = user.userInfo;
 
     next();
   } catch (error) {

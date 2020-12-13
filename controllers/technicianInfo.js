@@ -40,6 +40,16 @@ const resolver = {
       throw error;
     }
   },
+  getTechnicianInfo: async (args) => {
+    try {
+      const TECHNICIANINFO = await technicianInfoModel.findOne({
+        _id: args._id,
+      });
+      return TECHNICIANINFO;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 module.exports = { resolver };

@@ -15,7 +15,7 @@ const resolver = {
           const token = genJWT({
             userID: USER._id,
             username: USER.username,
-            userInfo: USER.userInfoID,
+            userInfoID: USER.userInfoID,
           });
           const userInfo = await userInfoModel.findOne({ userID: USER._id });
           console.log(userInfo);

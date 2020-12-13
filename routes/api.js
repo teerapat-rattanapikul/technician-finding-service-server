@@ -6,8 +6,8 @@ const { userInfoResolver } = require("./userInfo");
 const { technicianInfoResolver } = require("./technicianInfo");
 const { otpResolver } = require("./otp");
 const { formResolver } = require("./form");
-const { imageResolver } = require("./image");
 const schema = require("../schemas");
+const uploadImage = require("./uploadImage");
 const jwtVerify = require("../middlewares/verifyJWT");
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
+  console.log(file);
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
@@ -59,6 +60,15 @@ app.use(
   })
 );
 
+// app.use(
+//   "/technicianInfo",
+//   graphqlHTTP({
+//     schema: schema,
+//     rootValue: technicianInfoResolver,
+//     graphiql: true,
+//   })
+// );
+
 app.use(
   "/otp",
   graphqlHTTP({ schema: schema, rootValue: otpResolver, graphiql: true })
@@ -69,10 +79,6 @@ app.use(
   graphqlHTTP({ schema: schema, rootValue: formResolver, graphiql: true })
 );
 
-app.use(
-  "/image",
-  upload.single("productImage"),
-  graphqlHTTP({ schema: schema, rootValue: imageResolver, graphiql: true })
-);
+app.use("/uploadImage", uploadImage);
 
 module.exports = app;
