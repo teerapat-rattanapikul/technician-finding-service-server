@@ -2,23 +2,23 @@ const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
 const resolver = {
-  insertTechnicianInfo: async ({ INFORMATION }) => {
-    INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-    console.log(INFORMATION);
-    try {
-      const information = await technicianInfoModel.create(INFORMATION);
-      await userInfoModel.updateOne(
-        { _id: INFORMATION.userInfoID },
-        {
-          $set: { role: "technician" },
-          $push: { technicianInfoID: information._id },
-        }
-      );
-      return information;
-    } catch (error) {
-      throw error;
-    }
-  },
+  // insertTechnicianInfo: async ({ INFORMATION }) => {
+  //   INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+  //   console.log(INFORMATION);
+  //   try {
+  //     const information = await technicianInfoModel.create(INFORMATION);
+  //     await userInfoModel.updateOne(
+  //       { _id: INFORMATION.userInfoID },
+  //       {
+  //         $set: { role: "technician" },
+  //         $push: { technicianInfoID: information._id },
+  //       }
+  //     );
+  //     return information;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
   updateTechnicianInfo: async ({ INFORMATION }, req) => {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {

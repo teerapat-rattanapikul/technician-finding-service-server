@@ -15,7 +15,8 @@ const resolver = {
         upperCase: false,
         specialChars: false,
       });
-      const phoneNumber = args.phone.replace("0", "66");
+      const phoneNumber = "66" + args.phone;
+      console.log(phoneNumber);
       //   await client.messages
       //     .create({
       //       body: otpGen,

@@ -48,7 +48,7 @@ const resolver = {
           username: REGISTER.username,
           password: REGISTER.password,
         });
-        // add userinformation and link to user
+        // add user_information and link user from sser_information
         const information = await userInfoModel.create({
           firstname: REGISTER.firstname,
           lastname: REGISTER.lastname,
@@ -57,18 +57,19 @@ const resolver = {
           phone: REGISTER.phone,
           role: REGISTER.role,
         });
-        // link userinformation
+        // link user_information from user
         await userModel.updateOne(
           { _id: USER._id },
           { $set: { userInfoID: information._id } }
         );
-        // add technician
+        // add technician_information and link user_information from technician_information
         if (REGISTER.role === "technician") {
           const technician = await technicianInfoModel.create({
             aptitude: REGISTER.aptitude,
             onSite: REGISTER.onSite,
             userInfoID: information._id,
           });
+          //link technician_informaiton from user
           await userInfoModel.updateOne(
             { _id: information._id },
             {
