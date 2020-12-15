@@ -23,6 +23,7 @@ const schema = buildSchema(`
     type USER{
       username: String,
       password: String
+      status: Boolean
     }
 
     type USERINFO{
@@ -31,6 +32,7 @@ const schema = buildSchema(`
       address:AddressOUT
       userID:ID
       role:String
+      phone: String
       technicianInfoID:[ID]
     }
 
@@ -44,7 +46,7 @@ const schema = buildSchema(`
     }
 
     type OTP{
-      code: String
+      status:Boolean
     }
 
     type FORM{
@@ -58,6 +60,8 @@ const schema = buildSchema(`
       firstname: String
       lastname:String
       role:String
+      address:AddressOUT
+      userID:ID
     }
     type AddressOUT{
       lat:Float
@@ -71,6 +75,16 @@ const schema = buildSchema(`
     input USERNINPUT{
       username: String
       password: String
+      firstname: String
+      lastname:String
+      address:AddressIN
+      phone:String
+      role: String="user"
+      aptitude: String
+      onSite: Boolean
+      star: Int
+      amountOfvoteStar: Int
+      amountOfcomment: Int
     } 
 
     input USERINFOINPUT{

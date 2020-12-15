@@ -3,20 +3,20 @@ const userInfoModel = require("../models").userInfomations;
 const userModel = require("../models").users;
 
 const resolver = {
-  insertInformation: async ({ INFORMATION }) => {
-    INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-    try {
-      const information = await userInfoModel.create(INFORMATION);
-      console.log(information);
-      await userModel.updateOne(
-        { _id: INFORMATION.userID },
-        { $set: { userInfoID: information._id } }
-      );
-      return information;
-    } catch (error) {
-      throw error;
-    }
-  },
+  // insertInformation: async ({ INFORMATION }) => {
+  //   INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+  //   try {
+  //     const information = await userInfoModel.create(INFORMATION);
+  //     console.log(information);
+  //     await userModel.updateOne(
+  //       { _id: INFORMATION.userID },
+  //       { $set: { userInfoID: information._id } }
+  //     );
+  //     return information;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
   getInformation: async (args, req) => {
     try {
       const result = await userInfoModel.findById({ _id: req.userInfo });

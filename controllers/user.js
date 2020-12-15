@@ -1,5 +1,6 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
+const technicianInfoModel = require("../models").technicianInformations;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -41,18 +42,45 @@ const resolver = {
     const checkUser = await userModel.findOne({ username: REGISTER.username });
     try {
       if (checkUser === null) {
+        //add username and password
         REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
         const USER = await userModel.create({
           username: REGISTER.username,
           password: REGISTER.password,
         });
-        try {
-          return USER;
-        } catch (error) {
-          throw error;
+        // add userinformation and link to user
+        const information = await userInfoModel.create({
+          firstname: REGISTER.firstname,
+          lastname: REGISTER.lastname,
+          address: REGISTER.address,
+          userID: USER._id,
+          phone: REGISTER.phone,
+          role: REGISTER.role,
+        });
+        // link userinformation
+        await userModel.updateOne(
+          { _id: USER._id },
+          { $set: { userInfoID: information._id } }
+        );
+        // add technician
+        if (REGISTER.role === "technician") {
+          const technician = await technicianInfoModel.create({
+            aptitude: REGISTER.aptitude,
+            onSite: REGISTER.onSite,
+            userInfoID: information._id,
+          });
+          await userInfoModel.updateOne(
+            { _id: information._id },
+            {
+              $set: { role: "technician" },
+              $push: { technicianInfoID: technician._id },
+            }
+          );
         }
+
+        return { username: USER.username, status: true };
       } else {
-        return { username: "มี ชื่อผู้ใช้งาน นี้แล้ว" };
+        return { username: "มี ชื่อผู้ใช้งาน นี้แล้ว", status: false };
       }
     } catch (error) {
       throw error;

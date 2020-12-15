@@ -34,14 +34,14 @@ const resolver = {
     try {
       const result = await otpModel.findOneAndRemove({ code: AUT.code });
       if (result !== null) {
-        await userInfoModel.findOneAndUpdate(
-          { _id: AUT.userInfoID },
-          { $set: { phone: AUT.phone } },
-          { new: true }
-        );
-        return { code: "success" };
+        // await userInfoModel.findOneAndUpdate(
+        //   { _id: AUT.userInfoID },
+        //   { $set: { phone: AUT.phone } },
+        //   { new: true }
+        // );
+        return { status: true };
       }
-      return { code: "wrong OTP" };
+      return { status: false };
     } catch (error) {
       throw error;
     }
