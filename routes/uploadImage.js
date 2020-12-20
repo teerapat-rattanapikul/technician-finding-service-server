@@ -1,5 +1,5 @@
 var router = require("express").Router();
-const imageController = require("../controllers/image");
+const imageController = require("../controllers").imageController;
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

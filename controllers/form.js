@@ -2,7 +2,7 @@ const formModel = require("../models").forms;
 const imageModel = require("../models").images;
 const fs = require("fs");
 
-const resolver = {
+module.exports = {
   addForm: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
@@ -27,5 +27,3 @@ const resolver = {
     } catch (error) {}
   },
 };
-
-module.exports = { resolver };

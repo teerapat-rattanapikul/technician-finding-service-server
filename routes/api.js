@@ -1,51 +1,26 @@
 const { graphqlHTTP } = require("express-graphql");
 const express = require("express");
-const app = express();
-const { userResolver } = require("./user");
-const { userInfoResolver } = require("./userInfo");
-const { technicianInfoResolver } = require("./technicianInfo");
-const { otpResolver } = require("./otp");
-const { formResolver } = require("./form");
-const schema = require("../schemas");
 const uploadImage = require("./uploadImage");
+const app = express();
+const resolver = require("../controllers");
+const schema = require("../schemas");
 const jwtVerify = require("../middlewares/verifyJWT");
-const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
-  },
-});
 
-const fileFilter = (req, file, cb) => {
-  console.log(file);
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fieldSize: 1024 * 1024 * 5, // 5 mb
-  },
-  fileFilter: fileFilter,
-});
 app.use(
   "/user",
-  graphqlHTTP({ schema: schema, rootValue: userResolver, graphiql: true })
+  graphqlHTTP({
+    schema: schema.userSchema,
+    rootValue: resolver.userResolver,
+    graphiql: true,
+  })
 );
 
 app.use(
   "/userInfo",
   jwtVerify(),
   graphqlHTTP({
-    schema: schema,
-    rootValue: userInfoResolver,
+    schema: schema.userInfoSchema,
+    rootValue: resolver.userInfoResolver,
     graphiql: true,
   })
 );
@@ -54,8 +29,8 @@ app.use(
   "/technicianInfo",
   jwtVerify(),
   graphqlHTTP({
-    schema: schema,
-    rootValue: technicianInfoResolver,
+    schema: schema.technicianInfoSchema,
+    rootValue: resolver.technicianInfoResolver,
     graphiql: true,
   })
 );
@@ -71,12 +46,20 @@ app.use(
 
 app.use(
   "/otp",
-  graphqlHTTP({ schema: schema, rootValue: otpResolver, graphiql: true })
+  graphqlHTTP({
+    schema: schema.otpSchema,
+    rootValue: resolver.otpResolver,
+    graphiql: true,
+  })
 );
 
 app.use(
   "/form",
-  graphqlHTTP({ schema: schema, rootValue: formResolver, graphiql: true })
+  graphqlHTTP({
+    schema: schema.fromSchema,
+    rootValue: resolver.formResolver,
+    graphiql: true,
+  })
 );
 
 app.use("/uploadImage", uploadImage);

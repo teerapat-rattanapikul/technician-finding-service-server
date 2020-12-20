@@ -2,7 +2,7 @@ const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const userInfoModel = require("../models").userInfomations;
 const userModel = require("../models").users;
 
-const resolver = {
+module.exports = {
   insertInformation: async ({ INFORMATION }) => {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {
@@ -49,5 +49,3 @@ const resolver = {
     }
   },
 };
-
-module.exports = { resolver };
