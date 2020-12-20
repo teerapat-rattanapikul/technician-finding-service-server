@@ -1,15 +1,15 @@
-const user = require("./user");
-const userInfo = require("./userInfo");
-const technicianInfo = require("./technicianInfo");
-const otp = require("./otp");
-const form = require("./form");
-const image = require("./image");
+const userResolver = require("./user");
+const userInfoResolver = require("./userInfo");
+const technicianInfoResolver = require("./technicianInfo");
+const otpResolver = require("./otp");
+const formResolver = require("./form");
+const imageController = require("./image");
 
 module.exports = {
-  user: user,
-  userInfo: userInfo,
-  technicianInfo: technicianInfo,
-  otp: otp,
-  form: form,
-  image: image,
+  formResolver,
+  otpResolver,
+  userResolver,
+  userInfoResolver,
+  technicianInfoResolver,
+  imageController,
 };

@@ -1,7 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
-const resolver = {
+module.exports = {
   // insertTechnicianInfo: async ({ INFORMATION }) => {
   //   INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
   //   console.log(INFORMATION);
@@ -63,5 +63,3 @@ const resolver = {
     }
   },
 };
-
-module.exports = { resolver };
