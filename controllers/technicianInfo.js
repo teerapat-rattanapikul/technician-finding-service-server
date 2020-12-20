@@ -50,6 +50,18 @@ const resolver = {
       throw error;
     }
   },
+  searchTeachnician: async ({ WORD }) => {
+    WORD = JSON.parse(JSON.stringify(WORD));
+    console.log(WORD);
+    try {
+      const searchItem = await technicianInfoModel.find({
+        $text: { $search: WORD.word },
+      });
+      return { technician: searchItem, status: true };
+    } catch (error) {
+      return { status: false };
+    }
+  },
 };
 
 module.exports = { resolver };

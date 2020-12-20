@@ -16,6 +16,7 @@ const schema = buildSchema(`
       sendOTP(phone:String):OTP
       addForm(INFORMATION:FORMINPUT):FORM
       deleteForm(INFORMATION:FORMINPUT):FORM
+      searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
 
       getOTP(AUT:OTPINPUT):OTP
     }
@@ -40,9 +41,15 @@ const schema = buildSchema(`
       aptitude: String
       onSite: Boolean
       star: Int
+      address: String
       amountOfvoteStar: Int
       amountOfcomment: Int
       userInfoID: ID
+    }
+    
+    type SEARCHOUTPUT{
+      technician:[TECHNICIANINFO]
+      status:Boolean
     }
 
     type OTP{
@@ -113,6 +120,10 @@ const schema = buildSchema(`
     input FORMINPUT{
       title:String
       image:String
+    }
+    
+    input SEARCH{
+      word: String
     }
 `);
 

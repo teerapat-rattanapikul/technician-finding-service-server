@@ -9,7 +9,11 @@ const mongoose = require("mongoose");
 require("dotenv/config");
 const port = process.env.PORT;
 const db = process.env.DATA_BASE;
-mongoose.connect(`${db}`, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(`${db}`, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+});
 app.use("/uploads/", express.static("uploads"));
 app.use(cors({ credentials: true, origin: true }));
 app.use(morgan("dev"));
