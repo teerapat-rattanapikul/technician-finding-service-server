@@ -5,7 +5,7 @@ var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
 
-const resolver = {
+module.exports = {
   login: async ({ LOGIN }) => {
     LOGIN = JSON.parse(JSON.stringify(LOGIN));
     const USER = await userModel.findOne({ username: LOGIN.username });
@@ -88,5 +88,3 @@ const resolver = {
     }
   },
 };
-
-module.exports = { resolver };
