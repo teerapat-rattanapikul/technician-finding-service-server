@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const technicianInfoSchema = new mongoose.Schema(
   {
-    aptitude: String,
+    aptitude: { type: String, unique: true },
     onSite: Boolean,
     star: Number,
+    address: { type: String, unique: true },
     // comment: [
     //   {
     //     detailComment: String,

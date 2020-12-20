@@ -9,13 +9,14 @@ var twilio = require("twilio");
 var client = new twilio(accountSid, authToken);
 const resolver = {
   sendOTP: async (args) => {
-    console.log(args.phone);
     try {
       const otpGen = await otpGenerator.generate(6, {
         alphabets: false,
         upperCase: false,
         specialChars: false,
       });
+      const phoneNumber = "66" + args.phone;
+      console.log(phoneNumber);
       //   await client.messages
       //     .create({
       //       body: otpGen,
@@ -23,10 +24,11 @@ const resolver = {
       //       from: "+14055443804 ", // From a valid Twilio number
       //     })
       //     .then((message) => console.log(message.sid));
-      const result = await otpModel.create({ code: otpGen });
-      return result;
+      // const result = await otpModel.create({ code: otpGen });
+      console.log(otpGen);
+      return { status: true };
     } catch (error) {
-      throw error;
+      return { status: false };
     }
   },
   getOTP: async ({ AUT }) => {
@@ -34,16 +36,11 @@ const resolver = {
     try {
       const result = await otpModel.findOneAndRemove({ code: AUT.code });
       if (result !== null) {
-        await userInfoModel.findOneAndUpdate(
-          { _id: AUT.userInfoID },
-          { $set: { phone: AUT.phone } },
-          { new: true }
-        );
-        return { code: "success" };
+        return { status: true };
       }
-      return { code: "wrong OTP" };
+      return { status: false };
     } catch (error) {
-      throw error;
+      return { status: false };
     }
   },
 };

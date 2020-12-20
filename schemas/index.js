@@ -16,6 +16,7 @@ const schema = buildSchema(`
       sendOTP(phone:String):OTP
       addForm(INFORMATION:FORMINPUT):FORM
       deleteForm(INFORMATION:FORMINPUT):FORM
+      searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
 
       getOTP(AUT:OTPINPUT):OTP
     }
@@ -23,6 +24,7 @@ const schema = buildSchema(`
     type USER{
       username: String,
       password: String
+      status: Boolean
     }
 
     type USERINFO{
@@ -31,6 +33,7 @@ const schema = buildSchema(`
       address:AddressOUT
       userID:ID
       role:String
+      phone: String
       technicianInfoID:[ID]
     }
 
@@ -38,13 +41,19 @@ const schema = buildSchema(`
       aptitude: String
       onSite: Boolean
       star: Int
+      address: String
       amountOfvoteStar: Int
       amountOfcomment: Int
       userInfoID: ID
     }
+    
+    type SEARCHOUTPUT{
+      technician:[TECHNICIANINFO]
+      status:Boolean
+    }
 
     type OTP{
-      code: String
+      status:Boolean
     }
 
     type FORM{
@@ -58,6 +67,8 @@ const schema = buildSchema(`
       firstname: String
       lastname:String
       role:String
+      address:AddressOUT
+      userID:ID
     }
     type AddressOUT{
       lat:Float
@@ -71,6 +82,16 @@ const schema = buildSchema(`
     input USERNINPUT{
       username: String
       password: String
+      firstname: String
+      lastname:String
+      address:AddressIN
+      phone:String
+      role: String="user"
+      aptitude: String
+      onSite: Boolean
+      star: Int
+      amountOfvoteStar: Int
+      amountOfcomment: Int
     } 
 
     input USERINFOINPUT{
@@ -99,6 +120,10 @@ const schema = buildSchema(`
     input FORMINPUT{
       title:String
       image:String
+    }
+    
+    input SEARCH{
+      word: String
     }
 `);
 
