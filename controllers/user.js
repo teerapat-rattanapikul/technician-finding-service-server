@@ -38,55 +38,62 @@ module.exports = {
       return { token: "wrong username", status: false };
     }
   },
-  register: async ({ REGISTER }) => {
-    REGISTER = JSON.parse(JSON.stringify(REGISTER));
-    const checkUser = await userModel.findOne({ username: REGISTER.username });
+  usernameCheck: async (args) => {
     try {
-      if (checkUser === null) {
-        //add username and password
-        REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
-        const USER = await userModel.create({
-          username: REGISTER.username,
-          password: REGISTER.password,
-        });
-        // add user_information and link user from sser_information
-        const information = await userInfoModel.create({
-          firstname: REGISTER.firstname,
-          lastname: REGISTER.lastname,
-          userID: USER._id,
-          phone: REGISTER.phone,
-          role: REGISTER.role,
-        });
-        // link user_information from user
-        await userModel.updateOne(
-          { _id: USER._id },
-          { $set: { userInfoID: information._id } }
-        );
-        // add technician_information and link user_information from technician_information
-        if (REGISTER.role === "technician") {
-          const technician = await technicianInfoModel.create({
-            aptitude: REGISTER.aptitude,
-            onSite: REGISTER.onSite,
-            address: REGISTER.address,
-            description: REGISTER.description,
-            userInfoID: information._id,
-          });
-          //link technician_informaiton from user
-          await userInfoModel.updateOne(
-            { _id: information._id },
-            {
-              $set: { role: "technician" },
-              $push: { technicianInfoID: technician._id },
-            }
-          );
-        }
-
-        return { username: USER.username, status: true };
+      const USERNAME = await userModel.findOne({ username: args.username });
+      if (USERNAME === null) {
+        return true;
       } else {
-        return { username: "มี ชื่อผู้ใช้งาน นี้แล้ว", status: false };
+        return false;
       }
     } catch (error) {
-      throw error;
+      return false;
+    }
+  },
+  register: async ({ REGISTER }) => {
+    REGISTER = JSON.parse(JSON.stringify(REGISTER));
+    console.log(REGISTER);
+    try {
+      //add username and password
+      REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
+      const USER = await userModel.create({
+        username: REGISTER.username,
+        password: REGISTER.password,
+      });
+      // add user_information and link user from sser_information
+      const information = await userInfoModel.create({
+        firstname: REGISTER.firstname,
+        lastname: REGISTER.lastname,
+        userID: USER._id,
+        phone: REGISTER.phone,
+        role: REGISTER.role,
+      });
+      // link user_information from user
+      await userModel.updateOne(
+        { _id: USER._id },
+        { $set: { userInfoID: information._id } }
+      );
+      // add technician_information and link user_information from technician_information
+      if (REGISTER.role === "technician") {
+        const technician = await technicianInfoModel.create({
+          aptitude: REGISTER.aptitude,
+          onSite: REGISTER.onSite,
+          address: REGISTER.address,
+          description: REGISTER.description,
+          userInfoID: information._id,
+        });
+        //link technician_informaiton from user
+        await userInfoModel.updateOne(
+          { _id: information._id },
+          {
+            $set: { role: "technician" },
+            $push: { technicianInfoID: technician._id },
+          }
+        );
+      }
+      return { username: USER.username, status: true };
+    } catch (error) {
+      return { status: false };
     }
   },
 };

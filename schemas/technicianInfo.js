@@ -46,5 +46,6 @@ module.exports = buildSchema(`
 
     input SEARCH{
         word: String
+        address:AddressIN
     }
 `);

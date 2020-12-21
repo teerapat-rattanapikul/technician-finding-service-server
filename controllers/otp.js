@@ -10,37 +10,44 @@ var client = new twilio(accountSid, authToken);
 module.exports = {
   sendOTP: async (args) => {
     try {
-      const otpGen = await otpGenerator.generate(6, {
-        alphabets: false,
-        upperCase: false,
-        specialChars: false,
+      const checkMatchPhone = await userInfoModel.findOne({
+        phone: args.phone,
       });
-      const phoneNumber = "66" + args.phone;
-      console.log(phoneNumber);
-      //   await client.messages
-      //     .create({
-      //       body: otpGen,
-      //       to: "+66643300584", // Text this number
-      //       from: "+14055443804 ", // From a valid Twilio number
-      //     })
-      //     .then((message) => console.log(message.sid));
-      // const result = await otpModel.create({ code: otpGen });
-      console.log(otpGen);
-      return { status: true };
+
+      if (checkMatchPhone === null) {
+        const otpGen = await otpGenerator.generate(6, {
+          alphabets: false,
+          upperCase: false,
+          specialChars: false,
+        });
+        const phoneNumber = "66" + args.phone;
+        console.log(phoneNumber);
+        //   await client.messages
+        //     .create({
+        //       body: otpGen,
+        //       to: "+66643300584", // Text this number
+        //       from: "+14055443804 ", // From a valid Twilio number
+        //     })
+        //     .then((message) => console.log(message.sid));
+        const result = await otpModel.create({ code: otpGen });
+        console.log(result);
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      return { status: false };
+      return false;
     }
   },
-  getOTP: async ({ AUT }) => {
-    AUT = JSON.parse(JSON.stringify(AUT));
+  getOTP: async (args) => {
     try {
-      const result = await otpModel.findOneAndRemove({ code: AUT.code });
+      const result = await otpModel.findOneAndRemove({ code: args.code });
       if (result !== null) {
-        return { status: true };
+        return true;
       }
-      return { status: false };
+      return true;
     } catch (error) {
-      return { status: false };
+      return false;
     }
   },
 };
