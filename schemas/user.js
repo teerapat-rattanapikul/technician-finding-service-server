@@ -24,7 +24,6 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         role:String
-        address:AddressOUT
         userID:ID
     }
     input USERLOGIN{
@@ -43,12 +42,13 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         address:AddressIN
+        description: String
         phone:String
         role: String="user"
         aptitude: String
         onSite: Boolean
-        star: Int
-        amountOfvoteStar: Int
-        amountOfcomment: Int
+        star: Int=0
+        amountOfvoteStar: Int=0
+        amountOfcomment: Int=0
     }
 `);

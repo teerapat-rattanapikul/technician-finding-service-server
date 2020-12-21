@@ -4,10 +4,6 @@ const userInfoSchema = new mongoose.Schema({
   firstname: String,
   lastname: String,
   phone: String,
-  address: {
-    lat: Number,
-    lon: Number,
-  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
