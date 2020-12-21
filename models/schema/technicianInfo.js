@@ -5,7 +5,11 @@ const technicianInfoSchema = new mongoose.Schema(
     aptitude: { type: String, unique: true },
     onSite: Boolean,
     star: Number,
-    address: { type: String, unique: true },
+    address: {
+      lat: Number,
+      lon: Number,
+    },
+    description: { type: String, unique: true },
     // comment: [
     //   {
     //     detailComment: String,

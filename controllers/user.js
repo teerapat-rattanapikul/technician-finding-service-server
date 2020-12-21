@@ -26,6 +26,7 @@ module.exports = {
             firstname: userInfo.firstname,
             lastname: userInfo.lastname,
             role: userInfo.role,
+            userID: userInfo.userID,
           };
         } else {
           return { token: "wrong password", status: false };
@@ -52,7 +53,6 @@ module.exports = {
         const information = await userInfoModel.create({
           firstname: REGISTER.firstname,
           lastname: REGISTER.lastname,
-          address: REGISTER.address,
           userID: USER._id,
           phone: REGISTER.phone,
           role: REGISTER.role,
@@ -67,6 +67,8 @@ module.exports = {
           const technician = await technicianInfoModel.create({
             aptitude: REGISTER.aptitude,
             onSite: REGISTER.onSite,
+            address: REGISTER.address,
+            description: REGISTER.description,
             userInfoID: information._id,
           });
           //link technician_informaiton from user
