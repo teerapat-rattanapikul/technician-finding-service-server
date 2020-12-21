@@ -52,12 +52,26 @@ module.exports = {
   },
   searchTeachnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
-    console.log(WORD);
+    var distance = 0.05;
+    var searchData = [];
     try {
-      const searchItem = await technicianInfoModel.find({
-        $text: { $search: WORD.word },
-      });
-      return { technician: searchItem, status: true };
+      while (searchData.length === 0) {
+        searchData = await technicianInfoModel.find({
+          $text: { $search: WORD.word },
+          "address.lat": {
+            $gte: WORD.address.lat - distance,
+            $lt: WORD.address.lat + distance,
+          },
+          "address.lon": {
+            $gte: WORD.address.lon - distance,
+            $lt: WORD.address.lon + distance,
+          },
+        });
+        console.log(searchData);
+        console.log(distance);
+        distance += 0.05;
+      }
+      return { technician: searchData, status: true };
     } catch (error) {
       return { status: false };
     }

@@ -9,7 +9,7 @@ const technicianInfoSchema = new mongoose.Schema(
       lat: Number,
       lon: Number,
     },
-    description: { type: String, unique: true },
+    description: String,
     // comment: [
     //   {
     //     detailComment: String,
