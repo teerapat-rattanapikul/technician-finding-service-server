@@ -3,15 +3,9 @@ module.exports = buildSchema(`
     type Query{
         _:Boolean
         getOTP(code:String):Boolean
+        phoneCheck(phone:String):Boolean
+        sendOTP(phone:String):String
     }
 
-    type Mutation{
-        sendOTP(phone:String):codeOTP
-    }
-
-    type codeOTP{
-        code: String
-        status: Boolean
-    }
 
 `);
