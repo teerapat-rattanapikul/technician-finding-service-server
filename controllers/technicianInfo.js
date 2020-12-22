@@ -1,7 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
-const resolver = {
+module.exports = {
   // insertTechnicianInfo: async ({ INFORMATION }) => {
   //   INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
   //   console.log(INFORMATION);
@@ -52,16 +52,28 @@ const resolver = {
   },
   searchTeachnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
-    console.log(WORD);
+    var area = 0.05;
+    var searchData = [];
     try {
-      const searchItem = await technicianInfoModel.find({
-        $text: { $search: WORD.word },
-      });
-      return { technician: searchItem, status: true };
+      while (searchData.length === 0) {
+        searchData = await technicianInfoModel.find({
+          $text: { $search: WORD.word },
+          "address.lat": {
+            $gte: WORD.address.lat - area,
+            $lt: WORD.address.lat + area,
+          },
+          "address.lon": {
+            $gte: WORD.address.lon - area,
+            $lt: WORD.address.lon + area,
+          },
+        });
+        console.log(searchData);
+        console.log(area);
+        area += 0.05;
+      }
+      return { technician: searchData, status: true };
     } catch (error) {
       return { status: false };
     }
   },
 };
-
-module.exports = { resolver };
