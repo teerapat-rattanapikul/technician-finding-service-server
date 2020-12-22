@@ -29,25 +29,12 @@ module.exports = {
         //       from: "+14055443804 ", // From a valid Twilio number
         //     })
         //     .then((message) => console.log(message.sid));
-        const result = await otpModel.create({ code: otpGen });
-        console.log(result);
-        return true;
+        return { code: otpGen, status: true };
       } else {
-        return false;
+        return { code: "หมายเลขนี้ถูกใช้งานไปแล้ว", status: false };
       }
     } catch (error) {
-      return false;
-    }
-  },
-  getOTP: async (args) => {
-    try {
-      const result = await otpModel.findOneAndRemove({ code: args.code });
-      if (result !== null) {
-        return true;
-      }
-      return true;
-    } catch (error) {
-      return false;
+      return { status: false };
     }
   },
 };
