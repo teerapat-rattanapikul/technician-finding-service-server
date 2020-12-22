@@ -19,6 +19,7 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+
     type TOKEN{
         token:String
         status:Boolean
@@ -27,6 +28,7 @@ module.exports = buildSchema(`
         role:String
         userID:ID
     }
+    
     input USERLOGIN{
         username:String
         password:String
