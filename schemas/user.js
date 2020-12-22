@@ -2,6 +2,7 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         _:Boolean
+        usernameCheck(username:String):Boolean
     }
 
     type Mutation{
@@ -24,9 +25,9 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         role:String
-        address:AddressOUT
         userID:ID
     }
+    
     input USERLOGIN{
         username:String
         password:String
@@ -43,12 +44,13 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         address:AddressIN
+        description: String
         phone:String
         role: String="user"
         aptitude: String
         onSite: Boolean
-        star: Int
-        amountOfvoteStar: Int
-        amountOfcomment: Int
+        star: Int=0
+        amountOfvoteStar: Int=0
+        amountOfcomment: Int=0
     }
 `);
