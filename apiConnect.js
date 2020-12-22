@@ -7,8 +7,14 @@ register;
     }`;
 
 //-------------------------------------------
-2`เช็คการซ้ำกันของ เบอร์โทรศัพท์ พร้อมส่ง otp` // url : http://localhost:9999/api/otp
-`mutation{
+2`เช็คการซ้ำกันของ เบอร์โทรศัพท์ ` // url : http://localhost:9999/api/otp
+`query{
+    phoneCheck(phone:"${phone}")
+}`;
+
+//-------------------------------------------
+3`ส่ง otp` // url : http://localhost:9999/api/otp
+`query{
         sendOTP(phone:"${phone}")
     }`;
 //-------------------------------------------
