@@ -8,6 +8,7 @@ const genJWT = require("../services/genJWT");
 module.exports = {
   login: async ({ LOGIN }) => {
     LOGIN = JSON.parse(JSON.stringify(LOGIN));
+    console.log(LOGIN);
     const USER = await userModel.findOne({ username: LOGIN.username });
     if (USER) {
       const password = bcrypt.compareSync(LOGIN.password, USER.password);

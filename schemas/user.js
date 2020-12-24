@@ -1,7 +1,6 @@
 const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
-        _:Boolean
         usernameCheck(username:String):Boolean
     }
 
@@ -12,7 +11,6 @@ module.exports = buildSchema(`
 
     type USER{
         username: String,
-        password: String
         status: Boolean
     }
     type AddressOUT{
