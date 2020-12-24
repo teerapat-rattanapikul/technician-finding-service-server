@@ -19,7 +19,7 @@ const mergedSchema = mergeSchemas({
 });
 
 app.use(
-  "/",
+  "/graphql",
   jwtVerify(),
   graphqlHTTP({
     schema: mergedSchema,
