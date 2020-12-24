@@ -17,6 +17,18 @@ const userInfoSchema = new mongoose.Schema({
     },
   ],
   role: String,
+  chatHistry: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "chats",
+      name: String,
+      readStatus: Boolean,
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 module.exports = userInfoSchema;

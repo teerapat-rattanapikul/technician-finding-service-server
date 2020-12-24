@@ -2,62 +2,28 @@ const { graphqlHTTP } = require("express-graphql");
 const express = require("express");
 const uploadImage = require("./uploadImage");
 const app = express();
-const resolver = require("../controllers");
+const { mergeResolver } = require("../controllers");
 const schema = require("../schemas");
 const jwtVerify = require("../middlewares/verifyJWT");
+const { mergeSchemas } = require("@graphql-tools/merge");
+
+const mergedSchema = mergeSchemas({
+  schemas: [
+    schema.userSchema,
+    schema.userInfoSchema,
+    schema.technicianInfoSchema,
+    schema.fromSchema,
+    schema.otpSchema,
+    schema.chatSchema,
+  ],
+});
 
 app.use(
-  "/user",
-  graphqlHTTP({
-    schema: schema.userSchema,
-    rootValue: resolver.userResolver,
-    graphiql: true,
-  })
-);
-
-app.use(
-  "/userInfo",
+  "/",
   jwtVerify(),
   graphqlHTTP({
-    schema: schema.userInfoSchema,
-    rootValue: resolver.userInfoResolver,
-    graphiql: true,
-  })
-);
-
-app.use(
-  "/technicianInfo",
-  jwtVerify(),
-  graphqlHTTP({
-    schema: schema.technicianInfoSchema,
-    rootValue: resolver.technicianInfoResolver,
-    graphiql: true,
-  })
-);
-
-// app.use(
-//   "/technicianInfo",
-//   graphqlHTTP({
-//     schema: schema,
-//     rootValue: technicianInfoResolver,
-//     graphiql: true,
-//   })
-// );
-
-app.use(
-  "/otp",
-  graphqlHTTP({
-    schema: schema.otpSchema,
-    rootValue: resolver.otpResolver,
-    graphiql: true,
-  })
-);
-
-app.use(
-  "/form",
-  graphqlHTTP({
-    schema: schema.fromSchema,
-    rootValue: resolver.formResolver,
+    schema: mergedSchema,
+    rootValue: mergeResolver,
     graphiql: true,
   })
 );
