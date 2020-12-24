@@ -23,7 +23,9 @@ module.exports = {
       });
       await imageModel.deleteOne({ img: INFORMATION.image });
       fs.unlinkSync(INFORMATION.image);
-      return { title: "delete", image: "delete" };
-    } catch (error) {}
+      return true;
+    } catch (error) {
+      return false;
+    }
   },
 };

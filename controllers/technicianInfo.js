@@ -55,20 +55,32 @@ module.exports = {
     var area = 0.05;
     var searchData = [];
     try {
-      while (searchData.length === 0) {
-        searchData = await technicianInfoModel.find({
-          $text: { $search: WORD.word },
-          "address.lat": {
-            $gte: WORD.address.lat - area,
-            $lt: WORD.address.lat + area,
-          },
-          "address.lon": {
-            $gte: WORD.address.lon - area,
-            $lt: WORD.address.lon + area,
-          },
-        });
-        console.log(searchData);
-        console.log(area);
+      while (searchData.length === 0 && area < 1.0) {
+        if (WORD.word === "map") {
+          searchData = await technicianInfoModel.find({
+            "address.lat": {
+              $gte: WORD.address.lat - area,
+              $lt: WORD.address.lat + area,
+            },
+            "address.lon": {
+              $gte: WORD.address.lon - area,
+              $lt: WORD.address.lon + area,
+            },
+          });
+        } else {
+          searchData = await technicianInfoModel.find({
+            $text: { $search: WORD.word },
+            "address.lat": {
+              $gte: WORD.address.lat - area,
+              $lt: WORD.address.lat + area,
+            },
+            "address.lon": {
+              $gte: WORD.address.lon - area,
+              $lt: WORD.address.lon + area,
+            },
+          });
+        }
+
         area += 0.05;
       }
       return { technician: searchData, status: true };
