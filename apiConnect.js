@@ -28,11 +28,13 @@ register;
                 lastname:"${lastname}",
                 address:{
                     lat:${lat},
-                    lon:${lon}},
+                    lon:${lon}
+                        },
                 phone:"${phone}",
                 role:"${role}",
                 aptitude:"${apitutude}",
-                onSite:${onSite}})
+                onSite:${onSite}
+                })
             {
             status
         }

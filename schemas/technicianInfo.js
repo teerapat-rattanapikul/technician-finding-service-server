@@ -45,7 +45,7 @@ module.exports = buildSchema(`
     }
 
     input SEARCH{
-        word: String
+        word: String="map" 
         address:AddressIN
     }
 `);

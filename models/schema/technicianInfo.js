@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const technicianInfoSchema = new mongoose.Schema(
   {
-    aptitude: { type: String, unique: true },
+    aptitude: String,
     onSite: Boolean,
     star: Number,
     address: {
@@ -25,5 +25,5 @@ const technicianInfoSchema = new mongoose.Schema(
   }
   // { timestamps: true }
 );
-
+technicianInfoSchema.index({ aptitude: "text", description: "text" });
 module.exports = technicianInfoSchema;

@@ -1,11 +1,11 @@
 const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
-        _:Boolean
+        deleteForm(INFORMATION:FORMINPUT):Boolean  
     }
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
-        deleteForm(INFORMATION:FORMINPUT):FORM  
+        
     }
 
     type FORM{
