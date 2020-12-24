@@ -19,7 +19,7 @@ module.exports = {
             userInfoID: USER.userInfoID,
           });
           const userInfo = await userInfoModel.findOne({ userID: USER._id });
-          console.log(userInfo);
+          // console.log(userInfo);
           return {
             token,
             status: true,
@@ -52,7 +52,7 @@ module.exports = {
   },
   register: async ({ REGISTER }) => {
     REGISTER = JSON.parse(JSON.stringify(REGISTER));
-    console.log(REGISTER);
+    // console.log(REGISTER);
     try {
       //add username and password
       REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);

@@ -18,13 +18,6 @@ mongoose.connect(`${db}`, {
   useCreateIndex: true,
 });
 
-io.of('api').on('connection' , function (socket){
-  console.log(`${socket.id} connected`);
-  socket.on('disconnect' , function (){
-    console.log(`${socket.id} disconnected`);
-  })
-})
-
 app.use("/uploads/", express.static("uploads"));
 app.use(cors({ credentials: true, origin: true }));
 app.use(morgan("dev"));
@@ -32,5 +25,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.text({ type: "application/graphql" }));
 app.use("/api", apiRoutes);
+
+require('./middlewares/socket')(app , io ,db)
 
 server.listen(port);
