@@ -37,7 +37,7 @@ module.exports = (app, io, db) => {
         })
 
         socket.on('send_message' , function(data) {
-            // console.log(data);
+            console.log(data);
             socket.broadcast.to('api').emit('receive_message' , {data})
         })
 

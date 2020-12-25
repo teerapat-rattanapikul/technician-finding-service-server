@@ -8,7 +8,6 @@ const genJWT = require("../services/genJWT");
 module.exports = {
   login: async ({ LOGIN }) => {
     LOGIN = JSON.parse(JSON.stringify(LOGIN));
-    console.log(LOGIN);
     const USER = await userModel.findOne({ username: LOGIN.username });
     if (USER) {
       const password = bcrypt.compareSync(LOGIN.password, USER.password);
@@ -20,7 +19,6 @@ module.exports = {
             userInfoID: USER.userInfoID,
           });
           const userInfo = await userInfoModel.findOne({ userID: USER._id });
-          // console.log(userInfo);
           return {
             token,
             status: true,
@@ -53,7 +51,6 @@ module.exports = {
   },
   register: async ({ REGISTER }) => {
     REGISTER = JSON.parse(JSON.stringify(REGISTER));
-    // console.log(REGISTER);
     try {
       //add username and password
       REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
@@ -82,6 +79,9 @@ module.exports = {
           address: REGISTER.address,
           description: REGISTER.description,
           userInfoID: information._id,
+          star: 0,
+          amountOfvoteStar: 0,
+          amountOfcomment: 0,
         });
         //link technician_informaiton from user
         await userInfoModel.updateOne(

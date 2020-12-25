@@ -6,8 +6,9 @@ module.exports = buildSchema(`
 
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
-        updateTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
+        updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO
         searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
+        getNearTeachnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
     type AddressOUT{
         lat:Float
@@ -22,6 +23,7 @@ module.exports = buildSchema(`
         amountOfvoteStar: Int
         amountOfcomment: Int
         userInfoID: ID
+        count: Int
     }
 
     type SEARCHOUTPUT{
@@ -34,18 +36,28 @@ module.exports = buildSchema(`
         lon:Float
     }
     input TECHNICIANINFOINPUT{
-        aptitude: String
-        onSite: Boolean
-        star: Int=0
+        aptitude: String!
+        onSite: Boolean!
+        star: Int
         address:AddressIN
         description: String
-        amountOfvoteStar: Int=0
-        amountOfcomment: Int=0
+        amountOfvoteStar: Int
+        amountOfcomment: Int
         userInfoID: ID
+    }
+    input TECHNICIANUPDATE{
+        technicianID:ID!
+        onSite: Boolean!
+        description: String
+        address:AddressIN
     }
 
     input SEARCH{
-        word: String="map" 
-        address:AddressIN
+        word: String!
+        address:AddressIN!
+    }
+
+    input GETNEAR{
+        address:AddressIN!
     }
 `);

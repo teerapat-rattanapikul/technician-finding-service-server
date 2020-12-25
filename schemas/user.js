@@ -44,11 +44,11 @@ module.exports = buildSchema(`
         address:AddressIN
         description: String
         phone:String
-        role: String="user"
+        role: String
         aptitude: String
         onSite: Boolean
-        star: Int=0
-        amountOfvoteStar: Int=0
-        amountOfcomment: Int=0
+        star: Int
+        amountOfvoteStar: Int
+        amountOfcomment: Int
     }
 `);
