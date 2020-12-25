@@ -25,7 +25,7 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         userID:ID
-        role: String="user"
+        role: String
     }
 
     
