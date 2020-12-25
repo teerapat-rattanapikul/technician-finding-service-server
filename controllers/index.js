@@ -13,8 +13,7 @@ const mainResolver = [
   technicianInfoResolver,
 ];
 
-const mergeResolver = mergeResolvers(mainResolver);
 module.exports = {
-  mergeResolver,
+  mergeResolver: mergeResolvers(mainResolver),
   imageController,
 };
