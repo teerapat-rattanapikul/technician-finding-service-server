@@ -23,6 +23,7 @@ module.exports = buildSchema(`
         amountOfvoteStar: Int
         amountOfcomment: Int
         userInfoID: ID
+        count: Int
     }
 
     type SEARCHOUTPUT{

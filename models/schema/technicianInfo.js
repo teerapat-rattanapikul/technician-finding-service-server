@@ -10,6 +10,7 @@ const technicianInfoSchema = new mongoose.Schema(
       lon: Number,
     },
     description: String,
+    count: Number,
     // comment: [
     //   {
     //     detailComment: String,
