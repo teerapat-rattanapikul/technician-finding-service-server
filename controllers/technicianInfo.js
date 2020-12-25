@@ -74,7 +74,7 @@ module.exports = {
 
         area += 0.05;
       }
-      return { technician: searchData, status: true };
+      return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };
     }
@@ -97,7 +97,7 @@ module.exports = {
         });
         area += 0.05;
       }
-      return { technician: sortTechnician(searchData), status: true };
+      return { technician: searchData, status: true };
     } catch (error) {
       return { status: false };
     }
