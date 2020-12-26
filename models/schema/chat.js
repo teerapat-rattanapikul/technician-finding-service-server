@@ -6,9 +6,9 @@ const chatSchema = new mongoose.Schema({
   technicianID: mongoose.Schema.Types.ObjectId,
   technicianName: String,
   readStatus: Boolean,
-  recentMassage: {
+  recentMessage: {
     sender: mongoose.Schema.Types.ObjectId,
-    massage: String,
+    message: String,
     date: {
       type: Date,
       default: Date.now,
@@ -17,7 +17,7 @@ const chatSchema = new mongoose.Schema({
   history: [
     {
       sender: mongoose.Schema.Types.ObjectId,
-      massage: String,
+      message: String,
       date: {
         type: Date,
         default: Date.now,

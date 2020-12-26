@@ -5,10 +5,12 @@ module.exports = buildSchema(`
     type Query{
         _:Boolean
         getChatInformation(chatID:ID,userID:ID):CHAT
+        getChatRoom(userID:ID):[ID]
     }
 
     type Mutation{
         createChatRoom(INFORMATION:createChatInput):CHAT
+        chat(INFORMATION:CHATINPUT):CHAT
     }
 
     type CHAT{
@@ -16,20 +18,20 @@ module.exports = buildSchema(`
         userName:String,
         technicianID: ID,
         technicianName:String,
-        recentMassage:HISTORY,
+        recentMessage:HISTORY,
         history: [HISTORY],
         status:Boolean
     }
 
     type HISTORY{
         sender: ID,
-        massage: String,
+        message: String,
         date: Date
     }
 
-    input massageIn{
+    input messageIn{
         sender: ID,
-        massage: String,
+        message: String,
     }
 
     input createChatInput{
@@ -37,7 +39,13 @@ module.exports = buildSchema(`
         userName:String,
         technicianID: ID,
         technicianName:String,
-        massage:massageIn
+        message:messageIn
+    }
+
+    input CHATINPUT{
+        userID:ID,
+        chatID:ID,
+        message:messageIn
     }
 
     
