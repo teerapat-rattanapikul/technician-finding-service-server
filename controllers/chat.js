@@ -18,7 +18,7 @@ module.exports = {
       console.log(userInfo);
       const technicianInfo = await userInfoModel.updateOne(
         {
-          technicianInfoID: INFORMATION.technicianID,
+          userID: INFORMATION.technicianID,
         },
         { $push: { chatHistry: chat._id } }
       );
@@ -29,12 +29,23 @@ module.exports = {
     }
   },
   getChatInformation: async (args) => {
-    const chatInformation = await chatModel.findOne({
-      _id: args.chatID,
-      userID: args.userID,
-    });
-    console.log(chatInformation);
-    return chatInformation;
+    try {
+      var chatInformation = await chatModel.findOne({
+        technicianID: args.technicianID,
+        userID: args.userID,
+      });
+      if (chatInformation === null) {
+        chatInformation = await chatModel.findOne({
+          technicianID: args.userID,
+          userID: args.technicianID,
+        });
+      }
+      chatInformation["status"] = true;
+      console.log(chatInformation);
+      return chatInformation;
+    } catch (error) {
+      return { status: false };
+    }
   },
   getChatRoom: async (args) => {
     const user = await userInfoModel.findOne({ userID: args.userID });
