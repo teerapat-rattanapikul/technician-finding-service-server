@@ -4,7 +4,7 @@ module.exports = buildSchema(`
     
     type Query{
         _:Boolean
-        getChatInformation(chatID:ID,userID:ID):CHAT
+        getChatInformation(technicianID:ID,userID:ID):CHAT
         getChatRoom(userID:ID):[ID]
     }
 
