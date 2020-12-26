@@ -13,6 +13,7 @@ module.exports = (app, io, db) => {
             // console.log(uid, 'join api room');
             console.log(socket.rooms);
             socket.emit('join', { id: socket.id })
+            socket.emit('delete_client')
         })
         socket.on('leave', ({ uid }) => {
             console.log(uid, 'leave api room');
@@ -20,10 +21,20 @@ module.exports = (app, io, db) => {
             delete clients[uid]
 
         })
+
+        socket.on('test' , (data) => {
+            console.log(data);
+            socket.emit('test' , data)
+        })
+
+
+        socket.on('delete_client' , (data) => {
+            // delete clients[data]
+        })
+
         socket.on('disconnect', function () {
             console.log(clients, socket.id);
             for (var client in clients) {
-                console.log(client);
                 if (clients[client].sid === socket.id) {
                     delete clients[client]
                     break
@@ -38,7 +49,7 @@ module.exports = (app, io, db) => {
 
         socket.on('send_message' , function(data) {
             console.log(data);
-            socket.broadcast.to('api').emit('receive_message' , {data})
+            if(data.receiver.length !== 0) socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
         })
 
         
