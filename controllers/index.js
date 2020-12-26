@@ -4,6 +4,7 @@ const technicianInfoResolver = require("./technicianInfo");
 const otpResolver = require("./otp");
 const formResolver = require("./form");
 const imageController = require("./image");
+const chatResolver = require("./chat");
 const { mergeResolvers } = require("@graphql-tools/merge");
 const mainResolver = [
   formResolver,
@@ -11,6 +12,7 @@ const mainResolver = [
   userResolver,
   userInfoResolver,
   technicianInfoResolver,
+  chatResolver,
 ];
 
 module.exports = {
