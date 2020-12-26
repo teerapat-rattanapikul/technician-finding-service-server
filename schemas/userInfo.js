@@ -3,6 +3,7 @@ module.exports = buildSchema(`
     type Query{
         getAllInformation: [USERINFO]
         getInformation: USERINFO
+       
     }
 
     type Mutation{
