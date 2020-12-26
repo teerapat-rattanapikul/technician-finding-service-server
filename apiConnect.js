@@ -17,7 +17,6 @@ register;
 `query{
         sendOTP(phone:"${phone}")
     }`;
-
 //-------------------------------------------
 4`บันทึกข้อมูลการสมัคร` // url : http://localhost:9999/api/user
 ` mutation{

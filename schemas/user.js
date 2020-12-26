@@ -17,7 +17,6 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
-
     type TOKEN{
         token:String
         status:Boolean
