@@ -1,7 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const userInfoModel = require("../models").userInfomations;
 const userModel = require("../models").users;
-
+const chatModel = require("../models").chats;
 module.exports = {
   // insertInformation: async ({ INFORMATION }) => {
   //   INFORMATION = JSON.parse(JSON.stringify(INFORMATION));

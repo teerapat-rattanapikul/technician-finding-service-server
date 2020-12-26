@@ -65,6 +65,7 @@ module.exports = {
         userID: USER._id,
         phone: REGISTER.phone,
         role: REGISTER.role,
+        chatHistry: [],
       });
       // link user_information from user
       await userModel.updateOne(

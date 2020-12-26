@@ -21,12 +21,7 @@ const userInfoSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "chats",
-      name: String,
-      readStatus: Boolean,
-      date: {
-        type: Date,
-        default: Date.now,
-      },
+      require: true,
     },
   ],
 });

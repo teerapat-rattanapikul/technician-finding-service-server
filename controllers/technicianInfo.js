@@ -1,6 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
@@ -73,7 +74,7 @@ module.exports = {
 
         area += 0.05;
       }
-      return { technician: searchData, status: true };
+      return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };
     }
