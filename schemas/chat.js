@@ -5,7 +5,7 @@ module.exports = buildSchema(`
     type Query{
         _:Boolean
         getChatInformation(technicianID:ID,userID:ID):CHAT
-        getChatRoom(userID:ID):[ID]
+        getChatRoom(userID:ID):[CHAT]
     }
 
     type Mutation{
