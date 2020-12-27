@@ -4,25 +4,32 @@ module.exports = {
   createChatRoom: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+      const userName = await userInfoModel.findOne({
+        userID: INFORMATION.userID,
+      });
+      const technicianName = await userInfoModel.findOne({
+        userID: INFORMATION.technicianID,
+      });
+      INFORMATION["userName"] = userName.firstname;
+      INFORMATION["technicianName"] = technicianName.firstname;
       INFORMATION["recentMessage"] = INFORMATION.message;
       INFORMATION["readStatus"] = false;
       INFORMATION["history"] = [];
       INFORMATION["history"].push(INFORMATION.message);
-      delete INFORMATION.message;
-      const chat = await chatModel.create(INFORMATION);
-      chat["status"] = true;
-      const userInfo = await userInfoModel.updateOne(
-        { userID: INFORMATION.userID },
-        { $push: { chatHistry: chat._id } }
-      );
-      console.log(userInfo);
-      const technicianInfo = await userInfoModel.updateOne(
-        {
-          userID: INFORMATION.technicianID,
-        },
-        { $push: { chatHistry: chat._id } }
-      );
-      console.log(technicianInfo);
+      console.log(INFORMATION);
+      // delete INFORMATION.message;
+      // const chat = await chatModel.create(INFORMATION);
+      // chat["status"] = true;
+      // await userInfoModel.updateOne(
+      //   { userID: INFORMATION.userID },
+      //   { $push: { chatHistry: chat._id } }
+      // );
+      // await userInfoModel.updateOne(
+      //   {
+      //     userID: INFORMATION.technicianID,
+      //   },
+      //   { $push: { chatHistry: chat._id } }
+      // );
       return chat;
     } catch (error) {
       return { status: false };
@@ -30,18 +37,13 @@ module.exports = {
   },
   getChatInformation: async (args) => {
     try {
-      var chatInformation = await chatModel.findOne({
-        technicianID: args.technicianID,
-        userID: args.userID,
+      const chatInformation = await chatModel.findOne({
+        $or: [
+          { technicianID: args.technicianID, userID: args.userID },
+          { userID: args.technicianID, technicianID: args.userID },
+        ],
       });
-      if (chatInformation === null) {
-        chatInformation = await chatModel.findOne({
-          technicianID: args.userID,
-          userID: args.technicianID,
-        });
-      }
       chatInformation["status"] = true;
-      console.log(chatInformation);
       return chatInformation;
     } catch (error) {
       return { status: false };
