@@ -11,7 +11,6 @@ module.exports = buildSchema(`
         updateInformation(INFORMATION:USERINFOINPUT): USERINFO
     }
 
-
     type USERINFO{
         firstname: String
         lastname:String
@@ -20,7 +19,6 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:[ID]
     }
-
 
     input USERINFOINPUT{
         firstname: String

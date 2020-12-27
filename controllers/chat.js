@@ -18,6 +18,7 @@ module.exports = {
       INFORMATION["readStatus"] = false;
       INFORMATION["history"] = [];
       INFORMATION["history"].push(INFORMATION.message);
+
       delete INFORMATION.message;
       const chat = await chatModel.create(INFORMATION);
       chat["status"] = true;
