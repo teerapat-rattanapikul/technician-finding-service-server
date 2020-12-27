@@ -48,7 +48,9 @@ module.exports = {
     }
   },
   getChatRoom: async (args) => {
-    const user = await userInfoModel.findOne({ userID: args.userID });
+    const user = await userInfoModel
+      .findOne({ userID: args.userID })
+      .populate({ path: "chatHistry", select: "-history" });
     return user.chatHistry;
   },
   chat: async ({ INFORMATION }) => {
