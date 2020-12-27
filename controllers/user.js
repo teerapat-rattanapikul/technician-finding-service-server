@@ -90,14 +90,6 @@ module.exports = {
           star: 0,
           amount: 0,
         });
-        await technicianInfoModel.updateOne(
-          {
-            _id: technician._id,
-          },
-          {
-            $push: { aptitude: technicianValue._id },
-          }
-        );
         //link technician_informaiton from user
         await userInfoModel.updateOne(
           { _id: information._id },
