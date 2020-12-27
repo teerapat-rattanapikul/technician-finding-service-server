@@ -15,15 +15,21 @@ module.exports = buildSchema(`
         lon:Float
     }
     type TECHNICIANINFO{
-        aptitude: String
+        aptitude: [TECHNICIANVALUE]
         onSite: Boolean
         star: Int
+        amount:Int
         address:AddressOUT
         description: String
-        amountOfvoteStar: Int
-        amountOfcomment: Int
         userInfoID: ID
         count: Int
+    }
+
+    type TECHNICIANVALUE{
+        aptitude:String
+        star:Int
+        amountOfvoteStar: Int
+        amountOfcomment: Int
     }
 
     type SEARCHOUTPUT{
@@ -38,11 +44,8 @@ module.exports = buildSchema(`
     input TECHNICIANINFOINPUT{
         aptitude: String!
         onSite: Boolean!
-        star: Int
         address:AddressIN
         description: String
-        amountOfvoteStar: Int
-        amountOfcomment: Int
         userInfoID: ID
     }
     input TECHNICIANUPDATE{

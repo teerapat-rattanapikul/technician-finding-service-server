@@ -75,21 +75,34 @@ module.exports = {
       // add technician_information and link user_information from technician_information
       if (REGISTER.role === "technician") {
         const technician = await technicianInfoModel.create({
-          aptitude: REGISTER.aptitude,
+          aptitude: [
+            {
+              aptitude: REGISTER.aptitude,
+              star: 0,
+              amountOfvoteStar: 0,
+              amountOfcomment: 0,
+            },
+          ],
           onSite: REGISTER.onSite,
           address: REGISTER.address,
           description: REGISTER.description,
           userInfoID: information._id,
           star: 0,
-          amountOfvoteStar: 0,
-          amountOfcomment: 0,
+          amount: 0,
         });
+        await technicianInfoModel.updateOne(
+          {
+            _id: technician._id,
+          },
+          {
+            $push: { aptitude: technicianValue._id },
+          }
+        );
         //link technician_informaiton from user
         await userInfoModel.updateOne(
           { _id: information._id },
           {
-            $set: { role: "technician" },
-            $push: { technicianInfoID: technician._id },
+            $set: { role: "technician", technicianInfoID: technician._id },
           }
         );
       }

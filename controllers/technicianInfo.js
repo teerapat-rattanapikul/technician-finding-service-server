@@ -1,6 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const technicianValueModel = require("../models").technicianValues;
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
@@ -8,15 +9,22 @@ module.exports = {
     try {
       const USERINFO = await userInfoModel.findOne({ userID: req.userID });
       INFORMATION["userInfoID"] = USERINFO._id;
-      INFORMATION["amountOfvoteStar"] = 0;
-      INFORMATION["amountOfcomment"] = 0;
-      INFORMATION["star"] = 0;
-      const information = await technicianInfoModel.create(INFORMATION);
+      var value = {};
+      value["aptitude"] = INFORMATION.aptitude;
+      value["amountOfvoteStar"] = 0;
+      value["amountOfcomment"] = 0;
+      value["star"] = 0;
+      INFORMATION.aptitude = [value];
+      await technicianInfoModel.updateOne(
+        {
+          userInfoID: INFORMATION.userInfoID,
+        },
+        { $push: { aptitude: INFORMATION } }
+      );
       await userInfoModel.updateOne(
         { _id: USERINFO._id },
         {
-          $set: { role: "technician" },
-          $push: { technicianInfoID: information._id },
+          $set: { role: "technician", technicianInfoID: information._id },
         }
       );
       return information;
@@ -26,13 +34,12 @@ module.exports = {
   },
   updateTechnicianInfo: async ({ INFORMATION }, req) => {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-    const TECHNICIANID = INFORMATION.technicianID;
     try {
       const USERINFO = await userInfoModel.findOne({ userID: req.userID });
       const updateInformation = await technicianInfoModel.findOneAndUpdate(
         {
           userInfoID: USERINFO._id,
-          _id: TECHNICIANID,
+          _id: INFORMATION.technicianID,
         },
         {
           $set: INFORMATION,
@@ -56,6 +63,7 @@ module.exports = {
   },
   searchTeachnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
+    console.log(WORD);
     var area = 0.05;
     var searchData = [];
     try {
@@ -71,9 +79,9 @@ module.exports = {
             $lt: WORD.address.lon + area,
           },
         });
-
         area += 0.05;
       }
+
       return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };

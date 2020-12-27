@@ -1,3 +1,5 @@
+const technicianValueModel = require("../models").technicianValues;
+
 GetSortOrder = (data) => {
   return function (a, b) {
     if (a[data] < b[data]) {
@@ -23,15 +25,15 @@ module.exports = sortTechnician = (techArr) => {
     }
   }
   // sort by amount of vote star
-  result = techArr.sort(GetSortOrder("amountOfvoteStar"));
+  result = techArr.sort(GetSortOrder("amount"));
   for (i = 0; i < result.length; i++) {
     result[i]["count"] += countAmount;
     if (i !== result.length - 1) {
-      if (result[i].amountOfvoteStar !== result[i + 1].amountOfvoteStar) {
+      if (result[i].amount !== result[i + 1].amount) {
         countAmount++;
       }
     }
   }
-
+  console.log(result);
   return result;
 };
