@@ -4,23 +4,32 @@ module.exports = {
   createChatRoom: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+      const userName = await userInfoModel.findOne({
+        userID: INFORMATION.userID,
+      });
+      const technicianName = await userInfoModel.findOne({
+        userID: INFORMATION.technicianID,
+      });
+      INFORMATION["userName"] = userName.firstname;
+      INFORMATION["technicianName"] = technicianName.firstname;
       INFORMATION["recentMessage"] = INFORMATION.message;
       INFORMATION["readStatus"] = false;
       INFORMATION["history"] = [];
       INFORMATION["history"].push(INFORMATION.message);
-      delete INFORMATION.message;
-      const chat = await chatModel.create(INFORMATION);
-      chat["status"] = true;
-      await userInfoModel.updateOne(
-        { userID: INFORMATION.userID },
-        { $push: { chatHistry: chat._id } }
-      );
-      await userInfoModel.updateOne(
-        {
-          userID: INFORMATION.technicianID,
-        },
-        { $push: { chatHistry: chat._id } }
-      );
+      console.log(INFORMATION);
+      // delete INFORMATION.message;
+      // const chat = await chatModel.create(INFORMATION);
+      // chat["status"] = true;
+      // await userInfoModel.updateOne(
+      //   { userID: INFORMATION.userID },
+      //   { $push: { chatHistry: chat._id } }
+      // );
+      // await userInfoModel.updateOne(
+      //   {
+      //     userID: INFORMATION.technicianID,
+      //   },
+      //   { $push: { chatHistry: chat._id } }
+      // );
       return chat;
     } catch (error) {
       return { status: false };

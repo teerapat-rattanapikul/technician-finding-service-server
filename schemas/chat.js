@@ -37,9 +37,7 @@ module.exports = buildSchema(`
 
     input createChatInput{
         userID:ID,
-        userName:String,
         technicianID: ID,
-        technicianName:String,
         message:messageIn
     }
 
