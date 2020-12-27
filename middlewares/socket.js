@@ -48,8 +48,12 @@ module.exports = (app, io, db) => {
         })
 
         socket.on('send_message' , function(data) {
-            console.log(data);
-            if(data.receiver.length !== 0) socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
+            if(clients[data.receiver] !== undefined) {
+                socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
+            }
+            else{
+                console.log('not available');
+            }
         })
 
         
