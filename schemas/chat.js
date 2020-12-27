@@ -14,6 +14,7 @@ module.exports = buildSchema(`
     }
 
     type CHAT{
+        _id:ID
         userID:ID,
         userName:String,
         technicianID: ID,

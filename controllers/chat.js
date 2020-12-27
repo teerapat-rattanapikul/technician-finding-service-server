@@ -11,18 +11,16 @@ module.exports = {
       delete INFORMATION.message;
       const chat = await chatModel.create(INFORMATION);
       chat["status"] = true;
-      const userInfo = await userInfoModel.updateOne(
+      await userInfoModel.updateOne(
         { userID: INFORMATION.userID },
         { $push: { chatHistry: chat._id } }
       );
-      console.log(userInfo);
-      const technicianInfo = await userInfoModel.updateOne(
+      await userInfoModel.updateOne(
         {
           userID: INFORMATION.technicianID,
         },
         { $push: { chatHistry: chat._id } }
       );
-      console.log(technicianInfo);
       return chat;
     } catch (error) {
       return { status: false };
@@ -30,18 +28,13 @@ module.exports = {
   },
   getChatInformation: async (args) => {
     try {
-      var chatInformation = await chatModel.findOne({
-        technicianID: args.technicianID,
-        userID: args.userID,
+      const chatInformation = await chatModel.findOne({
+        $or: [
+          { technicianID: args.technicianID, userID: args.userID },
+          { userID: args.technicianID, technicianID: args.userID },
+        ],
       });
-      if (chatInformation === null) {
-        chatInformation = await chatModel.findOne({
-          technicianID: args.userID,
-          userID: args.technicianID,
-        });
-      }
       chatInformation["status"] = true;
-      console.log(chatInformation);
       return chatInformation;
     } catch (error) {
       return { status: false };
