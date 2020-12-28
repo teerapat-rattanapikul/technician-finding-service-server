@@ -61,7 +61,7 @@ module.exports = {
       throw error;
     }
   },
-  searchTeachnician: async ({ WORD }) => {
+  searchTechnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
     console.log(WORD);
     var area = 0.05;
@@ -87,7 +87,7 @@ module.exports = {
       return { status: false };
     }
   },
-  getNearTeachnician: async ({ ADDRESS }) => {
+  getNearTechnician: async ({ ADDRESS }) => {
     ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
     var area = 0.05;
     var searchData = [];

@@ -7,8 +7,8 @@ module.exports = buildSchema(`
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO
-        searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
-        getNearTeachnician(ADDRESS:GETNEAR):SEARCHOUTPUT
+        searchTechnician(WORD:SEARCH):SEARCHOUTPUT
+        getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
     type AddressOUT{
         lat:Float
