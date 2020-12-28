@@ -14,6 +14,15 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+    type USERINFO{
+        firstname: String
+        lastname:String
+        userID:ID
+        role:String
+        phone: String
+        technicianInfoID:[ID]
+    }
+
     type TECHNICIANINFO{
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
@@ -21,7 +30,7 @@ module.exports = buildSchema(`
         amount:Int
         address:AddressOUT
         description: String
-        userInfoID: ID
+        userInfoID: USERINFO
         count: Int
     }
 
