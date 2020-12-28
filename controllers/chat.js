@@ -4,14 +4,13 @@ module.exports = {
   createChatRoom: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-      const userName = await userInfoModel.findOne({
+      const user = await userInfoModel.findOne({
         userID: INFORMATION.userID,
       });
       const technician = await userInfoModel.findOne({
-        technicianInfoID: INFORMATION.technicianID,
+        userID: INFORMATION.technicianID,
       });
-
-      INFORMATION["userName"] = userName.firstname;
+      INFORMATION["userName"] = user.firstname;
       INFORMATION["technicianName"] = technician.firstname;
       INFORMATION["technicianID"] = technician.userID;
       INFORMATION["recentMessage"] = INFORMATION.message;
@@ -61,7 +60,7 @@ module.exports = {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {
       const chat = await chatModel.findOneAndUpdate(
-        { userID: INFORMATION.userID, _id: INFORMATION.chatID },
+        { userID: INFORMATION.userID, technicianID: INFORMATION.technicianID },
         {
           $set: { recentMessage: INFORMATION.message, readStatus: false },
           $push: { history: INFORMATION.message },

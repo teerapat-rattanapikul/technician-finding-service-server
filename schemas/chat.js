@@ -43,7 +43,7 @@ module.exports = buildSchema(`
 
     input CHATINPUT{
         userID:ID,
-        chatID:ID,
+        technicianID: ID,
         message:messageIn
     }
 
