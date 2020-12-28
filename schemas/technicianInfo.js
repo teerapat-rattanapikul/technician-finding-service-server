@@ -7,13 +7,22 @@ module.exports = buildSchema(`
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO
-        searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
-        getNearTeachnician(ADDRESS:GETNEAR):SEARCHOUTPUT
+        searchTechnician(WORD:SEARCH):SEARCHOUTPUT
+        getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
     type AddressOUT{
         lat:Float
         lon:Float
     }
+    type USERINFO{
+        firstname: String
+        lastname:String
+        userID:ID
+        role:String
+        phone: String
+        technicianInfoID:[ID]
+    }
+
     type TECHNICIANINFO{
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
@@ -21,7 +30,7 @@ module.exports = buildSchema(`
         amount:Int
         address:AddressOUT
         description: String
-        userInfoID: ID
+        userInfoID: USERINFO
         count: Int
     }
 

@@ -61,33 +61,35 @@ module.exports = {
       throw error;
     }
   },
-  searchTeachnician: async ({ WORD }) => {
+  searchTechnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
-    console.log(WORD);
     var area = 0.05;
     var searchData = [];
     try {
-      while (searchData.length === 0 && area < 1.0) {
-        searchData = await technicianInfoModel.find({
-          $text: { $search: WORD.word },
-          "address.lat": {
-            $gte: WORD.address.lat - area,
-            $lt: WORD.address.lat + area,
-          },
-          "address.lon": {
-            $gte: WORD.address.lon - area,
-            $lt: WORD.address.lon + area,
-          },
-        });
+      while (searchData.length <= 2 && area < 2.0) {
+        searchData = await technicianInfoModel
+          .find({
+            $text: { $search: WORD.word },
+            "address.lat": {
+              $gte: WORD.address.lat - area,
+              $lt: WORD.address.lat + area,
+            },
+            "address.lon": {
+              $gte: WORD.address.lon - area,
+              $lt: WORD.address.lon + area,
+            },
+          })
+          .populate("userInfoID");
+
         area += 0.05;
       }
-
+      console.log(searchData);
       return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };
     }
   },
-  getNearTeachnician: async ({ ADDRESS }) => {
+  getNearTechnician: async ({ ADDRESS }) => {
     ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
     var area = 0.05;
     var searchData = [];
