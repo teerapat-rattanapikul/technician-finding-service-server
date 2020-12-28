@@ -2,13 +2,13 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         usernameCheck(username:String):Boolean
+       
     }
 
     type Mutation{
         register(REGISTER:UESRREGISTER):USER    
         login(LOGIN:USERLOGIN):TOKEN
     }
-
     type USER{
         username: String,
         status: Boolean

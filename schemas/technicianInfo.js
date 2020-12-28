@@ -2,6 +2,7 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         getTechnicianInfo(_id:ID):TECHNICIANINFO
+        userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
     }
 
     type Mutation{
@@ -26,7 +27,7 @@ module.exports = buildSchema(`
     type TECHNICIANINFO{
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
-        star: Int
+        star: Float
         amount:Int
         address:AddressOUT
         description: String
@@ -36,7 +37,7 @@ module.exports = buildSchema(`
 
     type TECHNICIANVALUE{
         aptitude:String
-        star:Int
+        star:Float
         amountOfvoteStar: Int
         amountOfcomment: Int
     }
