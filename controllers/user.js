@@ -1,6 +1,7 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
 const technicianInfoModel = require("../models").technicianInformations;
+const vote = require("../helppers/vote");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -102,5 +103,21 @@ module.exports = {
     } catch (error) {
       return { status: false };
     }
+  },
+  userVote: async (args) => {
+    const technicianInfo = await technicianInfoModel.findOne({
+      _id: args.technicianID,
+    });
+
+    const voteTechnician = await technicianInfoModel.findOneAndUpdate(
+      {
+        _id: args.technicianID,
+      },
+      {
+        $set: vote(technicianInfo, args.aptitude, args.voteStar),
+      },
+      { new: true }
+    );
+    return voteTechnician;
   },
 };
