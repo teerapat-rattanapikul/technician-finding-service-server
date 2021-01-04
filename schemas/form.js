@@ -2,6 +2,7 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         deleteForm(INFORMATION:FORMINPUT):Boolean  
+        getForm(formID:ID):FORM
     }
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
@@ -9,12 +10,16 @@ module.exports = buildSchema(`
     }
 
     type FORM{
+        _id:ID
+        senderID:String
         title:String
         image: String
+        date:String
     }
  
     input FORMINPUT{
         title:String
-        image:String
+        image:[String]
+        date:String
     }
 `);

@@ -3,7 +3,6 @@ const express = require("express");
 const uploadImage = require("./uploadImage");
 const app = express();
 const { mergeResolver } = require("../controllers");
-const resolver = require("../controllers/technicianInfo");
 const schema = require("../schemas");
 const jwtVerify = require("../middlewares/verifyJWT");
 const { mergeSchemas } = require("@graphql-tools/merge");

@@ -1,6 +1,7 @@
 const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const technicianValueModel = require("../models").technicianValues;
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
@@ -8,15 +9,22 @@ module.exports = {
     try {
       const USERINFO = await userInfoModel.findOne({ userID: req.userID });
       INFORMATION["userInfoID"] = USERINFO._id;
-      INFORMATION["amountOfvoteStar"] = 0;
-      INFORMATION["amountOfcomment"] = 0;
-      INFORMATION["star"] = 0;
-      const information = await technicianInfoModel.create(INFORMATION);
+      var value = {};
+      value["aptitude"] = INFORMATION.aptitude;
+      value["amountOfvoteStar"] = 0;
+      value["amountOfcomment"] = 0;
+      value["star"] = 0;
+      INFORMATION.aptitude = [value];
+      await technicianInfoModel.updateOne(
+        {
+          userInfoID: INFORMATION.userInfoID,
+        },
+        { $push: { aptitude: INFORMATION } }
+      );
       await userInfoModel.updateOne(
         { _id: USERINFO._id },
         {
-          $set: { role: "technician" },
-          $push: { technicianInfoID: information._id },
+          $set: { role: "technician", technicianInfoID: information._id },
         }
       );
       return information;
@@ -26,13 +34,12 @@ module.exports = {
   },
   updateTechnicianInfo: async ({ INFORMATION }, req) => {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-    const TECHNICIANID = INFORMATION.technicianID;
     try {
       const USERINFO = await userInfoModel.findOne({ userID: req.userID });
       const updateInformation = await technicianInfoModel.findOneAndUpdate(
         {
           userInfoID: USERINFO._id,
-          _id: TECHNICIANID,
+          _id: INFORMATION.technicianID,
         },
         {
           $set: INFORMATION,
@@ -54,32 +61,35 @@ module.exports = {
       throw error;
     }
   },
-  searchTeachnician: async ({ WORD }) => {
+  searchTechnician: async ({ WORD }) => {
     WORD = JSON.parse(JSON.stringify(WORD));
     var area = 0.05;
     var searchData = [];
     try {
-      while (searchData.length === 0 && area < 1.0) {
-        searchData = await technicianInfoModel.find({
-          $text: { $search: WORD.word },
-          "address.lat": {
-            $gte: WORD.address.lat - area,
-            $lt: WORD.address.lat + area,
-          },
-          "address.lon": {
-            $gte: WORD.address.lon - area,
-            $lt: WORD.address.lon + area,
-          },
-        });
+      while (searchData.length <= 2 && area < 2.0) {
+        searchData = await technicianInfoModel
+          .find({
+            $text: { $search: WORD.word },
+            "address.lat": {
+              $gte: WORD.address.lat - area,
+              $lt: WORD.address.lat + area,
+            },
+            "address.lon": {
+              $gte: WORD.address.lon - area,
+              $lt: WORD.address.lon + area,
+            },
+          })
+          .populate("userInfoID");
 
         area += 0.05;
       }
+      console.log(searchData);
       return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };
     }
   },
-  getNearTeachnician: async ({ ADDRESS }) => {
+  getNearTechnician: async ({ ADDRESS }) => {
     ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
     var area = 0.05;
     var searchData = [];

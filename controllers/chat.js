@@ -4,25 +4,33 @@ module.exports = {
   createChatRoom: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+      const user = await userInfoModel.findOne({
+        userID: INFORMATION.userID,
+      });
+      const technician = await userInfoModel.findOne({
+        userID: INFORMATION.technicianID,
+      });
+      INFORMATION["userName"] = user.firstname;
+      INFORMATION["technicianName"] = technician.firstname;
+      INFORMATION["technicianID"] = technician.userID;
       INFORMATION["recentMessage"] = INFORMATION.message;
       INFORMATION["readStatus"] = false;
       INFORMATION["history"] = [];
       INFORMATION["history"].push(INFORMATION.message);
+
       delete INFORMATION.message;
       const chat = await chatModel.create(INFORMATION);
       chat["status"] = true;
-      const userInfo = await userInfoModel.updateOne(
+      await userInfoModel.updateOne(
         { userID: INFORMATION.userID },
         { $push: { chatHistry: chat._id } }
       );
-      console.log(userInfo);
-      const technicianInfo = await userInfoModel.updateOne(
+      await userInfoModel.updateOne(
         {
-          userID: INFORMATION.technicianID,
+          userID: technician.userID,
         },
         { $push: { chatHistry: chat._id } }
       );
-      console.log(technicianInfo);
       return chat;
     } catch (error) {
       return { status: false };
@@ -30,18 +38,13 @@ module.exports = {
   },
   getChatInformation: async (args) => {
     try {
-      var chatInformation = await chatModel.findOne({
-        technicianID: args.technicianID,
-        userID: args.userID,
+      const chatInformation = await chatModel.findOne({
+        $or: [
+          { technicianID: args.technicianID, userID: args.userID },
+          { userID: args.technicianID, technicianID: args.userID },
+        ],
       });
-      if (chatInformation === null) {
-        chatInformation = await chatModel.findOne({
-          technicianID: args.userID,
-          userID: args.technicianID,
-        });
-      }
       chatInformation["status"] = true;
-      console.log(chatInformation);
       return chatInformation;
     } catch (error) {
       return { status: false };
@@ -58,7 +61,7 @@ module.exports = {
     INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {
       const chat = await chatModel.findOneAndUpdate(
-        { userID: INFORMATION.userID, _id: INFORMATION.chatID },
+        { userID: INFORMATION.userID, technicianID: INFORMATION.technicianID },
         {
           $set: { recentMessage: INFORMATION.message, readStatus: false },
           $push: { history: INFORMATION.message },

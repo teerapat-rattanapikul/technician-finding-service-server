@@ -1,6 +1,7 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
 const technicianInfoModel = require("../models").technicianInformations;
+const vote = require("../helppers/vote");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -75,27 +76,65 @@ module.exports = {
       // add technician_information and link user_information from technician_information
       if (REGISTER.role === "technician") {
         const technician = await technicianInfoModel.create({
-          aptitude: REGISTER.aptitude,
+          aptitude: [
+            {
+              aptitude: REGISTER.aptitude,
+              star: 0,
+              amountOfvoteStar: 0,
+              amountOfcomment: 0,
+            },
+          ],
           onSite: REGISTER.onSite,
           address: REGISTER.address,
           description: REGISTER.description,
           userInfoID: information._id,
           star: 0,
-          amountOfvoteStar: 0,
-          amountOfcomment: 0,
+          amount: 0,
         });
         //link technician_informaiton from user
         await userInfoModel.updateOne(
           { _id: information._id },
           {
-            $set: { role: "technician" },
-            $push: { technicianInfoID: technician._id },
+            $set: { role: "technician", technicianInfoID: technician._id },
           }
         );
       }
       return { username: USER.username, status: true };
     } catch (error) {
       return { status: false };
+    }
+  },
+  userVote: async (args) => {
+    const technicianInfo = await technicianInfoModel.findOne({
+      _id: args.technicianID,
+    });
+
+    const voteTechnician = await technicianInfoModel.findOneAndUpdate(
+      {
+        _id: args.technicianID,
+      },
+      {
+        $set: vote(technicianInfo, args.aptitude, args.voteStar),
+      },
+      { new: true }
+    );
+    return voteTechnician;
+  },
+  tokenCheck: async (args, req) => {
+    try {
+      var { userID, username, userInfoID } = req;
+      if (userID !== null) {
+        return {
+          userID: userID,
+          username: username,
+          userInfoID: userInfoID,
+          status: true,
+        };
+      } else {
+        return { status: false };
+      }
+    } catch (error) {
+      return error;
     }
   },
 };

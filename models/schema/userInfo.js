@@ -9,13 +9,11 @@ const userInfoSchema = new mongoose.Schema({
     ref: "users",
     require: true,
   },
-  technicianInfoID: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "technicianInformations",
-      require: true,
-    },
-  ],
+  technicianInfoID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "technicianInformations",
+    require: true,
+  },
   role: String,
   chatHistry: [
     {
