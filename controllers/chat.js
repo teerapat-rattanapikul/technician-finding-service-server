@@ -51,6 +51,7 @@ module.exports = {
     const user = await userInfoModel
       .findOne({ userID: args.userID })
       .populate({ path: "chatHistry", select: "-history" });
+      console.log(user.chatHistry);
     return user.chatHistry;
   },
   chat: async ({ INFORMATION }) => {
