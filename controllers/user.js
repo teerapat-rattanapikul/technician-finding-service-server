@@ -124,7 +124,7 @@ module.exports = {
     try {
       var { userID, username, userInfoID } = req;
       console.log(userID);
-      if (userID !== null) {
+      if (userID !== null && userID !== undefined) {
         return {
           userID: userID,
           username: username,
