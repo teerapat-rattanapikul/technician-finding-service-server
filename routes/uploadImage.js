@@ -25,6 +25,6 @@ const upload = multer({
   },
   fileFilter: fileFilter,
 });
-router.use("/", upload.single("productImage"), imageController.uploadImg);
+router.use("/", upload.single("formImage"), imageController.uploadImg);
 
 module.exports = router;
