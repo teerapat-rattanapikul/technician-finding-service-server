@@ -31,6 +31,7 @@ module.exports = buildSchema(`
         userID:ID
         username:String
         userInfoID:ID
+        status:Boolean
     }
     
     input USERLOGIN{
