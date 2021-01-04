@@ -1,5 +1,4 @@
 const formModel = require("../models").forms;
-const imageModel = require("../models").images;
 const fs = require("fs");
 
 module.exports = {
@@ -34,7 +33,6 @@ module.exports = {
         title: INFORMATION.title,
         image: INFORMATION.image,
       });
-      await imageModel.deleteOne({ img: INFORMATION.image });
       fs.unlinkSync(INFORMATION.image);
       return true;
     } catch (error) {
