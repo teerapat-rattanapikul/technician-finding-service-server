@@ -123,6 +123,7 @@ module.exports = {
   tokenCheck: async (args, req) => {
     try {
       var { userID, username, userInfoID } = req;
+      console.log(userID);
       if (userID !== null) {
         return {
           userID: userID,
