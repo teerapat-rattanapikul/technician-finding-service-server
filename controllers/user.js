@@ -120,4 +120,12 @@ module.exports = {
     );
     return voteTechnician;
   },
+  tokenCheck: async (args, req) => {
+    try {
+      var { userID, username, userInfoID } = req;
+      return { userID: userID, username: username, userInfoID: userInfoID };
+    } catch (error) {
+      return error;
+    }
+  },
 };
