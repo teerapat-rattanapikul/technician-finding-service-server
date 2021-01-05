@@ -8,11 +8,17 @@ module.exports = () => (req, res, next) => {
     } else {
       const token = authorization.replace("Bearer ", "");
       const decoded = jwt.verify(token, "secret_key");
-      console.log(decoded);
       const user = decoded.user;
+      console.log(user);
       req.userID = user.userID;
       req.username = user.username;
       req.userInfoID = user.userInfoID;
+      req.firstname = user.firstname;
+      req.lastname = user.lastname;
+      req.phone = user.phone;
+      req.role = user.role;
+      req.technicianInfoID = user.technicianInfoID;
+      req.chatHistry = user.chatHistry;
     }
 
     next();

@@ -21,7 +21,7 @@ module.exports = buildSchema(`
         userID:ID
         role:String
         phone: String
-        technicianInfoID:[ID]
+        technicianInfoID:ID
     }
 
     type TECHNICIANINFO{
