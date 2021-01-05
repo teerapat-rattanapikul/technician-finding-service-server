@@ -8,6 +8,7 @@ module.exports = () => (req, res, next) => {
     } else {
       const token = authorization.replace("Bearer ", "");
       const decoded = jwt.verify(token, "secret_key");
+      console.log(decoded);
       const user = decoded.user;
       req.userID = user.userID;
       req.username = user.username;
@@ -17,8 +18,10 @@ module.exports = () => (req, res, next) => {
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      error.status = 401;
+      req.userID = null;
+      //error.status = 401;
     }
-    res.json(error);
+    //res.json(error);
+    next();
   }
 };
