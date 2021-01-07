@@ -17,7 +17,8 @@ module.exports = buildSchema(`
         userID:ID
         role:String
         phone: String
-        technicianInfoID:[ID]
+        technicianInfoID:ID
+        chatHistry:[ID]
     }
 
     input USERINFOINPUT{

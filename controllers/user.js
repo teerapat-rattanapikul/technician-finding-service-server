@@ -5,6 +5,7 @@ const vote = require("../helppers/vote");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
+const tokenVerify = require("../middlewares/verifyJWT");
 
 module.exports = {
   login: async ({ LOGIN }) => {
@@ -14,20 +15,22 @@ module.exports = {
       const password = bcrypt.compareSync(LOGIN.password, USER.password);
       try {
         if (password) {
-          const token = genJWT({
+          const userInfo = await userInfoModel.findOne({ userID: USER._id });
+          const returnObject = {
             userID: USER._id,
             username: USER.username,
-            userInfoID: USER.userInfoID,
-          });
-          const userInfo = await userInfoModel.findOne({ userID: USER._id });
-          return {
-            token,
-            status: true,
+            userInfoID: userInfo._id,
             firstname: userInfo.firstname,
             lastname: userInfo.lastname,
             role: userInfo.role,
-            userID: userInfo.userID,
+            phone: userInfo.phone,
+            technicianInfoID: userInfo.technicianInfoID,
+            chatHistry: userInfo.chatHistry,
           };
+          const token = genJWT(returnObject);
+          returnObject["token"] = token;
+          returnObject["status"] = true;
+          return returnObject;
         } else {
           return { token: "wrong password", status: false };
         }
@@ -120,15 +123,20 @@ module.exports = {
     );
     return voteTechnician;
   },
-  tokenCheck: async (args, req) => {
+  tokenCheck: async (args) => {
+    const user = tokenVerify(args.token);
     try {
-      var { userID, username, userInfoID } = req;
-      console.log(userID);
-      if (userID !== null && userID !== undefined) {
+      if (user.userID !== null && user.userID !== undefined) {
         return {
-          userID: userID,
-          username: username,
-          userInfoID: userInfoID,
+          userID: user.userID,
+          username: user.username,
+          userInfoID: user.userInfoID,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phone: user.phone,
+          role: user.role,
+          technicianInfoID: user.technicianInfoID,
+          chatHistry: user.chatHistry,
           status: true,
         };
       } else {
@@ -138,4 +146,26 @@ module.exports = {
       return error;
     }
   },
+  // tokenCheck: async (args, req) => {
+  //   try {
+  //     if (req.userID !== null && req.userID !== undefined) {
+  //       return {
+  //         userID: req.userID,
+  //         username: req.username,
+  //         userInfoID: req.userInfoID,
+  //         firstname: req.firstname,
+  //         lastname: req.lastname,
+  //         phone: req.phone,
+  //         role: req.role,
+  //         technicianInfoID: req.technicianInfoID,
+  //         chatHistry: req.chatHistry,
+  //         status: true,
+  //       };
+  //     } else {
+  //       return { status: false };
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // },
 };

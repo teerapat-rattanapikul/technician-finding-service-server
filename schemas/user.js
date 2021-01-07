@@ -2,7 +2,7 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         usernameCheck(username:String):Boolean
-        tokenCheck:TOKENCHECK
+        tokenCheck(token:String):TOKEN
        
     }
 
@@ -20,18 +20,16 @@ module.exports = buildSchema(`
     }
     type TOKEN{
         token:String
+        username:String
         status:Boolean
         firstname: String
         lastname:String
         role:String
         userID:ID
-    }
-
-    type TOKENCHECK{
-        userID:ID
-        username:String
         userInfoID:ID
-        status:Boolean
+        phone: String
+        technicianInfoID:ID
+        chatHistry: [ID]
     }
     
     input USERLOGIN{
