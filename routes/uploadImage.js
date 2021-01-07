@@ -25,6 +25,7 @@ const upload = multer({
   },
   fileFilter: fileFilter,
 });
-router.use("/", upload.single("formImage"), imageController.uploadImg);
+// max number of image is 5
+router.use("/", upload.array("formImage", 5), imageController.uploadImg);
 
 module.exports = router;

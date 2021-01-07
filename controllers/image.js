@@ -1,12 +1,25 @@
-// const imageModel = require("../models").images;
-
+const formModel = require("../models").forms;
 module.exports = {
   uploadImg: async (req, res, next) => {
+    console.log(req.body);
+    var form = {};
     try {
-      console.log(req.file.path);
-      res.json(req.file.path);
+      form["detail"] = req.body.detail;
+      form["date"] = new Date(req.body.date)
+        .toISOString()
+        .replace(/T/, " ")
+        .replace(/\..+/, "");
+      if (req.files !== undefined) {
+        var pathFile = [];
+        req.files.forEach((element) => {
+          pathFile.push(element.path);
+        });
+        form["image"] = pathFile;
+      }
+      const information = await formModel.create(form);
+      res.json(information);
     } catch (error) {
-      throw error;
+      res.json(error);
     }
   },
 };
