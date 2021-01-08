@@ -8,6 +8,5 @@ module.exports = {
     schema.technicianInfoSchema
   ),
   forms: mongoose.model("forms", schema.formSchema),
-  images: mongoose.model("imgs", schema.imageSchema),
   chats: mongoose.model("chats", schema.chatSchema),
 };
