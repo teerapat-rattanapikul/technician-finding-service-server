@@ -1,6 +1,6 @@
 const formModel = require("../models").forms;
 module.exports = {
-  uploadImg: async (req, res, next) => {
+  uploadForm: async (req, res, next) => {
     console.log(req.body);
     var form = {};
     try {

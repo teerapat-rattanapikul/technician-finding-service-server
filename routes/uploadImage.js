@@ -1,5 +1,5 @@
 var router = require("express").Router();
-const imageController = require("../controllers").imageController;
+const formController = require("../controllers").formController;
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,6 +26,6 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 // max number of image is 5
-router.use("/", upload.array("formImage", 5), imageController.uploadImg);
+router.use("/", upload.array("formImage", 5), formController.uploadForm);
 
 module.exports = router;
