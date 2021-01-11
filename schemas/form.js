@@ -13,13 +13,13 @@ module.exports = buildSchema(`
     type FORM{
         _id:ID
         senderID:String
-        title:String
+        detail:String
         image: String
         date:String
     }
  
     input FORMINPUT{
-        title:String
+        detail:String
         image:[String]
         date:String
     }

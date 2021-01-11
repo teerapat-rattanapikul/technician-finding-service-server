@@ -1,4 +1,4 @@
-const fromSchema = require("./form");
+const formSchema = require("./form");
 const otpSchema = require("./otp");
 const userSchema = require("./user");
 const userInfoSchema = require("./userInfo");
@@ -6,7 +6,7 @@ const technicianInfoSchema = require("./technicianInfo");
 const chatSchema = require("./chat");
 
 module.exports = {
-  fromSchema,
+  formSchema,
   otpSchema,
   userSchema,
   userInfoSchema,
