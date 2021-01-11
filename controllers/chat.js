@@ -10,8 +10,9 @@ module.exports = {
       const technician = await userInfoModel.findOne({
         userID: INFORMATION.technicianID,
       });
-      INFORMATION["userName"] = user.firstname;
-      INFORMATION["technicianName"] = technician.firstname;
+      INFORMATION["userName"] = user.firstname + " " + user.lastname;
+      INFORMATION["technicianName"] =
+        technician.firstname + " " + technician.lastname;
       INFORMATION["technicianID"] = technician.userID;
       INFORMATION["recentMessage"] = INFORMATION.message;
       INFORMATION["readStatus"] = false;
