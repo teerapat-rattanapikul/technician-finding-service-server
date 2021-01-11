@@ -107,21 +107,27 @@ module.exports = {
       return { status: false };
     }
   },
-  userVote: async (args) => {
-    const technicianInfo = await technicianInfoModel.findOne({
-      _id: args.technicianID,
-    });
+  userVote: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        const technicianInfo = await technicianInfoModel.findOne({
+          _id: args.technicianID,
+        });
 
-    const voteTechnician = await technicianInfoModel.findOneAndUpdate(
-      {
-        _id: args.technicianID,
-      },
-      {
-        $set: vote(technicianInfo, args.aptitude, args.voteStar),
-      },
-      { new: true }
-    );
-    return voteTechnician;
+        const voteTechnician = await technicianInfoModel.findOneAndUpdate(
+          {
+            _id: args.technicianID,
+          },
+          {
+            $set: vote(technicianInfo, args.aptitude, args.voteStar),
+          },
+          { new: true }
+        );
+        return voteTechnician;
+      }
+    } catch (error) {
+      throw error;
+    }
   },
   // tokenCheck: async (args) => {
   //   const user = tokenVerify(args.token);

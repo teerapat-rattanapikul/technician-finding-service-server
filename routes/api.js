@@ -12,7 +12,7 @@ const mergedSchema = mergeSchemas({
     schema.userSchema,
     schema.userInfoSchema,
     schema.technicianInfoSchema,
-    schema.fromSchema,
+    schema.formSchema,
     schema.otpSchema,
     schema.chatSchema,
   ],

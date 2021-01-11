@@ -4,6 +4,7 @@ module.exports = buildSchema(`
         deleteForm(INFORMATION:FORMINPUT):Boolean  
         getForm(formID:ID):FORM
     }
+
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
         
@@ -12,13 +13,13 @@ module.exports = buildSchema(`
     type FORM{
         _id:ID
         senderID:String
-        title:String
+        detail:String
         image: String
         date:String
     }
  
     input FORMINPUT{
-        title:String
+        detail:String
         image:[String]
         date:String
     }

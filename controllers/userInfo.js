@@ -19,8 +19,10 @@ module.exports = {
   // },
   getInformation: async (args, req) => {
     try {
-      const result = await userInfoModel.findById({ _id: req.userInfo });
-      return result;
+      if (req.role !== null && req.role !== undefined) {
+        const result = await userInfoModel.findById({ _id: req.userInfo });
+        return result;
+      }
     } catch (error) {
       throw error;
     }
@@ -34,16 +36,18 @@ module.exports = {
     }
   },
   updateInformation: async ({ INFORMATION }, req) => {
-    INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {
-      const updateInformation = await userInfoModel.findOneAndUpdate(
-        {
-          userID: req.userID,
-        },
-        { $set: INFORMATION },
-        { new: true }
-      );
-      return updateInformation;
+      if (req.role !== null && req.role !== undefined) {
+        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+        const updateInformation = await userInfoModel.findOneAndUpdate(
+          {
+            userID: req.userID,
+          },
+          { $set: INFORMATION },
+          { new: true }
+        );
+        return updateInformation;
+      }
     } catch (error) {
       throw error;
     }
