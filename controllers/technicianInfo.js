@@ -55,7 +55,7 @@ module.exports = {
       throw error;
     }
   },
-  getTechnicianInfo: async (args) => {
+  getTechnicianInfo: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         const TECHNICIANINFO = await technicianInfoModel.findOne({
@@ -67,7 +67,7 @@ module.exports = {
       throw error;
     }
   },
-  searchTechnician: async ({ WORD }) => {
+  searchTechnician: async ({ WORD }, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         WORD = JSON.parse(JSON.stringify(WORD));
@@ -97,7 +97,7 @@ module.exports = {
       return { status: false };
     }
   },
-  getNearTechnician: async ({ ADDRESS }) => {
+  getNearTechnician: async ({ ADDRESS }, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
