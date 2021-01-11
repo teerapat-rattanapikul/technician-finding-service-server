@@ -5,7 +5,7 @@ const vote = require("../helppers/vote");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
-const tokenVerify = require("../middlewares/verifyJWT");
+//const tokenVerify = require("../middlewares/verifyJWT");
 
 module.exports = {
   login: async ({ LOGIN }) => {
@@ -107,58 +107,42 @@ module.exports = {
       return { status: false };
     }
   },
-  userVote: async (args) => {
-    const technicianInfo = await technicianInfoModel.findOne({
-      _id: args.technicianID,
-    });
-
-    const voteTechnician = await technicianInfoModel.findOneAndUpdate(
-      {
-        _id: args.technicianID,
-      },
-      {
-        $set: vote(technicianInfo, args.aptitude, args.voteStar),
-      },
-      { new: true }
-    );
-    return voteTechnician;
-  },
-  tokenCheck: async (args) => {
-    const user = tokenVerify(args.token);
+  userVote: async (args, req) => {
     try {
-      if (user.userID !== null && user.userID !== undefined) {
-        return {
-          userID: user.userID,
-          username: user.username,
-          userInfoID: user.userInfoID,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          phone: user.phone,
-          role: user.role,
-          technicianInfoID: user.technicianInfoID,
-          chatHistry: user.chatHistry,
-          status: true,
-        };
-      } else {
-        return { status: false };
+      if (req.role !== null && req.role !== undefined) {
+        const technicianInfo = await technicianInfoModel.findOne({
+          _id: args.technicianID,
+        });
+
+        const voteTechnician = await technicianInfoModel.findOneAndUpdate(
+          {
+            _id: args.technicianID,
+          },
+          {
+            $set: vote(technicianInfo, args.aptitude, args.voteStar),
+          },
+          { new: true }
+        );
+        return voteTechnician;
       }
     } catch (error) {
-      return error;
+      throw error;
     }
   },
-  // tokenCheck: async (args, req) => {
+  // tokenCheck: async (args) => {
+  //   const user = tokenVerify(args.token);
   //   try {
-  //     if (req.userID !== null && req.userID !== undefined) {
+  //     if (user.userID !== null && user.userID !== undefined) {
   //       return {
-  //         userID: req.userID,
-  //         username: req.username,
-  //         userInfoID: req.userInfoID,
-  //         firstname: req.firstname,
-  //         lastname: req.lastname,
-  //         phone: req.phone,
-  //         role: req.role,
-  //         technicianInfoID: req.technicianInfoID,
-  //         chatHistry: req.chatHistry,
+  //         userID: user.userID,
+  //         username: user.username,
+  //         userInfoID: user.userInfoID,
+  //         firstname: user.firstname,
+  //         lastname: user.lastname,
+  //         phone: user.phone,
+  //         role: user.role,
+  //         technicianInfoID: user.technicianInfoID,
+  //         chatHistry: user.chatHistry,
   //         status: true,
   //       };
   //     } else {
@@ -168,4 +152,26 @@ module.exports = {
   //     return error;
   //   }
   // },
+  tokenCheck: async (args, req) => {
+    try {
+      if (req.userID !== null && req.userID !== undefined) {
+        return {
+          userID: req.userID,
+          username: req.username,
+          userInfoID: req.userInfoID,
+          firstname: req.firstname,
+          lastname: req.lastname,
+          phone: req.phone,
+          role: req.role,
+          technicianInfoID: req.technicianInfoID,
+          chatHistry: req.chatHistry,
+          status: true,
+        };
+      } else {
+        return { status: false };
+      }
+    } catch (error) {
+      return error;
+    }
+  },
 };

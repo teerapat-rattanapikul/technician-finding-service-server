@@ -4,7 +4,7 @@ const uploadImage = require("./uploadImage");
 const app = express();
 const { mergeResolver } = require("../controllers");
 const schema = require("../schemas");
-//const jwtVerify = require("../middlewares/verifyJWT");
+const jwtVerify = require("../middlewares/verifyJWT");
 const { mergeSchemas } = require("@graphql-tools/merge");
 
 const mergedSchema = mergeSchemas({
@@ -12,30 +12,30 @@ const mergedSchema = mergeSchemas({
     schema.userSchema,
     schema.userInfoSchema,
     schema.technicianInfoSchema,
-    schema.fromSchema,
+    schema.formSchema,
     schema.otpSchema,
     schema.chatSchema,
   ],
 });
 
-// app.use(
-//   "/graphql",
-//   jwtVerify(),
-//   graphqlHTTP({
-//     schema: mergedSchema,
-//     rootValue: mergeResolver,
-//     graphiql: true,
-//   })
-// );
-
 app.use(
   "/graphql",
+  jwtVerify(),
   graphqlHTTP({
     schema: mergedSchema,
     rootValue: mergeResolver,
     graphiql: true,
   })
 );
+
+// app.use(
+//   "/graphql",
+//   graphqlHTTP({
+//     schema: mergedSchema,
+//     rootValue: mergeResolver,
+//     graphiql: true,
+//   })
+// );
 
 app.use("/uploadImage", uploadImage);
 
