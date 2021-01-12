@@ -7,7 +7,7 @@ module.exports = buildSchema(`
     }
 
     type Mutation{
-        register(REGISTER:UESRREGISTER):USER    
+        register(REGISTER:UESRREGISTER):TOKEN    
         login(LOGIN:USERLOGIN):TOKEN
     }
     type USER{
