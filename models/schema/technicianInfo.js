@@ -2,22 +2,28 @@ const mongoose = require("mongoose");
 
 const technicianInfoSchema = new mongoose.Schema(
   {
-    aptitude: String,
+    aptitude: [
+      {
+        aptitude: String,
+        star: Number,
+        amountOfvoteStar: Number,
+        amountOfcomment: Number,
+      },
+    ],
     onSite: Boolean,
-    star: Number,
     address: {
       lat: Number,
       lon: Number,
     },
     description: String,
     count: Number,
+    star: Number,
+    amount: Number,
     // comment: [
     //   {
     //     detailComment: String,
     //   },
     // ],
-    amountOfvoteStar: Number,
-    amountOfcomment: Number,
     userInfoID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "userInformations",

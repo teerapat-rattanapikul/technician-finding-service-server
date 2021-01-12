@@ -2,28 +2,44 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         getTechnicianInfo(_id:ID):TECHNICIANINFO
+        userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
     }
 
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO
-        searchTeachnician(WORD:SEARCH):SEARCHOUTPUT
-        getNearTeachnician(ADDRESS:GETNEAR):SEARCHOUTPUT
+        searchTechnician(WORD:SEARCH):SEARCHOUTPUT
+        getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
     type AddressOUT{
         lat:Float
         lon:Float
     }
+    type USERINFO{
+        firstname: String
+        lastname:String
+        userID:ID
+        role:String
+        phone: String
+        technicianInfoID:ID
+    }
+
     type TECHNICIANINFO{
-        aptitude: String
+        aptitude: [TECHNICIANVALUE]
         onSite: Boolean
-        star: Int
+        star: Float
+        amount:Int
         address:AddressOUT
         description: String
+        userInfoID: USERINFO
+        count: Int
+    }
+
+    type TECHNICIANVALUE{
+        aptitude:String
+        star:Float
         amountOfvoteStar: Int
         amountOfcomment: Int
-        userInfoID: ID
-        count: Int
     }
 
     type SEARCHOUTPUT{
@@ -38,11 +54,8 @@ module.exports = buildSchema(`
     input TECHNICIANINFOINPUT{
         aptitude: String!
         onSite: Boolean!
-        star: Int
         address:AddressIN
         description: String
-        amountOfvoteStar: Int
-        amountOfcomment: Int
         userInfoID: ID
     }
     input TECHNICIANUPDATE{

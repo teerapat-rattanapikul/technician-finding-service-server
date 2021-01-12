@@ -5,9 +5,8 @@ module.exports = {
   userInfomations: mongoose.model("userInformations", schema.userInfoSchema),
   technicianInformations: mongoose.model(
     "technicianInformations",
-    schema.technicianSchema
+    schema.technicianInfoSchema
   ),
   forms: mongoose.model("forms", schema.formSchema),
-  images: mongoose.model("imgs", schema.imageSchema),
   chats: mongoose.model("chats", schema.chatSchema),
 };
