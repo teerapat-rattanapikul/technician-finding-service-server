@@ -4,6 +4,7 @@ const userInfoSchema = new mongoose.Schema({
   firstname: String,
   lastname: String,
   phone: String,
+  avatar: String,
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",

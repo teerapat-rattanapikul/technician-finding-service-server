@@ -24,6 +24,7 @@ module.exports = buildSchema(`
         status:Boolean
         firstname: String
         lastname:String
+        avatar:String
         role:String
         userID:ID
         userInfoID:ID
@@ -50,6 +51,7 @@ module.exports = buildSchema(`
         address:AddressIN
         description: String
         phone:String
+        avatar:String
         role: String
         aptitude: String
         onSite: Boolean
