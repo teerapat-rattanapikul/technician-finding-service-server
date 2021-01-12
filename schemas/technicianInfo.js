@@ -33,6 +33,7 @@ module.exports = buildSchema(`
         description: String
         userInfoID: USERINFO
         count: Int
+        status:Boolean
     }
 
     type TECHNICIANVALUE{
@@ -56,7 +57,6 @@ module.exports = buildSchema(`
         onSite: Boolean!
         address:AddressIN
         description: String
-        userInfoID: ID
     }
     input TECHNICIANUPDATE{
         technicianID:ID!
