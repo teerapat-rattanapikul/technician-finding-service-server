@@ -67,29 +67,15 @@ module.exports = {
       throw error;
     }
   },
-  searchTechnician: async ({ WORD }, req) => {
+  searchTechnician: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        WORD = JSON.parse(JSON.stringify(WORD));
-        var area = 0.05;
-        var searchData = [];
-        while (searchData.length <= 2 && area < 2.0) {
-          searchData = await technicianInfoModel
-            .find({
-              $text: { $search: WORD.word },
-              "address.lat": {
-                $gte: WORD.address.lat - area,
-                $lt: WORD.address.lat + area,
-              },
-              "address.lon": {
-                $gte: WORD.address.lon - area,
-                $lt: WORD.address.lon + area,
-              },
-            })
-            .populate("userInfoID");
-
-          area += 0.05;
-        }
+        console.log(args.word);
+        searchData = await technicianInfoModel
+          .find({
+            $text: { $search: args.word },
+          })
+          .populate("userInfoID");
         console.log(searchData);
         return { technician: sortTechnician(searchData), status: true };
       }
