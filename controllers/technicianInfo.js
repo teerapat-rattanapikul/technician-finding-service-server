@@ -86,13 +86,26 @@ module.exports = {
   },
   searchTechnician: async (args, req) => {
     try {
+      var searchData = {};
       if (req.role !== null && req.role !== undefined) {
         searchData = await technicianInfoModel
           .find({
             $text: { $search: args.word },
           })
           .populate("userInfoID");
-        console.log(searchData);
+        if (searchData.length === 0) {
+          const userInfo = await userInfoModel
+            .find({
+              $text: { $search: args.word },
+            })
+            .populate("technicianInfoID");
+          userInfo.forEach((element) => {
+            const returndata = element.technicianInfoID;
+            element.technicianInfoID = undefined;
+            returndata["userInfoID"] = element;
+            searchData.push(returndata);
+          });
+        }
         return { technician: sortTechnician(searchData), status: true };
       } else {
         return { status: false };
