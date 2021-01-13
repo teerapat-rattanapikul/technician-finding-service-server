@@ -182,6 +182,7 @@ module.exports = {
           role: req.role,
           technicianInfoID: req.technicianInfoID,
           chatHistry: req.chatHistry,
+          avatar: req.avatar,
           status: true,
         };
       } else {
