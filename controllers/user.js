@@ -119,7 +119,7 @@ module.exports = {
       const token = genJWT(returnObject);
       returnObject["token"] = token;
       returnObject["status"] = true;
-      return token;
+      return returnObject;
     } catch (error) {
       return { status: false };
     }
