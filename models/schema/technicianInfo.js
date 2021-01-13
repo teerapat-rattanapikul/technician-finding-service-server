@@ -32,5 +32,8 @@ const technicianInfoSchema = new mongoose.Schema(
   }
   // { timestamps: true }
 );
-technicianInfoSchema.index({ aptitude: "text", description: "text" });
+technicianInfoSchema.index({
+  "aptitude.aptitude": "text",
+  description: "text",
+});
 module.exports = technicianInfoSchema;

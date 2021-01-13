@@ -24,5 +24,8 @@ const userInfoSchema = new mongoose.Schema({
     },
   ],
 });
-
+userInfoSchema.index({
+  firstname: "text",
+  lastname: "text",
+});
 module.exports = userInfoSchema;
