@@ -108,16 +108,18 @@ module.exports = {
         var area = 0.05;
         var searchData = [];
         while (searchData.length <= 2 && area < 4.0) {
-          searchData = await technicianInfoModel.find({
-            "address.lat": {
-              $gte: ADDRESS.address.lat - area,
-              $lt: ADDRESS.address.lat + area,
-            },
-            "address.lon": {
-              $gte: ADDRESS.address.lon - area,
-              $lt: ADDRESS.address.lon + area,
-            },
-          });
+          searchData = await technicianInfoModel
+            .find({
+              "address.lat": {
+                $gte: ADDRESS.address.lat - area,
+                $lt: ADDRESS.address.lat + area,
+              },
+              "address.lon": {
+                $gte: ADDRESS.address.lon - area,
+                $lt: ADDRESS.address.lon + area,
+              },
+            })
+            .populate("userInfoID");
           area += 0.05;
         }
         return { technician: searchData, status: true };
