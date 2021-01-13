@@ -11,16 +11,16 @@ module.exports = buildSchema(`
         updateInformation(INFORMATION:USERINFOINPUT): USERINFO
     }
 
-
     type USERINFO{
         firstname: String
         lastname:String
         userID:ID
+        avatar:String
         role:String
         phone: String
-        technicianInfoID:[ID]
+        technicianInfoID:ID
+        chatHistry:[ID]
     }
-
 
     input USERINFOINPUT{
         firstname: String

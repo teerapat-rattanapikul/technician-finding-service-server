@@ -2,11 +2,12 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         usernameCheck(username:String):Boolean
+        tokenCheck(token:String):TOKEN
        
     }
 
     type Mutation{
-        register(REGISTER:UESRREGISTER):USER    
+        register(REGISTER:UESRREGISTER):TOKEN    
         login(LOGIN:USERLOGIN):TOKEN
     }
     type USER{
@@ -17,14 +18,19 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
-
     type TOKEN{
         token:String
+        username:String
         status:Boolean
         firstname: String
         lastname:String
+        avatar:String
         role:String
         userID:ID
+        userInfoID:ID
+        phone: String
+        technicianInfoID:ID
+        chatHistry: [ID]
     }
     
     input USERLOGIN{
@@ -45,6 +51,7 @@ module.exports = buildSchema(`
         address:AddressIN
         description: String
         phone:String
+        avatar:String
         role: String
         aptitude: String
         onSite: Boolean
