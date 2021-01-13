@@ -15,6 +15,7 @@ module.exports = buildSchema(`
         firstname: String
         lastname:String
         userID:ID
+        avatar:String
         role:String
         phone: String
         technicianInfoID:ID

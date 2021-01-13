@@ -1,34 +1,45 @@
-const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
-const technicianValueModel = require("../models").technicianValues;
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        const USERINFO = await userInfoModel.findOne({ userID: req.userID });
-        INFORMATION["userInfoID"] = USERINFO._id;
         var value = {};
+        var technicianInfo = {};
         value["aptitude"] = INFORMATION.aptitude;
         value["amountOfvoteStar"] = 0;
         value["amountOfcomment"] = 0;
         value["star"] = 0;
         INFORMATION.aptitude = [value];
-        await technicianInfoModel.updateOne(
-          {
-            userInfoID: INFORMATION.userInfoID,
-          },
-          { $push: { aptitude: INFORMATION } }
-        );
-        await userInfoModel.updateOne(
-          { _id: USERINFO._id },
-          {
-            $set: { role: "technician", technicianInfoID: information._id },
-          }
-        );
-        return information;
+        if (req.role === "user") {
+          const USERINFO = await userInfoModel.findOne({ userID: req.userID });
+          INFORMATION["star"] = 0;
+          INFORMATION["amount"] = 0;
+          INFORMATION["userInfoID"] = req.userInfoID;
+          technicianInfo = await technicianInfoModel.create(INFORMATION);
+          await userInfoModel.updateOne(
+            { _id: USERINFO._id },
+            {
+              $set: {
+                role: "technician",
+                technicianInfoID: technicianInfo._id,
+              },
+            }
+          );
+        } else if (req.role === "technician") {
+          technicianInfo = await technicianInfoModel.updateOne(
+            {
+              userInfoID: req.userInfoID,
+            },
+            { $push: { aptitude: INFORMATION.aptitude } }
+          );
+        }
+        technicianInfo["status"] = true;
+        return technicianInfo;
+      } else {
+        return { status: false };
       }
     } catch (error) {
       throw error;
@@ -49,7 +60,10 @@ module.exports = {
           },
           { new: true }
         );
+        updateInformation["status"] = true;
         return updateInformation;
+      } else {
+        return { status: false };
       }
     } catch (error) {
       throw error;
@@ -61,37 +75,27 @@ module.exports = {
         const TECHNICIANINFO = await technicianInfoModel.findOne({
           _id: args._id,
         });
+        TECHNICIANINFO["status"] = true;
         return TECHNICIANINFO;
+      } else {
+        return { status: false };
       }
     } catch (error) {
       throw error;
     }
   },
-  searchTechnician: async ({ WORD }, req) => {
+  searchTechnician: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        WORD = JSON.parse(JSON.stringify(WORD));
-        var area = 0.05;
-        var searchData = [];
-        while (searchData.length <= 2 && area < 2.0) {
-          searchData = await technicianInfoModel
-            .find({
-              $text: { $search: WORD.word },
-              "address.lat": {
-                $gte: WORD.address.lat - area,
-                $lt: WORD.address.lat + area,
-              },
-              "address.lon": {
-                $gte: WORD.address.lon - area,
-                $lt: WORD.address.lon + area,
-              },
-            })
-            .populate("userInfoID");
-
-          area += 0.05;
-        }
+        searchData = await technicianInfoModel
+          .find({
+            $text: { $search: args.word },
+          })
+          .populate("userInfoID");
         console.log(searchData);
         return { technician: sortTechnician(searchData), status: true };
+      } else {
+        return { status: false };
       }
     } catch (error) {
       return { status: false };
@@ -117,6 +121,8 @@ module.exports = {
           area += 0.05;
         }
         return { technician: searchData, status: true };
+      } else {
+        return { status: false };
       }
     } catch (error) {
       return { status: false };

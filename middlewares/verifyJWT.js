@@ -27,6 +27,7 @@ module.exports = () => (req, res, next) => {
       req.role = user.role;
       req.technicianInfoID = user.technicianInfoID;
       req.chatHistry = user.chatHistry;
+      req.avatar = user.avatar;
     }
 
     next();

@@ -26,6 +26,7 @@ module.exports = {
             phone: userInfo.phone,
             technicianInfoID: userInfo.technicianInfoID,
             chatHistry: userInfo.chatHistry,
+            avatar: userInfo.avatar,
           };
           const token = genJWT(returnObject);
           returnObject["token"] = token;
@@ -66,6 +67,7 @@ module.exports = {
       const information = await userInfoModel.create({
         firstname: REGISTER.firstname,
         lastname: REGISTER.lastname,
+        avatar: REGISTER.avatar,
         userID: USER._id,
         phone: REGISTER.phone,
         role: REGISTER.role,
