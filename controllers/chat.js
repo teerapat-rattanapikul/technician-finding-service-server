@@ -1,7 +1,7 @@
 const chatModel = require("../models").chats;
 const userInfoModel = require("../models").userInfomations;
 module.exports = {
-  createChatRoom: async ({ INFORMATION }) => {
+  createChatRoom: async ({ INFORMATION }, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
@@ -39,7 +39,7 @@ module.exports = {
       return { status: false };
     }
   },
-  getChatInformation: async (args) => {
+  getChatInformation: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         const chatInformation = await chatModel.findOne({
@@ -55,7 +55,7 @@ module.exports = {
       return { status: false };
     }
   },
-  getChatRoom: async (args) => {
+  getChatRoom: async (args, req) => {
     if (req.role !== null && req.role !== undefined) {
       const user = await userInfoModel
         .findOne({ userID: args.userID })
@@ -63,7 +63,7 @@ module.exports = {
       return user.chatHistry;
     }
   },
-  chat: async ({ INFORMATION }) => {
+  chat: async ({ INFORMATION }, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));

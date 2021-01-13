@@ -146,29 +146,7 @@ module.exports = {
       throw error;
     }
   },
-  // tokenCheck: async (args) => {
-  //   const user = tokenVerify(args.token);
-  //   try {
-  //     if (user.userID !== null && user.userID !== undefined) {
-  //       return {
-  //         userID: user.userID,
-  //         username: user.username,
-  //         userInfoID: user.userInfoID,
-  //         firstname: user.firstname,
-  //         lastname: user.lastname,
-  //         phone: user.phone,
-  //         role: user.role,
-  //         technicianInfoID: user.technicianInfoID,
-  //         chatHistry: user.chatHistry,
-  //         status: true,
-  //       };
-  //     } else {
-  //       return { status: false };
-  //     }
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // },
+
   tokenCheck: async (args, req) => {
     try {
       if (req.userID !== null && req.userID !== undefined) {
