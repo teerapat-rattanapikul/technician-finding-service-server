@@ -4,6 +4,7 @@ const chatSchema = new mongoose.Schema({
   userID: mongoose.Schema.Types.ObjectId,
   userName: String,
   userAvatar: String,
+  type: String,
   technicianID: mongoose.Schema.Types.ObjectId,
   technicianName: String,
   technicianAvatar: String,
