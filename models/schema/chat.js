@@ -4,7 +4,6 @@ const chatSchema = new mongoose.Schema({
   userID: mongoose.Schema.Types.ObjectId,
   userName: String,
   userAvatar: String,
-  type: String,
   technicianID: mongoose.Schema.Types.ObjectId,
   technicianName: String,
   technicianAvatar: String,
@@ -12,6 +11,7 @@ const chatSchema = new mongoose.Schema({
   recentMessage: {
     sender: mongoose.Schema.Types.ObjectId,
     message: String,
+    msgType: String,
     date: {
       type: Date,
       default: Date.now,
@@ -21,6 +21,7 @@ const chatSchema = new mongoose.Schema({
     {
       sender: mongoose.Schema.Types.ObjectId,
       message: String,
+      msgType: String,
       date: {
         type: Date,
         default: Date.now,
