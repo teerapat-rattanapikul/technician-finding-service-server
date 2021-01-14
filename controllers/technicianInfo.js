@@ -72,9 +72,11 @@ module.exports = {
   getTechnicianInfo: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        const TECHNICIANINFO = await technicianInfoModel.findOne({
-          _id: args._id,
-        });
+        const TECHNICIANINFO = await technicianInfoModel
+          .findOne({
+            _id: args._id,
+          })
+          .populate("userInfoID");
         TECHNICIANINFO["status"] = true;
         return TECHNICIANINFO;
       } else {
