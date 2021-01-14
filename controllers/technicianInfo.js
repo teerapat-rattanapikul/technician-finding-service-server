@@ -49,10 +49,9 @@ module.exports = {
     try {
       if (req.role === "technician") {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        const USERINFO = await userInfoModel.findOne({ userID: req.userID });
         const updateInformation = await technicianInfoModel.findOneAndUpdate(
           {
-            userInfoID: USERINFO._id,
+            userInfoID: req.userInfoID,
             _id: INFORMATION.technicianID,
           },
           {
