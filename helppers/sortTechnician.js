@@ -34,6 +34,6 @@ module.exports = sortTechnician = (techArr) => {
       }
     }
   }
-  console.log(result);
+  //console.log(result);
   return result;
 };
