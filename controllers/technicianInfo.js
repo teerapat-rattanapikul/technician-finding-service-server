@@ -107,6 +107,7 @@ module.exports = {
             const returnData = element.technicianInfoID;
             element.technicianInfoID = undefined;
             returnData["userInfoID"] = element;
+            returnData.userInfoID["technicianInfoID"] = returnData._id;
             searchData.push(returnData);
           });
         }
