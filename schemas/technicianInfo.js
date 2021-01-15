@@ -10,6 +10,7 @@ module.exports = buildSchema(`
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
         userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
+        userComment(_id:ID,comment:String):TECHNICIANINFO
     }
     type AddressOUT{
         lat:Float
@@ -28,6 +29,7 @@ module.exports = buildSchema(`
         comment:String
     }
     type TECHNICIANINFO{
+        _id : ID
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
         comment:[COMMENT]

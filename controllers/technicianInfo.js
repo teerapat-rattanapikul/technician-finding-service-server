@@ -13,6 +13,7 @@ module.exports = {
         value["amountOfcomment"] = 0;
         value["star"] = 0;
         INFORMATION.aptitude = [value];
+        INFORMATION["comment"] = [];
         if (req.role === "user") {
           const USERINFO = await userInfoModel.findOne({ userID: req.userID });
           INFORMATION["star"] = 0;
@@ -76,7 +77,9 @@ module.exports = {
             _id: args._id,
           })
           .populate("userInfoID");
+        console.log(TECHNICIANINFO);
         TECHNICIANINFO["status"] = true;
+
         return TECHNICIANINFO;
       } else {
         return { status: false };
@@ -101,10 +104,10 @@ module.exports = {
             })
             .populate("technicianInfoID");
           userInfo.forEach((element) => {
-            const returndata = element.technicianInfoID;
+            const returnData = element.technicianInfoID;
             element.technicianInfoID = undefined;
-            returndata["userInfoID"] = element;
-            searchData.push(returndata);
+            returnData["userInfoID"] = element;
+            searchData.push(returnData);
           });
         }
         return { technician: sortTechnician(searchData), status: true };
@@ -142,6 +145,53 @@ module.exports = {
       }
     } catch (error) {
       return { status: false };
+    }
+  },
+  userVote: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        const technicianInfo = await technicianInfoModel.findOne({
+          _id: args.technicianID,
+        });
+
+        const voteTechnician = await technicianInfoModel
+          .findOneAndUpdate(
+            {
+              _id: args.technicianID,
+            },
+            {
+              $set: vote(technicianInfo, args.aptitude, args.voteStar),
+            },
+            { new: true }
+          )
+          .populate("userInfoID");
+        voteTechnician["status"] = true;
+        return voteTechnician;
+      } else {
+        return { status: false };
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+  userComment: async (args, req) => {
+    try {
+      if (req.userID !== null && req.userID !== undefined) {
+        const technicianUpdate = technicianInfoModel
+          .findOneAndUpdate(
+            { _id: args._id },
+            {
+              $push: { comment: { userID: req.userID, comment: args.comment } },
+            },
+            { new: true }
+          )
+          .populate("userInfoID");
+        technicianUpdate["status"] = true;
+        return technicianUpdate;
+      }
+      return { status: false };
+    } catch (error) {
+      return error;
     }
   },
 };
