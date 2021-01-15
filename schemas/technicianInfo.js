@@ -23,10 +23,14 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:ID
     }
-
+    type COMMENT{
+        userID:ID
+        comment:String
+    }
     type TECHNICIANINFO{
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
+        comment:[COMMENT]
         star: Float
         amount:Int
         address:AddressOUT
@@ -52,11 +56,16 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+    input CommentIN{
+        userID:ID
+        comment:String
+    }
     input TECHNICIANINFOINPUT{
         aptitude: String!
         onSite: Boolean!
         address:AddressIN
         description: String
+        comment:CommentIN
     }
     input TECHNICIANUPDATE{
         technicianID:ID!

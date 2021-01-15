@@ -30,7 +30,7 @@ module.exports = buildSchema(`
         sender: ID,
         message: String,
         date: Date
-        msgTypetype: String,
+        msgType: String,
     }
 
     input messageIn{
