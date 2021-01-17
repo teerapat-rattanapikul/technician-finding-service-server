@@ -19,11 +19,12 @@ const technicianInfoSchema = new mongoose.Schema(
     count: Number,
     star: Number,
     amount: Number,
-    // comment: [
-    //   {
-    //     detailComment: String,
-    //   },
-    // ],
+    comment: [
+      {
+        userID: mongoose.Schema.Types.ObjectId,
+        comment: String,
+      },
+    ],
     userInfoID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "userInformations",

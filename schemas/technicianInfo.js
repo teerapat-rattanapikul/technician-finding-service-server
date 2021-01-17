@@ -10,6 +10,7 @@ module.exports = buildSchema(`
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
         userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
+        userComment(_id:ID,comment:String):TECHNICIANINFO
     }
     type AddressOUT{
         lat:Float
@@ -23,10 +24,15 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:ID
     }
-
+    type COMMENT{
+        userID:ID
+        comment:String
+    }
     type TECHNICIANINFO{
+        _id : ID
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
+        comment:[COMMENT]
         star: Float
         amount:Int
         address:AddressOUT
@@ -52,11 +58,16 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+    input CommentIN{
+        userID:ID
+        comment:String
+    }
     input TECHNICIANINFOINPUT{
         aptitude: String!
         onSite: Boolean!
         address:AddressIN
         description: String
+        comment:CommentIN
     }
     input TECHNICIANUPDATE{
         technicianID:ID!
