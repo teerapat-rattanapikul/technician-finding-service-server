@@ -5,6 +5,7 @@ var authToken = "e8aa8fa7a981f3639d13b52c7800430e"; // Your Auth Token from www.
 var otpGenerator = require("otp-generator");
 var twilio = require("twilio");
 var client = new twilio(accountSid, authToken);
+const formController = require("./form");
 module.exports = {
   sendOTP: async (args) => {
     try {

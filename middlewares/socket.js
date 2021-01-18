@@ -1,5 +1,5 @@
 var clients = [];
-const formModel = require("../models").forms,;
+const formModel = require("../models").forms;
 module.exports = (app, io, db) => {
   io.on("connection", function (socket) {
     console.log(`${socket.id} connected`);
@@ -42,18 +42,16 @@ module.exports = (app, io, db) => {
 
     socket.on("send_message", function (data) {
       if (clients[data.receiver] !== undefined) {
-        socket
-          .to(clients[data.receiver].sid)
-          .emit("receive_message", {
-            message: data.message,
-            sender: data.sender,
-          });
+        socket.to(clients[data.receiver].sid).emit("receive_message", {
+          message: data.message,
+          sender: data.sender,
+        });
       } else {
         console.log("not available");
       }
     });
 
-    socket.on("send_post_req",async function (data) {
+    socket.on("send_post_req", async function (data) {
       console.log(data);
       await formModel.create(data);
       socket
