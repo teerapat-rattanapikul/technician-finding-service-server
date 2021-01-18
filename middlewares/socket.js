@@ -42,14 +42,19 @@ module.exports = (app, io, db) => {
             }
         })
 
-        socket.on('send_post_req', function (data) {
-            console.log(data)
-            socket.broadcast.to('api').emit('send_post_req' , {data})
+        socket.on('send_message' , function(data) {
+            if(clients[data.receiver] !== undefined) {
+                socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
+            }
+            else{
+                console.log('not available');
+            }
         })
 
-        socket.on('send_message' , function(data) {
+        socket.on('send_post_req' , function(data) {
             console.log(data);
-            if(data.receiver.length !== 0) socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
+            socket.to(clients['5ffed875c2aad77514888d92'].sid)
+            .emit('send_post_req' , {msg : 'server received'})
         })
 
         
