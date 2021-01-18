@@ -1,5 +1,4 @@
 const userInfoModel = require("../models").userInfomations;
-const genJWT = require("../services/genJWT");
 var twilio = require("twilio");
 var accountSid = "AC4c7bab831d608ed2b40150be4c57d0c2"; // Your Account SID from www.twilio.com/console
 var authToken = "e8aa8fa7a981f3639d13b52c7800430e"; // Your Auth Token from www.twilio.com/console
@@ -15,7 +14,6 @@ module.exports = {
         specialChars: false,
       });
       const phoneNumber = "66" + args.phone;
-      console.log(phoneNumber);
       //   await client.messages
       //     .create({
       //       body: otpGen,
