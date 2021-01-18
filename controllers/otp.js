@@ -14,7 +14,7 @@ module.exports = {
         upperCase: false,
         specialChars: false,
       });
-      const phoneNumber = "66" + args.phone;
+      const phoneNumber = "+66" + args.phone;
       //   await client.messages
       //     .create({
       //       body: otpGen,

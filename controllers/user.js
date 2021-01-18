@@ -67,7 +67,7 @@ module.exports = {
         lastname: REGISTER.lastname,
         avatar: REGISTER.avatar,
         userID: USER._id,
-        phone: REGISTER.phone,
+        phone: "0" + REGISTER.phone,
         role: REGISTER.role,
         chatHistry: [],
       });
