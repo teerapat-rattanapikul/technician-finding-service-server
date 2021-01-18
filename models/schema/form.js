@@ -5,6 +5,11 @@ const formSchema = new mongoose.Schema({
   detail: String,
   image: [String],
   date: String,
+  techType: String,
+  location: {
+    lat: Number,
+    lon: Number,
+  },
 });
 
 module.exports = formSchema;
