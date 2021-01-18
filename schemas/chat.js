@@ -16,8 +16,10 @@ module.exports = buildSchema(`
     type CHAT{
         _id:ID
         userID:ID,
+        userAvatar:String,
         userName:String,
         technicianID: ID,
+        technicianAvatar:String
         technicianName:String,
         recentMessage:HISTORY,
         history: [HISTORY],
@@ -28,15 +30,16 @@ module.exports = buildSchema(`
         sender: ID,
         message: String,
         date: Date
+        msgType: String,
     }
 
     input messageIn{
         sender: ID,
         message: String,
+        msgType: String,
     }
 
     input createChatInput{
-        userID:ID,
         technicianID: ID,
         message:messageIn
     }

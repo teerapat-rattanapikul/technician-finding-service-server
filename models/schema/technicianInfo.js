@@ -19,11 +19,12 @@ const technicianInfoSchema = new mongoose.Schema(
     count: Number,
     star: Number,
     amount: Number,
-    // comment: [
-    //   {
-    //     detailComment: String,
-    //   },
-    // ],
+    comment: [
+      {
+        userID: mongoose.Schema.Types.ObjectId,
+        comment: String,
+      },
+    ],
     userInfoID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "userInformations",
@@ -32,5 +33,8 @@ const technicianInfoSchema = new mongoose.Schema(
   }
   // { timestamps: true }
 );
-technicianInfoSchema.index({ aptitude: "text", description: "text" });
+technicianInfoSchema.index({
+  "aptitude.aptitude": "text",
+  description: "text",
+});
 module.exports = technicianInfoSchema;

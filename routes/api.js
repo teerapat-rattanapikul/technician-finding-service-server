@@ -1,6 +1,5 @@
 const { graphqlHTTP } = require("express-graphql");
 const express = require("express");
-const uploadImage = require("./uploadImage");
 const app = express();
 const { mergeResolver } = require("../controllers");
 const schema = require("../schemas");
@@ -27,16 +26,5 @@ app.use(
     graphiql: true,
   })
 );
-
-// app.use(
-//   "/graphql",
-//   graphqlHTTP({
-//     schema: mergedSchema,
-//     rootValue: mergeResolver,
-//     graphiql: true,
-//   })
-// );
-
-app.use("/uploadImage", uploadImage);
 
 module.exports = app;

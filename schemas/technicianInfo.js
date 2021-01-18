@@ -2,14 +2,15 @@ const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
         getTechnicianInfo(_id:ID):TECHNICIANINFO
-        userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
+        searchTechnician(word:String):SEARCHOUTPUT
+        getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
 
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
-        updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO
-        searchTechnician(WORD:SEARCH):SEARCHOUTPUT
-        getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
+        updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
+        userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
+        userComment(_id:ID,comment:String):TECHNICIANINFO
     }
     type AddressOUT{
         lat:Float
@@ -23,16 +24,22 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:ID
     }
-
+    type COMMENT{
+        userID:ID
+        comment:String
+    }
     type TECHNICIANINFO{
+        _id : ID
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
+        comment:[COMMENT]
         star: Float
         amount:Int
         address:AddressOUT
         description: String
         userInfoID: USERINFO
         count: Int
+        status:Boolean
     }
 
     type TECHNICIANVALUE{
@@ -51,23 +58,22 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+    input CommentIN{
+        userID:ID
+        comment:String
+    }
     input TECHNICIANINFOINPUT{
         aptitude: String!
         onSite: Boolean!
         address:AddressIN
         description: String
-        userInfoID: ID
+        comment:CommentIN
     }
     input TECHNICIANUPDATE{
         technicianID:ID!
         onSite: Boolean!
         description: String
         address:AddressIN
-    }
-
-    input SEARCH{
-        word: String!
-        address:AddressIN!
     }
 
     input GETNEAR{

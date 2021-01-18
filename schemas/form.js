@@ -14,7 +14,7 @@ module.exports = buildSchema(`
         _id:ID
         senderID:String
         detail:String
-        image: String
+        image: [String]
         date:String
     }
  

@@ -17,7 +17,6 @@ module.exports = () => (req, res, next) => {
       const token = authorization.replace("Bearer ", "");
       const decoded = jwt.verify(token, "secret_key");
       const user = decoded.user;
-      console.log(user);
       req.userID = user.userID;
       req.username = user.username;
       req.userInfoID = user.userInfoID;
@@ -27,6 +26,7 @@ module.exports = () => (req, res, next) => {
       req.role = user.role;
       req.technicianInfoID = user.technicianInfoID;
       req.chatHistry = user.chatHistry;
+      req.avatar = user.avatar;
     }
 
     next();

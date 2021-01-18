@@ -26,6 +26,7 @@ module.exports = {
             phone: userInfo.phone,
             technicianInfoID: userInfo.technicianInfoID,
             chatHistry: userInfo.chatHistry,
+            avatar: userInfo.avatar,
           };
           const token = genJWT(returnObject);
           returnObject["token"] = token;
@@ -63,9 +64,10 @@ module.exports = {
         password: REGISTER.password,
       });
       // add user_information and link user from sser_information
-      const information = await userInfoModel.create({
+      const userInfo = await userInfoModel.create({
         firstname: REGISTER.firstname,
         lastname: REGISTER.lastname,
+        avatar: REGISTER.avatar,
         userID: USER._id,
         phone: REGISTER.phone,
         role: REGISTER.role,
@@ -74,7 +76,7 @@ module.exports = {
       // link user_information from user
       await userModel.updateOne(
         { _id: USER._id },
-        { $set: { userInfoID: information._id } }
+        { $set: { userInfoID: userInfo._id } }
       );
       // add technician_information and link user_information from technician_information
       if (REGISTER.role === "technician") {
@@ -90,68 +92,39 @@ module.exports = {
           onSite: REGISTER.onSite,
           address: REGISTER.address,
           description: REGISTER.description,
-          userInfoID: information._id,
+          userInfoID: userInfo._id,
+          comment: [],
           star: 0,
           amount: 0,
         });
         //link technician_informaiton from user
         await userInfoModel.updateOne(
-          { _id: information._id },
+          { _id: userInfo._id },
           {
             $set: { role: "technician", technicianInfoID: technician._id },
           }
         );
       }
-      return { username: USER.username, status: true };
+      const returnObject = {
+        userID: USER._id,
+        username: USER.username,
+        userInfoID: userInfo._id,
+        firstname: userInfo.firstname,
+        lastname: userInfo.lastname,
+        role: userInfo.role,
+        phone: userInfo.phone,
+        technicianInfoID: userInfo.technicianInfoID,
+        chatHistry: userInfo.chatHistry,
+        avatar: userInfo.avatar,
+      };
+      const token = genJWT(returnObject);
+      returnObject["token"] = token;
+      returnObject["status"] = true;
+      return returnObject;
     } catch (error) {
       return { status: false };
     }
   },
-  userVote: async (args, req) => {
-    try {
-      if (req.role !== null && req.role !== undefined) {
-        const technicianInfo = await technicianInfoModel.findOne({
-          _id: args.technicianID,
-        });
-
-        const voteTechnician = await technicianInfoModel.findOneAndUpdate(
-          {
-            _id: args.technicianID,
-          },
-          {
-            $set: vote(technicianInfo, args.aptitude, args.voteStar),
-          },
-          { new: true }
-        );
-        return voteTechnician;
-      }
-    } catch (error) {
-      throw error;
-    }
-  },
-  // tokenCheck: async (args) => {
-  //   const user = tokenVerify(args.token);
-  //   try {
-  //     if (user.userID !== null && user.userID !== undefined) {
-  //       return {
-  //         userID: user.userID,
-  //         username: user.username,
-  //         userInfoID: user.userInfoID,
-  //         firstname: user.firstname,
-  //         lastname: user.lastname,
-  //         phone: user.phone,
-  //         role: user.role,
-  //         technicianInfoID: user.technicianInfoID,
-  //         chatHistry: user.chatHistry,
-  //         status: true,
-  //       };
-  //     } else {
-  //       return { status: false };
-  //     }
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // },
   tokenCheck: async (args, req) => {
     try {
       if (req.userID !== null && req.userID !== undefined) {
@@ -165,6 +138,7 @@ module.exports = {
           role: req.role,
           technicianInfoID: req.technicianInfoID,
           chatHistry: req.chatHistry,
+          avatar: req.avatar,
           status: true,
         };
       } else {
