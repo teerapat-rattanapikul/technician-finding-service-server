@@ -56,7 +56,7 @@ module.exports = (app, io, db) => {
       await formModel.create(data);
       socket
         .to(clients["5ffed875c2aad77514888d92"].sid)
-        .emit("send_post_req", { msg: "server received" });
+        .emit("send_post_req", { data });
     });
   });
 };
