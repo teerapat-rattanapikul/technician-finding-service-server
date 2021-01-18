@@ -6,11 +6,8 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        INFORMATION["date"] = new Date(INFORMATION.date)
-          .toISOString()
-          .replace(/T/, " ")
-          .replace(/\..+/, "");
         INFORMATION["senderID"] = req.userID;
+        console.log(INFORMATION);
         const information = await formModel.create(INFORMATION);
         return information;
       }
