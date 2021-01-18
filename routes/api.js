@@ -27,13 +27,4 @@ app.use(
   })
 );
 
-// app.use(
-//   "/graphql",
-//   graphqlHTTP({
-//     schema: mergedSchema,
-//     rootValue: mergeResolver,
-//     graphiql: true,
-//   })
-// );
-
 module.exports = app;
