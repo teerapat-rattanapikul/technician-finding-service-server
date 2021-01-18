@@ -1,11 +1,9 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
 const technicianInfoModel = require("../models").technicianInformations;
-const vote = require("../helppers/vote");
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
-//const tokenVerify = require("../middlewares/verifyJWT");
 
 module.exports = {
   login: async ({ LOGIN }) => {

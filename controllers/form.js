@@ -12,7 +12,6 @@ module.exports = {
           .replace(/\..+/, "");
         INFORMATION["senderID"] = req.userID;
         const information = await formModel.create(INFORMATION);
-        console.log(information);
         return information;
       }
     } catch (error) {
@@ -26,7 +25,6 @@ module.exports = {
         return form;
       }
     } catch (error) {
-      console.log(error);
       return error;
     }
   },

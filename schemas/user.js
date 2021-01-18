@@ -3,7 +3,6 @@ module.exports = buildSchema(`
     type Query{
         usernameCheck(username:String):Boolean
         tokenCheck(token:String):TOKEN
-       
     }
 
     type Mutation{
@@ -55,8 +54,5 @@ module.exports = buildSchema(`
         role: String
         aptitude: String
         onSite: Boolean
-        star: Int
-        amountOfvoteStar: Int
-        amountOfcomment: Int
     }
 `);

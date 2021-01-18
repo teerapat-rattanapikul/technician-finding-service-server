@@ -1,5 +1,6 @@
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
@@ -77,7 +78,6 @@ module.exports = {
             _id: args._id,
           })
           .populate("userInfoID");
-        console.log(TECHNICIANINFO);
         TECHNICIANINFO["status"] = true;
 
         return TECHNICIANINFO;

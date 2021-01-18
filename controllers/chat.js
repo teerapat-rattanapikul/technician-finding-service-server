@@ -22,7 +22,6 @@ module.exports = {
         INFORMATION["history"].push(INFORMATION.message);
         delete INFORMATION.message;
         const chat = await chatModel.create(INFORMATION);
-        console.log(chat);
         chat["status"] = true;
 
         await userInfoModel.updateOne(
