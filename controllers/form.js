@@ -3,11 +3,11 @@ const fs = require("fs");
 //add me
 module.exports = {
   addForm: async ({ INFORMATION }, req) => {
+    console.log(INFORMATION);
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         INFORMATION["senderID"] = req.userID;
-        console.log(INFORMATION);
         const information = await formModel.create(INFORMATION);
         return information;
       }
