@@ -42,11 +42,6 @@ module.exports = (app, io, db) => {
             }
         })
 
-        socket.on('send_post_req', function (data) {
-            console.log(data)
-            socket.broadcast.to('api').emit('send_post_req' , {data})
-        })
-
         socket.on('send_message' , function(data) {
             if(clients[data.receiver] !== undefined) {
                 socket.to(clients[data.receiver].sid).emit('receive_message' , {message : data.message , sender : data.sender})
@@ -54,6 +49,12 @@ module.exports = (app, io, db) => {
             else{
                 console.log('not available');
             }
+        })
+
+        socket.on('send_post_req' , function(data) {
+            console.log(data);
+            socket.to(clients['5ffed875c2aad77514888d92'].sid)
+            .emit('send_post_req' , {msg : 'server received'})
         })
 
         
