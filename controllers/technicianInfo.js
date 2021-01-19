@@ -1,5 +1,6 @@
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const userModel = require("../models").users;
 const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
@@ -16,19 +17,23 @@ module.exports = {
         INFORMATION.aptitude = [value];
         INFORMATION["comment"] = [];
         if (req.role === "user") {
-          const USERINFO = await userInfoModel.findOne({ userID: req.userID });
           INFORMATION["star"] = 0;
           INFORMATION["amount"] = 0;
+          INFORMATION["userID"] = req.userID;
           INFORMATION["userInfoID"] = req.userInfoID;
           technicianInfo = await technicianInfoModel.create(INFORMATION);
           await userInfoModel.updateOne(
-            { _id: USERINFO._id },
+            { _id: req.userInfoID },
             {
               $set: {
                 role: "technician",
                 technicianInfoID: technicianInfo._id,
               },
             }
+          );
+          await userModel.updateOne(
+            { _id: req.userID },
+            { $set: { technicianInfoID: technicianInfo._id } }
           );
         } else if (req.role === "technician") {
           technicianInfo = await technicianInfoModel.updateOne(
@@ -75,7 +80,7 @@ module.exports = {
       if (req.role !== null && req.role !== undefined) {
         const TECHNICIANINFO = await technicianInfoModel
           .findOne({
-            _id: args._id,
+            userID: args.userID,
           })
           .populate("userInfoID");
         TECHNICIANINFO["status"] = true;
@@ -152,13 +157,13 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         const technicianInfo = await technicianInfoModel.findOne({
-          _id: args.technicianID,
+          userID: args.userID,
         });
 
         const voteTechnician = await technicianInfoModel
           .findOneAndUpdate(
             {
-              _id: args.technicianID,
+              userID: args.userID,
             },
             {
               $set: vote(technicianInfo, args.aptitude, args.voteStar),
@@ -180,7 +185,7 @@ module.exports = {
       if (req.userID !== null && req.userID !== undefined) {
         const technicianUpdate = technicianInfoModel
           .findOneAndUpdate(
-            { _id: args._id },
+            { userID: args.userID },
             {
               $push: { comment: { userID: req.userID, comment: args.comment } },
             },

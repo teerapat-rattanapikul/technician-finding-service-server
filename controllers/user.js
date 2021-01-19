@@ -1,6 +1,5 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
-const technicianInfoModel = require("../models").technicianInformations;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -68,7 +67,7 @@ module.exports = {
         avatar: REGISTER.avatar,
         userID: USER._id,
         phone: "0" + REGISTER.phone,
-        role: REGISTER.role,
+        role: "user",
         chatHistry: [],
       });
       // link user_information from user
@@ -76,33 +75,6 @@ module.exports = {
         { _id: USER._id },
         { $set: { userInfoID: userInfo._id } }
       );
-      // add technician_information and link user_information from technician_information
-      if (REGISTER.role === "technician") {
-        const technician = await technicianInfoModel.create({
-          aptitude: [
-            {
-              aptitude: REGISTER.aptitude,
-              star: 0,
-              amountOfvoteStar: 0,
-              amountOfcomment: 0,
-            },
-          ],
-          onSite: REGISTER.onSite,
-          address: REGISTER.address,
-          description: REGISTER.description,
-          userInfoID: userInfo._id,
-          comment: [],
-          star: 0,
-          amount: 0,
-        });
-        //link technician_informaiton from user
-        await userInfoModel.updateOne(
-          { _id: userInfo._id },
-          {
-            $set: { role: "technician", technicianInfoID: technician._id },
-          }
-        );
-      }
       const returnObject = {
         userID: USER._id,
         username: USER.username,

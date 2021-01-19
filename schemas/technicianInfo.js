@@ -1,7 +1,7 @@
 const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
-        getTechnicianInfo(_id:ID):TECHNICIANINFO
+        getTechnicianInfo(userID:ID):TECHNICIANINFO
         searchTechnician(word:String):SEARCHOUTPUT
         getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
     }
@@ -9,8 +9,8 @@ module.exports = buildSchema(`
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
-        userVote(technicianID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
-        userComment(_id:ID,comment:String):TECHNICIANINFO
+        userVote(userID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
+        userComment(userID:ID,comment:String):TECHNICIANINFO
     }
     type AddressOUT{
         lat:Float
@@ -30,6 +30,7 @@ module.exports = buildSchema(`
     }
     type TECHNICIANINFO{
         _id : ID
+        userID:ID
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
         comment:[COMMENT]
@@ -67,7 +68,6 @@ module.exports = buildSchema(`
         onSite: Boolean!
         address:AddressIN
         description: String
-        comment:CommentIN
     }
     input TECHNICIANUPDATE{
         technicianID:ID!
