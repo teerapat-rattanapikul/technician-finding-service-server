@@ -1,5 +1,6 @@
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
+const userModel = require("../models").users;
 const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
 module.exports = {
@@ -16,19 +17,23 @@ module.exports = {
         INFORMATION.aptitude = [value];
         INFORMATION["comment"] = [];
         if (req.role === "user") {
-          const USERINFO = await userInfoModel.findOne({ userID: req.userID });
           INFORMATION["star"] = 0;
           INFORMATION["amount"] = 0;
+          INFORMATION["userID"] = req.userID;
           INFORMATION["userInfoID"] = req.userInfoID;
           technicianInfo = await technicianInfoModel.create(INFORMATION);
           await userInfoModel.updateOne(
-            { _id: USERINFO._id },
+            { _id: req.userInfoID },
             {
               $set: {
                 role: "technician",
                 technicianInfoID: technicianInfo._id,
               },
             }
+          );
+          await userModel.updateOne(
+            { _id: req.userID },
+            { $set: { technicianInfoID: technicianInfo._id } }
           );
         } else if (req.role === "technician") {
           technicianInfo = await technicianInfoModel.updateOne(
@@ -75,7 +80,7 @@ module.exports = {
       if (req.role !== null && req.role !== undefined) {
         const TECHNICIANINFO = await technicianInfoModel
           .findOne({
-            _id: args._id,
+            userID: args.userID,
           })
           .populate("userInfoID");
         TECHNICIANINFO["status"] = true;
@@ -140,6 +145,7 @@ module.exports = {
             .populate("userInfoID");
           area += 0.05;
         }
+        console.log(searchData);
         return { technician: searchData, status: true };
       } else {
         return { status: false };
@@ -152,13 +158,13 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         const technicianInfo = await technicianInfoModel.findOne({
-          _id: args.technicianID,
+          userID: args.userID,
         });
 
         const voteTechnician = await technicianInfoModel
           .findOneAndUpdate(
             {
-              _id: args.technicianID,
+              userID: args.userID,
             },
             {
               $set: vote(technicianInfo, args.aptitude, args.voteStar),
@@ -180,7 +186,7 @@ module.exports = {
       if (req.userID !== null && req.userID !== undefined) {
         const technicianUpdate = technicianInfoModel
           .findOneAndUpdate(
-            { _id: args._id },
+            { userID: args.userID },
             {
               $push: { comment: { userID: req.userID, comment: args.comment } },
             },
@@ -193,6 +199,48 @@ module.exports = {
       return { status: false };
     } catch (error) {
       return error;
+    }
+  },
+  fromSearchTech: async (args) => {
+    try {
+      const DAY = new Date(args.date).getDay();
+      const HOUR = new Date(args.date).getHours();
+      var area = 0.05;
+      var searchData = [];
+      while (searchData.length <= 2 && area < 4.0) {
+        const Tech = await technicianInfoModel
+          .find({
+            $text: { $search: args.word },
+            "address.lat": {
+              $gte: args.lat - area,
+              $lt: args.lat + area,
+            },
+            "address.lon": {
+              $gte: args.lon - area,
+              $lt: args.lon + area,
+            },
+          })
+          .populate("userInfoID");
+        Tech.forEach((tech) => {
+          tech.aptitude.forEach((APTITUDE) => {
+            if (APTITUDE.aptitude === args.word) {
+              if (APTITUDE.workDay.includes(DAY)) {
+                if (
+                  HOUR > APTITUDE.workTime.start &&
+                  HOUR < APTITUDE.workTime.end
+                ) {
+                  searchData.push(tech);
+                  console.log(searchData);
+                }
+              }
+            } else return;
+          });
+        });
+        area += 0.05;
+      }
+      return { technician: sortTechnician(searchData), status: true };
+    } catch (error) {
+      return { status: false };
     }
   },
 };

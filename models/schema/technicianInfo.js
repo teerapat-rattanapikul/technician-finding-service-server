@@ -1,38 +1,45 @@
 const mongoose = require("mongoose");
 
-const technicianInfoSchema = new mongoose.Schema(
-  {
-    aptitude: [
-      {
-        aptitude: String,
-        star: Number,
-        amountOfvoteStar: Number,
-        amountOfcomment: Number,
+const technicianInfoSchema = new mongoose.Schema({
+  aptitude: [
+    {
+      aptitude: String,
+      star: Number,
+      amountOfvoteStar: Number,
+      amountOfcomment: Number,
+      workDay: [Number],
+      workTime: {
+        start: Number,
+        end: Number,
       },
-    ],
-    onSite: Boolean,
-    address: {
-      lat: Number,
-      lon: Number,
     },
-    description: String,
-    count: Number,
-    star: Number,
-    amount: Number,
-    comment: [
-      {
-        userID: mongoose.Schema.Types.ObjectId,
-        comment: String,
-      },
-    ],
-    userInfoID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "userInformations",
-      require: true,
+  ],
+  onSite: Boolean,
+  address: {
+    lat: Number,
+    lon: Number,
+  },
+  description: String,
+  count: Number,
+  star: Number,
+  amount: Number,
+  comment: [
+    {
+      userID: mongoose.Schema.Types.ObjectId,
+      comment: String,
     },
-  }
-  // { timestamps: true }
-);
+  ],
+  userInfoID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userInformations",
+    require: true,
+  },
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    require: true,
+  },
+});
 technicianInfoSchema.index({
   "aptitude.aptitude": "text",
   description: "text",
