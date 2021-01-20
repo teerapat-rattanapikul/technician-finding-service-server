@@ -207,7 +207,7 @@ module.exports = {
       const HOUR = new Date(args.date).getHours();
       var area = 0.05;
       var searchData = [];
-      while (searchData.length <= 2 && area < 4.0) {
+      while (searchData.length <= 2 && area < 2.0) {
         const Tech = await technicianInfoModel
           .find({
             $text: { $search: args.word },
@@ -221,20 +221,19 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        Tech.forEach((tech) => {
-          tech.aptitude.forEach((APTITUDE) => {
-            if (APTITUDE.aptitude === args.word) {
-              if (APTITUDE.workDay.includes(DAY)) {
-                if (
-                  HOUR > APTITUDE.workTime.start &&
-                  HOUR < APTITUDE.workTime.end
-                ) {
-                  searchData.push(tech);
-                  console.log(searchData);
-                }
-              }
-            } else return;
-          });
+        searchData = [];
+        Tech.map((tech) => {
+          tech.aptitude
+            .filter(
+              (APTITUDE) =>
+                APTITUDE.aptitude === args.word &&
+                APTITUDE.workDay.includes(DAY) &&
+                APTITUDE.workTime.start < HOUR &&
+                HOUR < APTITUDE.workTime.end
+            )
+            .map(() => {
+              searchData.push(tech);
+            });
         });
         area += 0.05;
       }
