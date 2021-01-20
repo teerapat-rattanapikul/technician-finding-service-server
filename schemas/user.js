@@ -13,10 +13,6 @@ module.exports = buildSchema(`
         username: String,
         status: Boolean
     }
-    type AddressOUT{
-        lat:Float
-        lon:Float
-    }
     type TOKEN{
         token:String
         username:String
@@ -37,22 +33,14 @@ module.exports = buildSchema(`
         password:String
     }
 
-    input AddressIN{
-        lat:Float
-        lon:Float
-    }
     
     input UESRREGISTER{
         username: String
         password: String
         firstname: String
         lastname:String
-        address:AddressIN
-        description: String
         phone:String
         avatar:String
         role: String
-        aptitude: String
-        onSite: Boolean
     }
 `);

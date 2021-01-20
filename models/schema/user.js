@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
     ref: "userInformations",
     require: true,
   },
+  technicianInfoID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "technicianInformations",
+    require: true,
+  },
 });
 
 module.exports = userSchema;

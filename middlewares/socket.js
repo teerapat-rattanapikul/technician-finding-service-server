@@ -42,18 +42,17 @@ module.exports = (app, io, db) => {
 
     socket.on("send_message", function (data) {
       if (clients[data.receiver] !== undefined) {
-        socket
-          .to(clients[data.receiver].sid)
-          .emit("receive_message", {
-            message: data.message,
-            sender: data.sender,
-          });
+        socket.to(clients[data.receiver].sid).emit("receive_message", {
+          message: data.message,
+          sender: data.sender,
+        });
       } else {
         console.log("not available");
       }
     });
 
     socket.on("send_post_req", async function (data) {
+
       console.log('send post req' , data);
       //   await formModel.create(data);
       if (clients["5ffed875c2aad77514888d92"] !== undefined) {
@@ -61,6 +60,7 @@ module.exports = (app, io, db) => {
           .to(clients["5ffed875c2aad77514888d92"].sid)
           .emit("send_post_req", data);
       }
+
     });
 
 
