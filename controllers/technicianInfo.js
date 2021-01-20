@@ -145,6 +145,7 @@ module.exports = {
             .populate("userInfoID");
           area += 0.05;
         }
+        console.log(searchData);
         return { technician: searchData, status: true };
       } else {
         return { status: false };
@@ -198,6 +199,48 @@ module.exports = {
       return { status: false };
     } catch (error) {
       return error;
+    }
+  },
+  fromSearchTech: async (args) => {
+    try {
+      const DAY = new Date(args.date).getDay();
+      const HOUR = new Date(args.date).getHours();
+      var area = 0.05;
+      var searchData = [];
+      while (searchData.length <= 2 && area < 4.0) {
+        const Tech = await technicianInfoModel
+          .find({
+            $text: { $search: args.word },
+            "address.lat": {
+              $gte: args.lat - area,
+              $lt: args.lat + area,
+            },
+            "address.lon": {
+              $gte: args.lon - area,
+              $lt: args.lon + area,
+            },
+          })
+          .populate("userInfoID");
+        Tech.forEach((tech) => {
+          tech.aptitude.forEach((APTITUDE) => {
+            if (APTITUDE.aptitude === args.word) {
+              if (APTITUDE.workDay.includes(DAY)) {
+                if (
+                  HOUR > APTITUDE.workTime.start &&
+                  HOUR < APTITUDE.workTime.end
+                ) {
+                  searchData.push(tech);
+                  console.log(searchData);
+                }
+              }
+            } else return;
+          });
+        });
+        area += 0.05;
+      }
+      return { technician: sortTechnician(searchData), status: true };
+    } catch (error) {
+      return { status: false };
     }
   },
 };

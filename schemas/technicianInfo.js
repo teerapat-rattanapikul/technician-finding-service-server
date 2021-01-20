@@ -4,6 +4,7 @@ module.exports = buildSchema(`
         getTechnicianInfo(userID:ID):TECHNICIANINFO
         searchTechnician(word:String):SEARCHOUTPUT
         getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
+        fromSearchTech(word:String,lat:Float,lon:Float,date:String):SEARCHOUTPUT
     }
 
     type Mutation{
@@ -42,12 +43,18 @@ module.exports = buildSchema(`
         count: Int
         status:Boolean
     }
+    type WORKTIME{
+        start:Int
+        end:Int
+    }
 
     type TECHNICIANVALUE{
         aptitude:String
         star:Float
         amountOfvoteStar: Int
         amountOfcomment: Int
+        workDay:[Int]
+        workTime:WORKTIME
     }
 
     type SEARCHOUTPUT{

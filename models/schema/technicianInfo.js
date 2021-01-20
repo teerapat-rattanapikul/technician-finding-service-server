@@ -7,6 +7,11 @@ const technicianInfoSchema = new mongoose.Schema({
       star: Number,
       amountOfvoteStar: Number,
       amountOfcomment: Number,
+      workDay: [Number],
+      workTime: {
+        start: Number,
+        end: Number,
+      },
     },
   ],
   onSite: Boolean,
