@@ -53,12 +53,26 @@ module.exports = (app, io, db) => {
       }
     });
 
-    socket.on("send_post_req",async function (data) {
-      console.log(data);
-      await formModel.create(data);
-      socket
-        .to(clients["5ffed875c2aad77514888d92"].sid)
-        .emit("send_post_req", { data });
+    socket.on("send_post_req", async function (data) {
+      console.log('send post req' , data);
+      //   await formModel.create(data);
+      if (clients["5ffed875c2aad77514888d92"] !== undefined) {
+        socket
+          .to(clients["5ffed875c2aad77514888d92"].sid)
+          .emit("send_post_req", data);
+      }
     });
+
+
+    socket.on('accepted_req', ({ sendTo, payload }) => {
+      console.log(sendTo);
+      console.log(payload);
+      if(clients[sendTo] !== undefined){
+        socket
+          .to(clients[sendTo].sid)
+          .emit("accepted_req", payload);
+      }
+    })
+
   });
 };
