@@ -9,9 +9,11 @@ module.exports = buildSchema(`
 
     type Mutation{
         insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
+        createTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
         userVote(userID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
         userComment(userID:ID,comment:String):TECHNICIANINFO
+        test(date:String):Boolean
     }
     type AddressOUT{
         lat:Float
@@ -43,9 +45,13 @@ module.exports = buildSchema(`
         count: Int
         status:Boolean
     }
-    type WORKTIME{
-        start:Int
-        end:Int
+    type TIMEOUT{
+        hour:Int
+        minutes:Int
+    }
+    type WORKTIMEOUT{
+        start:TIMEOUT
+        end:TIMEOUT
     }
 
     type TECHNICIANVALUE{
@@ -53,8 +59,9 @@ module.exports = buildSchema(`
         star:Float
         amountOfvoteStar: Int
         amountOfcomment: Int
+        voteID:[ID]
         workDay:[Int]
-        workTime:WORKTIME
+        workTime:WORKTIMEOUT
     }
 
     type SEARCHOUTPUT{
@@ -70,8 +77,17 @@ module.exports = buildSchema(`
         userID:ID
         comment:String
     }
+    input TIMEIN{
+        hour:Int
+        minutes:Int
+    }
+    input WORKTIMEIN{
+        start:TIMEIN
+        end:TIMEIN
+    }
     input TECHNICIANINFOINPUT{
-        aptitude: String!
+        aptitude: [String]
+        workTime:WORKTIMEIN
         onSite: Boolean!
         address:AddressIN
         description: String

@@ -3,6 +3,7 @@ const userInfoModel = require("../models").userInfomations;
 const userModel = require("../models").users;
 const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
+const checkWorkActive = require("../helppers/checkWorkActive");
 module.exports = {
   insertTechnicianInfo: async ({ INFORMATION }, req) => {
     try {
@@ -10,43 +11,72 @@ module.exports = {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         var value = {};
         var technicianInfo = {};
-        value["aptitude"] = INFORMATION.aptitude;
+        const loop = INFORMATION.aptitude;
         value["amountOfvoteStar"] = 0;
         value["amountOfcomment"] = 0;
         value["star"] = 0;
-        INFORMATION.aptitude = [value];
-        INFORMATION["comment"] = [];
-        if (req.role === "user") {
-          INFORMATION["star"] = 0;
-          INFORMATION["amount"] = 0;
-          INFORMATION["userID"] = req.userID;
-          INFORMATION["userInfoID"] = req.userInfoID;
-          technicianInfo = await technicianInfoModel.create(INFORMATION);
-          await userInfoModel.updateOne(
-            { _id: req.userInfoID },
-            {
-              $set: {
-                role: "technician",
-                technicianInfoID: technicianInfo._id,
-              },
-            }
-          );
-          await userModel.updateOne(
-            { _id: req.userID },
-            { $set: { technicianInfoID: technicianInfo._id } }
-          );
-        } else if (req.role === "technician") {
+        value["voteID"] = [];
+        value["workTime"] = INFORMATION.workTime;
+        loop.forEach(async (APTITUDE) => {
+          value["aptitude"] = APTITUDE;
+          INFORMATION.aptitude = [value];
           technicianInfo = await technicianInfoModel.updateOne(
             {
               userInfoID: req.userInfoID,
             },
             { $push: { aptitude: INFORMATION.aptitude } }
           );
-        }
+        });
         technicianInfo["status"] = true;
         return technicianInfo;
       } else {
         return { status: false };
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+  createTechnicianInfo: async ({ INFORMATION }, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+        var data = INFORMATION.aptitude;
+        INFORMATION.aptitude = [];
+        INFORMATION["star"] = 0;
+        INFORMATION["amount"] = 0;
+        INFORMATION["userID"] = req.userID;
+        INFORMATION["userInfoID"] = req.userInfoID;
+        INFORMATION["comment"] = [];
+        console.log(INFORMATION);
+        data.forEach(async (APTITUDE) => {
+          var value = {
+            amountOfvoteStar: 0,
+            amountOfcomment: 0,
+            star: 0,
+            aptitude: APTITUDE,
+            voteID: [],
+            workTime: INFORMATION.workTime,
+          };
+          INFORMATION.aptitude.push(value);
+        });
+        console.log(INFORMATION);
+        technicianInfo = await technicianInfoModel.create(INFORMATION);
+        await userInfoModel.updateOne(
+          { _id: req.userInfoID },
+          {
+            $set: {
+              role: "technician",
+              technicianInfoID: technicianInfo._id,
+            },
+          }
+        );
+        await userModel.updateOne(
+          { _id: req.userID },
+          { $set: { technicianInfoID: technicianInfo._id } }
+        );
+        afterCreate = true;
+        technicianInfo["status"] = true;
+        return technicianInfo;
       }
     } catch (error) {
       throw error;
@@ -145,7 +175,6 @@ module.exports = {
             .populate("userInfoID");
           area += 0.05;
         }
-        console.log(searchData);
         return { technician: searchData, status: true };
       } else {
         return { status: false };
@@ -155,25 +184,35 @@ module.exports = {
     }
   },
   userVote: async (args, req) => {
+    console.log(args);
     try {
       if (req.role !== null && req.role !== undefined) {
         const technicianInfo = await technicianInfoModel.findOne({
           userID: args.userID,
         });
-
-        const voteTechnician = await technicianInfoModel
-          .findOneAndUpdate(
-            {
-              userID: args.userID,
-            },
-            {
-              $set: vote(technicianInfo, args.aptitude, args.voteStar),
-            },
-            { new: true }
-          )
-          .populate("userInfoID");
-        voteTechnician["status"] = true;
-        return voteTechnician;
+        const voting = vote(
+          technicianInfo,
+          args.aptitude,
+          args.voteStar,
+          req.userID
+        );
+        if (voting !== false) {
+          const voteTechnician = await technicianInfoModel
+            .findOneAndUpdate(
+              {
+                userID: args.userID,
+              },
+              {
+                $set: voting,
+              },
+              { new: true }
+            )
+            .populate("userInfoID");
+          voteTechnician["status"] = true;
+          return voteTechnician;
+        } else {
+          return { status: false };
+        }
       } else {
         return { status: false };
       }
@@ -205,6 +244,7 @@ module.exports = {
     try {
       const DAY = new Date(args.date).getDay();
       const HOUR = new Date(args.date).getHours();
+      const MINUTE = new Date(args.date).getMinutes();
       var area = 0.05;
       var searchData = [];
       while (searchData.length <= 2 && area < 2.0) {
@@ -224,13 +264,11 @@ module.exports = {
         searchData = [];
         Tech.map((tech) => {
           tech.aptitude
-            .filter(
-              (APTITUDE) =>
-                APTITUDE.aptitude === args.word &&
+            .filter((APTITUDE) => {
+              APTITUDE.aptitude === args.word &&
                 APTITUDE.workDay.includes(DAY) &&
-                APTITUDE.workTime.start < HOUR &&
-                HOUR < APTITUDE.workTime.end
-            )
+                checkWorkActive(APTITUDE.workTime.start, APTITUDE.workTime.end);
+            })
             .map(() => {
               searchData.push(tech);
             });
@@ -240,6 +278,30 @@ module.exports = {
       return { technician: sortTechnician(searchData), status: true };
     } catch (error) {
       return { status: false };
+    }
+  },
+  test: async (args) => {
+    HOUR = new Date(args.date).getHours();
+    MINUTE = new Date(args.date).getMinutes();
+    console.log(HOUR);
+    console.log(MINUTE);
+    const startH = 8;
+    const startM = 59;
+    const endH = 15;
+    const endM = 40;
+    if (startH <= HOUR && endH >= HOUR) {
+      if (startH === HOUR) {
+        if (startM <= MINUTE) {
+          return true;
+        } else if (endH === HOUR) {
+          if (endM >= MINUTE) {
+            return true;
+          }
+        }
+      }
+      return true;
+    } else {
+      return false;
     }
   },
 };

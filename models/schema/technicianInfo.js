@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
-
 const technicianInfoSchema = new mongoose.Schema({
   aptitude: [
     {
+      _id: false,
       aptitude: String,
       star: Number,
       amountOfvoteStar: Number,
       amountOfcomment: Number,
       workDay: [Number],
       workTime: {
-        start: Number,
-        end: Number,
+        start: {
+          hour: Number,
+          minutes: Number,
+        },
+        end: {
+          hour: Number,
+          minutes: Number,
+        },
       },
+      voteID: [String],
     },
   ],
   onSite: Boolean,
@@ -25,6 +32,7 @@ const technicianInfoSchema = new mongoose.Schema({
   amount: Number,
   comment: [
     {
+      _id: false,
       userID: mongoose.Schema.Types.ObjectId,
       comment: String,
     },
