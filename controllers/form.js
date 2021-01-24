@@ -1,4 +1,5 @@
 const formModel = require("../models").forms;
+const userInfoModel = require("../models").userInfomations;
 const fs = require("fs");
 //add me
 module.exports = {
@@ -9,6 +10,10 @@ module.exports = {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         INFORMATION["senderID"] = req.userID;
         const information = await formModel.create(INFORMATION);
+        await userInfoModel.updateOne(
+          { _id: req.userID },
+          { $push: { $forms: information._id } }
+        );
         return information;
       }
     } catch (error) {

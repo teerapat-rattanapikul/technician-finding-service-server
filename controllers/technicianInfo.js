@@ -263,45 +263,35 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        searchData = [];
-        Tech.forEach((tech) => {
-          tech.aptitude.forEach((APTITUDE) => {
-            if (
-              APTITUDE.aptitude === args.word &&
-              APTITUDE.workDay.includes(DAY) &&
-              checkWorkActive(
-                APTITUDE.workTime.start,
-                APTITUDE.workTime.end,
-                HOUR,
-                MINUTE
-              )
-            ) {
-              console.log(tech);
-              searchData.push(tech);
-              return;
-            }
-          });
+
+        searchData = Tech.filter((tech) => {
+          return (
+            tech.workDay.includes(DAY) &&
+            checkWorkActive(
+              tech.workTime.start,
+              tech.workTime.end,
+              HOUR,
+              MINUTE
+            )
+          );
         });
 
-        // Tech.map((tech) => {
-        //   tech.aptitude
-        //     .filter((APTITUDE) => {
-        //       return (
-        // APTITUDE.aptitude === args.word &&
-        // APTITUDE.workDay.includes(DAY) &&
-        // checkWorkActive(
-        //   APTITUDE.workTime.start,
-        //   APTITUDE.workTime.end,
-        //   HOUR,
-        //   MINUTE
-        //         )
-        //       );
-        //     })
-        //     .map(() => {
-        //       console.log(tech);
-        //       searchData.push(tech);
-        //     });
+        // searchData = Tech.filter((tech) => {
+        //   console.log(tech);
+        //   return tech.filter((TIME) => {
+        //     console.log(TIME);
+        //     return (
+        //       TIME.workDay.includes(DAY) &&
+        //       checkWorkActive(
+        //         TIME.workTime.start,
+        //         TIME.workTime.end,
+        //         HOUR,
+        //         MINUTE
+        //       )
+        //     );
+        //   });
         // });
+
         area += 0.05;
       }
       return { technician: sortTechnician(searchData), status: true };
@@ -328,6 +318,8 @@ module.exports = {
         { _id: uesrID },
         { $push: { acceptForm: args.formID }, $set: { newForm: [] } }
       );
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   },
 };

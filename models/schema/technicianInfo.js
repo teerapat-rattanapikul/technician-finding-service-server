@@ -7,18 +7,32 @@ const technicianInfoSchema = new mongoose.Schema({
       star: Number,
       amountOfvoteStar: Number,
       amountOfcomment: Number,
-      workDay: [Number],
-      workTime: {
-        start: {
-          hour: Number,
-          minutes: Number,
-        },
-        end: {
-          hour: Number,
-          minutes: Number,
-        },
-      },
       voteID: [String],
+    },
+  ],
+  workDay: [Number],
+  workTime: {
+    start: {
+      hour: Number,
+      minutes: Number,
+    },
+    end: {
+      hour: Number,
+      minutes: Number,
+    },
+  },
+  acceptForm: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "forms",
+      require: true,
+    },
+  ],
+  newForm: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "forms",
+      require: true,
     },
   ],
   onSite: Boolean,
