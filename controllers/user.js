@@ -120,7 +120,8 @@ module.exports = {
             .findOne({
               _id: req.technicianInfoID,
             })
-            .populate("forms");
+            .populate("newForm")
+            .populate("acceptForm");
           result["technicianInfoID"] = technicianData;
         }
         return result;
