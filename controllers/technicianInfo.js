@@ -247,7 +247,6 @@ module.exports = {
       const DAY = new Date(args.date).getDay();
       const HOUR = new Date(args.date).getHours();
       const MINUTE = new Date(args.date).getMinutes();
-      console.log(DAY);
       var area = 0.05;
       var searchData = [];
       while (searchData.length <= 1 && area < 2.0) {
@@ -264,26 +263,26 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        searchData = [];
-        Tech.map((tech) => {
-          tech.aptitude
-            .filter((APTITUDE) => {
-              return (
-                APTITUDE.aptitude === args.word &&
-                APTITUDE.workDay.includes(DAY) &&
-                checkWorkActive(
-                  APTITUDE.workTime.start,
-                  APTITUDE.workTime.end,
-                  HOUR,
-                  MINUTE
-                )
-              );
-            })
-            .map(() => {
-              console.log(tech);
-              searchData.push(tech);
-            });
-        });
+        searchData = Tech;
+        // Tech.map((tech) => {
+        //   tech.aptitude
+        //     .filter((APTITUDE) => {
+        //       return (
+        //         APTITUDE.aptitude === args.word &&
+        //         APTITUDE.workDay.includes(DAY) &&
+        //         checkWorkActive(
+        //           APTITUDE.workTime.start,
+        //           APTITUDE.workTime.end,
+        //           HOUR,
+        //           MINUTE
+        //         )
+        //       );
+        //     })
+        //     .map(() => {
+        //       console.log(tech);
+        //       searchData.push(tech);
+        //     });
+        // });
         area += 0.05;
       }
       return { technician: sortTechnician(searchData), status: true };
