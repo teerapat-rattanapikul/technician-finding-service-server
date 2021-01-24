@@ -66,9 +66,14 @@ module.exports = (app, io, db) => {
         technician: tech.technician,
         formID: form._id,
       });
-      socket
-        .to(clients["5ffed875c2aad77514888d92"].sid)
-        .emit("send_post_req", { data });
+      tech.map((item) => {
+        if (client[item._id] !== undefined) {
+          socket.to(clients[item._id].sid).emit("send_post_req", { form });
+        }
+      });
+      // socket
+      //   .to(clients["5ffed875c2aad77514888d92"].sid)
+      //   .emit("send_post_req", { data });
     });
 
     socket.on("accepted_req", ({ sendTo, payload }) => {
