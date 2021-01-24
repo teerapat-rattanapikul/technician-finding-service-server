@@ -263,18 +263,18 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-
-        searchData = Tech.filter((tech) => {
-          return (
-            tech.workDay.includes(DAY) &&
-            checkWorkActive(
-              tech.workTime.start,
-              tech.workTime.end,
-              HOUR,
-              MINUTE
-            )
-          );
-        });
+        searchData = Tech;
+        // searchData = Tech.filter((tech) => {
+        //   return (
+        //     tech.workDay.includes(DAY) &&
+        //     checkWorkActive(
+        //       tech.workTime.start,
+        //       tech.workTime.end,
+        //       HOUR,
+        //       MINUTE
+        //     )
+        //   );
+        // });
 
         // searchData = Tech.filter((tech) => {
         //   console.log(tech);
