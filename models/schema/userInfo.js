@@ -15,6 +15,18 @@ const userInfoSchema = new mongoose.Schema({
     ref: "technicianInformations",
     require: true,
   },
+  notification: [
+    {
+      techFname: String,
+      techLname: String,
+      minPrice: Number,
+      maxPrice: Number,
+      location: {
+        lat: Number,
+        lon: Number,
+      },
+    },
+  ],
   role: String,
   chatHistry: [
     {
