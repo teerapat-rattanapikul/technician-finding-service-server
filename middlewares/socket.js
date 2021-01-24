@@ -56,7 +56,7 @@ module.exports = (app, io, db) => {
       const INFORMATION = data;
       const form = await formController.addForm({ INFORMATION });
       const tech = await technicianController.fromSearchTech({
-        word: data.typeTech,
+        word: data.techType,
         lat: data.location.lat,
         lon: data.location.lon,
         date: data.date,
