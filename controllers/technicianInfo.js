@@ -266,7 +266,6 @@ module.exports = {
         searchData = [];
         Tech.forEach((tech) => {
           tech.aptitude.forEach((APTITUDE) => {
-            console.log(APTITUDE);
             if (
               APTITUDE.aptitude === args.word &&
               APTITUDE.workDay.includes(DAY) &&
@@ -277,6 +276,7 @@ module.exports = {
                 MINUTE
               )
             ) {
+              console.log(tech);
               searchData.push(tech);
               return;
             }
