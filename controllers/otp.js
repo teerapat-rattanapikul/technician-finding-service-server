@@ -1,11 +1,11 @@
 const userInfoModel = require("../models").userInfomations;
+const formController = require("../controllers/form");
 var twilio = require("twilio");
 var accountSid = "AC4c7bab831d608ed2b40150be4c57d0c2"; // Your Account SID from www.twilio.com/console
 var authToken = "e8aa8fa7a981f3639d13b52c7800430e"; // Your Auth Token from www.twilio.com/console
 var otpGenerator = require("otp-generator");
 var twilio = require("twilio");
 var client = new twilio(accountSid, authToken);
-const formController = require("./form");
 module.exports = {
   sendOTP: async (args) => {
     try {
@@ -41,5 +41,20 @@ module.exports = {
     } catch (error) {
       return false;
     }
+  },
+  test: async () => {
+    const INFORMATION = {
+      senderID: "5ffeaa6ba4f28a3dbfd905dc",
+      location: {
+        lat: 1.234,
+        lon: 1.234,
+      },
+      detail: "hello",
+      techType: "คอม",
+      image: [],
+      date: "2021-01-24T01:40Z",
+    };
+    const result = await formController.addForm({ INFORMATION });
+    console.log(result);
   },
 };

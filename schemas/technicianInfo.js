@@ -13,7 +13,7 @@ module.exports = buildSchema(`
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
         userVote(userID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
         userComment(userID:ID,comment:String):TECHNICIANINFO
-        test(date:String):Boolean
+
     }
     type AddressOUT{
         lat:Float

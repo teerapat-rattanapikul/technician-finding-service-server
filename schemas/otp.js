@@ -4,7 +4,7 @@ module.exports = buildSchema(`
         getOTP(code:String):Boolean
         phoneCheck(phone:String):Boolean
         sendOTP(phone:String):String
-        test(detail:String):Boolean
+        test:Boolean
     }
 
 
