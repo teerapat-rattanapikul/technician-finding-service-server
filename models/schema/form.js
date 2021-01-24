@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const formSchema = new mongoose.Schema({
-  senderID: {
+  senderID: mongoose.Schema.Types.ObjectId,
+  userInfoID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    ref: "userInformations",
     require: true,
   },
   detail: String,

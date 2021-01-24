@@ -51,9 +51,11 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+
     type FORM{
         _id:ID
-        senderID:String
+        senderID:ID
+        userInfoID:USERINFO
         detail:String
         image: [String]
         date:String
