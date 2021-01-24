@@ -3,19 +3,14 @@ const userInfoModel = require("../models").userInfomations;
 const fs = require("fs");
 //add me
 module.exports = {
-  addForm: async ({ INFORMATION }, req) => {
-    console.log(INFORMATION);
+  addForm: async ({ INFORMATION }) => {
     try {
-      if (req.role !== null && req.role !== undefined) {
-        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        INFORMATION["senderID"] = req.userID;
-        const information = await formModel.create(INFORMATION);
-        await userInfoModel.updateOne(
-          { _id: req.userID },
-          { $push: { $forms: information._id } }
-        );
-        return information;
-      }
+      const information = await formModel.create(INFORMATION);
+      await userInfoModel.updateOne(
+        { _id: req.userID },
+        { $push: { $forms: information._id } }
+      );
+      return information;
     } catch (error) {
       throw error;
     }

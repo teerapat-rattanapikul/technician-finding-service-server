@@ -1,5 +1,6 @@
 var clients = [];
-const formModel = require("../models").forms;
+const formController = require("../controllers/form");
+const technicianController = require("../controllers/technicianInfo");
 module.exports = (app, io, db) => {
   io.on("connection", function (socket) {
     console.log(`${socket.id} connected`);
@@ -52,15 +53,22 @@ module.exports = (app, io, db) => {
     });
 
     socket.on("send_post_req", async function (data) {
-
-      console.log('send post req' , data);
-      //   await formModel.create(data);
-      if (clients["5ffed875c2aad77514888d92"] !== undefined) {
-        socket
-          .to(clients["5ffed875c2aad77514888d92"].sid)
-          .emit("send_post_req", data);
-      }
-
+      console.log(data);
+      const INFORMATION = data;
+      const form = await formController.addForm({ INFORMATION });
+      const tech = await technicianController.fromSearchTech({
+        word: data.typeTech,
+        lat: data.location.lat,
+        lon: data.location.lon,
+        date: data.date,
+      });
+      await technicianController.saveNewForm({
+        technician: tech.technician,
+        formID: form._id,
+      });
+      socket
+        .to(clients["5ffed875c2aad77514888d92"].sid)
+        .emit("send_post_req", { data });
     });
 
 
