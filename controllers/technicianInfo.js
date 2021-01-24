@@ -47,6 +47,8 @@ module.exports = {
         INFORMATION["userID"] = req.userID;
         INFORMATION["userInfoID"] = req.userInfoID;
         INFORMATION["comment"] = [];
+        INFORMATION["newForm"] = [];
+        INFORMATION["acceptForm"] = [];
         console.log(INFORMATION);
         data.forEach(async (APTITUDE) => {
           var value = {
@@ -280,28 +282,25 @@ module.exports = {
       return { status: false };
     }
   },
-  test: async (args) => {
-    HOUR = new Date(args.date).getHours();
-    MINUTE = new Date(args.date).getMinutes();
-    console.log(HOUR);
-    console.log(MINUTE);
-    const startH = 8;
-    const startM = 59;
-    const endH = 15;
-    const endM = 40;
-    if (startH <= HOUR && endH >= HOUR) {
-      if (startH === HOUR) {
-        if (startM <= MINUTE) {
-          return true;
-        } else if (endH === HOUR) {
-          if (endM >= MINUTE) {
-            return true;
-          }
-        }
-      }
+  saveNewForm: async (args) => {
+    try {
+      args.technician.forEach(async (tech) => {
+        await technicianInfoModel.updateOne(
+          { _id: tech._id },
+          { $push: { newForm: args.formID } }
+        );
+      });
       return true;
-    } else {
-      return false;
+    } catch (error) {
+      throw error;
     }
+  },
+  saveAcceptForm: async (args) => {
+    try {
+      await technicianInfoModel.updateOne(
+        { _id: uesrID },
+        { $push: { acceptForm: args.formID }, $set: { newForm: [] } }
+      );
+    } catch (error) {}
   },
 };

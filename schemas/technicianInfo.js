@@ -31,12 +31,27 @@ module.exports = buildSchema(`
         userID:ID
         comment:String
     }
+    type LOCATIONOUT{
+        lat:Float
+        lon:Float
+    }
+    type FORM{
+        _id:ID
+        senderID:String
+        detail:String
+        image: [String]
+        date:String
+        techType:String
+        location:LOCATIONOUT
+    }
     type TECHNICIANINFO{
         _id : ID
         userID:ID
         aptitude: [TECHNICIANVALUE]
         onSite: Boolean
         comment:[COMMENT]
+        acceptForm:[FORM]
+        newForm:[FORM]
         star: Float
         amount:Int
         address:AddressOUT

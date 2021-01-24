@@ -1,5 +1,6 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
+const technicianInfoModel = require("../models").technicianInformations;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -24,6 +25,7 @@ module.exports = {
             technicianInfoID: userInfo.technicianInfoID,
             chatHistry: userInfo.chatHistry,
             avatar: userInfo.avatar,
+            notification: userInfo.notification,
           };
           const token = genJWT(returnObject);
           returnObject["token"] = token;
@@ -68,6 +70,7 @@ module.exports = {
         userID: USER._id,
         phone: "0" + REGISTER.phone,
         role: "user",
+        notification: [],
         chatHistry: [],
       });
       // link user_information from user
@@ -86,6 +89,7 @@ module.exports = {
         technicianInfoID: userInfo.technicianInfoID,
         chatHistry: userInfo.chatHistry,
         avatar: userInfo.avatar,
+        notification: userInfo.notification,
       };
       const token = genJWT(returnObject);
       returnObject["token"] = token;
@@ -98,7 +102,7 @@ module.exports = {
   tokenCheck: async (args, req) => {
     try {
       if (req.userID !== null && req.userID !== undefined) {
-        return {
+        const result = {
           userID: req.userID,
           username: req.username,
           userInfoID: req.userInfoID,
@@ -106,11 +110,18 @@ module.exports = {
           lastname: req.lastname,
           phone: req.phone,
           role: req.role,
-          technicianInfoID: req.technicianInfoID,
           chatHistry: req.chatHistry,
           avatar: req.avatar,
+          notification: req.notification,
           status: true,
         };
+        if (req.role === "technician") {
+          const technicianData = await technicianInfoModel.findOne({
+            _id: req.technicianInfoID,
+          });
+          result["technicianInfoID"] = technicianData;
+        }
+        return result;
       } else {
         return { status: false };
       }
