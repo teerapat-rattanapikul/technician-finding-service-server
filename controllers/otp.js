@@ -44,12 +44,16 @@ module.exports = {
     }
   },
   test: async () => {
-    const INFORMATION = {
-      senderID: "5ffeaa6ba4f28a3dbfd905dc",
-    };
-    const form = await formController.addForm({
-      INFORMATION,
+    const tech = await technicianController.fromSearchTech({
+      word: "หดส",
+      lat: 1.234,
+      lon: 1.234,
+      date: "2021-01-24T01:40Z",
     });
-    console.log(form._id);
+    const result = await technicianController.saveNewForm({
+      technician: tech.technician,
+      formID: "600d77ba7bd38a0022fcb5c5",
+    });
+    console.log(("result:", result));
   },
 };

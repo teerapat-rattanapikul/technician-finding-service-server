@@ -244,6 +244,7 @@ module.exports = {
   },
   fromSearchTech: async (args) => {
     try {
+      console.log(args);
       const DAY = new Date(args.date).getDay();
       const HOUR = new Date(args.date).getHours();
       const MINUTE = new Date(args.date).getMinutes();
