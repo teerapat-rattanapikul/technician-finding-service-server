@@ -263,25 +263,35 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        searchData = [];
-        Tech.map(async (tech) => {
-          await tech.aptitude
-            .filter((APTITUDE) => {
-              return (
-                APTITUDE.aptitude === args.word &&
-                APTITUDE.workDay.includes(DAY) &&
-                checkWorkActive(
-                  APTITUDE.workTime.start,
-                  APTITUDE.workTime.end,
-                  HOUR,
-                  MINUTE
-                )
-              );
-            })
-            .map(async () => {
-              await searchData.push(tech);
-            });
+
+        searchData = Tech.filter((tech) => {
+          return (
+            tech.workDay.includes(DAY) &&
+            checkWorkActive(
+              tech.workTime.start,
+              tech.workTime.end,
+              HOUR,
+              MINUTE
+            )
+          );
         });
+
+        // searchData = Tech.filter((tech) => {
+        //   console.log(tech);
+        //   return tech.filter((TIME) => {
+        //     console.log(TIME);
+        //     return (
+        //       TIME.workDay.includes(DAY) &&
+        //       checkWorkActive(
+        //         TIME.workTime.start,
+        //         TIME.workTime.end,
+        //         HOUR,
+        //         MINUTE
+        //       )
+        //     );
+        //   });
+        // });
+
         area += 0.05;
       }
       return { technician: sortTechnician(searchData), status: true };
