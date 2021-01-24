@@ -70,5 +70,17 @@ module.exports = (app, io, db) => {
         .to(clients["5ffed875c2aad77514888d92"].sid)
         .emit("send_post_req", { data });
     });
+
+
+    socket.on('accepted_req', ({ sendTo, payload }) => {
+      console.log(sendTo);
+      console.log(payload);
+      if(clients[sendTo] !== undefined){
+        socket
+          .to(clients[sendTo].sid)
+          .emit("accepted_req", payload);
+      }
+    })
+
   });
 };
