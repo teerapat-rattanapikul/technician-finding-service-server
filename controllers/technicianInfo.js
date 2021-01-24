@@ -280,6 +280,7 @@ module.exports = {
               );
             })
             .map(() => {
+              console.log(tech);
               searchData.push(tech);
             });
         });
