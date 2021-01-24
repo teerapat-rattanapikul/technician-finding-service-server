@@ -15,16 +15,11 @@ const userInfoSchema = new mongoose.Schema({
     ref: "technicianInformations",
     require: true,
   },
-  notification: [
+  forms: [
     {
-      techFname: String,
-      techLname: String,
-      minPrice: Number,
-      maxPrice: Number,
-      location: {
-        lat: Number,
-        lon: Number,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "forms",
+      require: true,
     },
   ],
   role: String,

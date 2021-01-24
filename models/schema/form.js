@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const formSchema = new mongoose.Schema({
-  senderID: mongoose.Schema.Types.ObjectId,
+  senderID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    require: true,
+  },
   detail: String,
   image: [String],
   date: String,
@@ -10,6 +14,13 @@ const formSchema = new mongoose.Schema({
     lat: Number,
     lon: Number,
   },
+  technician: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "technicianInformations",
+      require: true,
+    },
+  ],
 });
 
 module.exports = formSchema;

@@ -264,44 +264,24 @@ module.exports = {
           })
           .populate("userInfoID");
         searchData = [];
-        Tech.forEach((tech) => {
-          tech.aptitude.forEach((APTITUDE) => {
-            if (
-              APTITUDE.aptitude === args.word &&
-              APTITUDE.workDay.includes(DAY) &&
-              checkWorkActive(
-                APTITUDE.workTime.start,
-                APTITUDE.workTime.end,
-                HOUR,
-                MINUTE
-              )
-            ) {
-              console.log(tech);
-              searchData.push(tech);
-              return;
-            }
-          });
+        Tech.map(async (tech) => {
+          await tech.aptitude
+            .filter((APTITUDE) => {
+              return (
+                APTITUDE.aptitude === args.word &&
+                APTITUDE.workDay.includes(DAY) &&
+                checkWorkActive(
+                  APTITUDE.workTime.start,
+                  APTITUDE.workTime.end,
+                  HOUR,
+                  MINUTE
+                )
+              );
+            })
+            .map(async () => {
+              await searchData.push(tech);
+            });
         });
-
-        // Tech.map((tech) => {
-        //   tech.aptitude
-        //     .filter((APTITUDE) => {
-        //       return (
-        // APTITUDE.aptitude === args.word &&
-        // APTITUDE.workDay.includes(DAY) &&
-        // checkWorkActive(
-        //   APTITUDE.workTime.start,
-        //   APTITUDE.workTime.end,
-        //   HOUR,
-        //   MINUTE
-        //         )
-        //       );
-        //     })
-        //     .map(() => {
-        //       console.log(tech);
-        //       searchData.push(tech);
-        //     });
-        // });
         area += 0.05;
       }
       return { technician: sortTechnician(searchData), status: true };
@@ -328,6 +308,8 @@ module.exports = {
         { _id: uesrID },
         { $push: { acceptForm: args.formID }, $set: { newForm: [] } }
       );
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   },
 };
