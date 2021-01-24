@@ -67,8 +67,8 @@ module.exports = (app, io, db) => {
         formID: form._id,
       });
       tech.technician.map((item) => {
-        if (client[item._id] !== undefined) {
-          socket.to(clients[item._id].sid).emit("send_post_req", { form });
+        if (clients[item.userID] !== undefined) {
+          socket.to(clients[item.userID].sid).emit("send_post_req", { form });
         }
       });
       // socket
