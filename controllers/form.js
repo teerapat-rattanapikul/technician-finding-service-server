@@ -7,7 +7,7 @@ module.exports = {
     try {
       const information = await formModel.create(INFORMATION);
       await userInfoModel.updateOne(
-        { _id: req.userID },
+        { userID: INFORMATION.senderID },
         { $push: { $forms: information._id } }
       );
       return information;
