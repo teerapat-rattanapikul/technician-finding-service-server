@@ -53,7 +53,6 @@ module.exports = (app, io, db) => {
     });
 
     socket.on("send_post_req", async function (data) {
-      console.log(data);
       const INFORMATION = data;
       const form = await formController.addForm({ INFORMATION });
       const tech = await technicianController.fromSearchTech({
@@ -62,6 +61,7 @@ module.exports = (app, io, db) => {
         lon: data.location.lon,
         date: data.date,
       });
+      console.log(tech);
       await technicianController.saveNewForm({
         technician: tech.technician,
         formID: form._id,
@@ -71,16 +71,12 @@ module.exports = (app, io, db) => {
         .emit("send_post_req", { data });
     });
 
-
-    socket.on('accepted_req', ({ sendTo, payload }) => {
+    socket.on("accepted_req", ({ sendTo, payload }) => {
       console.log(sendTo);
       console.log(payload);
-      if(clients[sendTo] !== undefined){
-        socket
-          .to(clients[sendTo].sid)
-          .emit("accepted_req", payload);
+      if (clients[sendTo] !== undefined) {
+        socket.to(clients[sendTo].sid).emit("accepted_req", payload);
       }
-    })
-
+    });
   });
 };
