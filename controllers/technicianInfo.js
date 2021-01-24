@@ -267,8 +267,8 @@ module.exports = {
         searchData = [];
         Tech.map((tech) => {
           tech.aptitude
-            .filter(
-              (APTITUDE) =>
+            .filter((APTITUDE) => {
+              return (
                 APTITUDE.aptitude === args.word &&
                 APTITUDE.workDay.includes(DAY) &&
                 checkWorkActive(
@@ -277,7 +277,8 @@ module.exports = {
                   HOUR,
                   MINUTE
                 )
-            )
+              );
+            })
             .map(() => {
               searchData.push(tech);
             });
