@@ -263,18 +263,37 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        searchData = Tech;
+        searchData = [];
+        Tech.forEach((tech) => {
+          tech.aptitude.forEach((APTITUDE) => {
+            console.log(APTITUDE);
+            if (
+              APTITUDE.aptitude === args.word &&
+              APTITUDE.workDay.includes(DAY) &&
+              checkWorkActive(
+                APTITUDE.workTime.start,
+                APTITUDE.workTime.end,
+                HOUR,
+                MINUTE
+              )
+            ) {
+              searchData.push(tech);
+              return;
+            }
+          });
+        });
+
         // Tech.map((tech) => {
         //   tech.aptitude
         //     .filter((APTITUDE) => {
         //       return (
-        //         APTITUDE.aptitude === args.word &&
-        //         APTITUDE.workDay.includes(DAY) &&
-        //         checkWorkActive(
-        //           APTITUDE.workTime.start,
-        //           APTITUDE.workTime.end,
-        //           HOUR,
-        //           MINUTE
+        // APTITUDE.aptitude === args.word &&
+        // APTITUDE.workDay.includes(DAY) &&
+        // checkWorkActive(
+        //   APTITUDE.workTime.start,
+        //   APTITUDE.workTime.end,
+        //   HOUR,
+        //   MINUTE
         //         )
         //       );
         //     })
