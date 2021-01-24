@@ -120,8 +120,14 @@ module.exports = {
             .findOne({
               _id: req.technicianInfoID,
             })
-            .populate("newForm")
-            .populate("acceptForm");
+            .populate({
+              path: "newForm",
+              populate: {
+                path: "userInfoID",
+              },
+            })
+            .populate({ path: "acceptForm", populate: { path: "userInfoID" } });
+
           result["technicianInfoID"] = technicianData;
         }
         return result;
