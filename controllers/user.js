@@ -116,9 +116,11 @@ module.exports = {
           status: true,
         };
         if (req.role === "technician") {
-          const technicianData = await technicianInfoModel.findOne({
-            _id: req.technicianInfoID,
-          });
+          const technicianData = await technicianInfoModel
+            .findOne({
+              _id: req.technicianInfoID,
+            })
+            .populate("forms");
           result["technicianInfoID"] = technicianData;
         }
         return result;
