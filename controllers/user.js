@@ -17,9 +17,12 @@ module.exports = {
             .findOne({ userID: USER._id })
             .populate({
               path: "forms",
-              populate: { path: "tech", populate: { path: "userInfoID" } },
+              populate: {
+                path: "technician.tech",
+                populate: { path: "userInfoID" },
+              },
             });
-          console.log(userInfo.technician);
+          console.log(userInfo);
           const returnObject = {
             userID: USER._id,
             username: USER.username,
@@ -31,9 +34,9 @@ module.exports = {
             technicianInfoID: userInfo.technicianInfoID,
             chatHistry: userInfo.chatHistry,
             avatar: userInfo.avatar,
-            forms: userInfo.forms,
           };
           const token = genJWT(returnObject);
+          returnObject["forms"] = userInfo.forms;
           returnObject["token"] = token;
           returnObject["status"] = true;
           return returnObject;
@@ -119,9 +122,14 @@ module.exports = {
           role: req.role,
           chatHistry: req.chatHistry,
           avatar: req.avatar,
-          forms: req.forms,
           status: true,
         };
+        const userInfo = await userInfoModel
+          .find({ _id: req.userInfoID })
+          .populate({ path: "forms", populate: { path: "technician.tech" } });
+
+        console.log(userInfo);
+        result["forms"] = userInfo.forms;
         if (req.role === "technician") {
           const technicianData = await technicianInfoModel
             .findOne({
