@@ -23,6 +23,14 @@ module.exports = buildSchema(`
         lat:Float
         lon:Float
     }
+    type AddressOUT{
+        lat:Float
+        lon:Float
+    }
+    type COMMENT{
+        userID:ID
+        comment:String
+    }
     type USERINFO{
         firstname: String
         lastname:String
@@ -32,10 +40,43 @@ module.exports = buildSchema(`
         technicianInfoID:ID
     }
     type FORMNOTIC{
-        tech:ID
+        tech:TECHNICIANINFO
         minPrice:Int
         maxPrice:Int
         location:LOCATIONOUT
+    }
+    type TIMEOUT{
+        hour:Int
+        minutes:Int
+    }
+    type WORKTIMEOUT{
+        start:TIMEOUT
+        end:TIMEOUT
+    }
+
+    type TECHNICIANVALUE{
+        aptitude:String
+        star:Float
+        amountOfvoteStar: Int
+        amountOfcomment: Int
+        voteID:[ID]
+        workDay:[Int]
+        workTime:WORKTIMEOUT
+    }
+    type TECHNICIANINFO{
+        _id : ID
+        userID:ID
+        aptitude: [TECHNICIANVALUE]
+        onSite: Boolean
+        comment:[COMMENT]
+        acceptForm:[FORM]
+        newForm:[FORM]
+        star: Float
+        amount:Int
+        address:AddressOUT
+        description: String
+        userInfoID: USERINFO
+        count: Int
     }
     type FORM{
         _id:ID
