@@ -24,6 +24,10 @@ const formSchema = new mongoose.Schema({
         ref: "technicianInformations",
         require: true,
       },
+      location: {
+        lat: Number,
+        lon: Number,
+      },
       minPrice: Number,
       maxPrice: Number,
     },

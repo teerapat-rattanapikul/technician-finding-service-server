@@ -14,8 +14,6 @@ module.exports = buildSchema(`
         _id:ID
         minPrice: Int
         maxPrice: Int
-        techFname: String
-        techLname: String
     }
     input TECHFORM{
         formID:ID
@@ -33,6 +31,12 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:ID
     }
+    type FORMNOTIC{
+        tech:ID
+        minPrice:Int
+        maxPrice:Int
+        location:LOCATIONOUT
+    }
     type FORM{
         _id:ID
         senderID:ID
@@ -42,6 +46,7 @@ module.exports = buildSchema(`
         date:String
         techType:String
         location:LOCATIONOUT
+        technician:[FORMNOTIC]
     }
     input LOCATIONIN{
         lat:Float

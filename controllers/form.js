@@ -8,13 +8,17 @@ module.exports = {
     try {
       INFORMATION["active"] = true;
       INFORMATION["technician"] = [];
+      var information = {};
       const userInfo = await userInfoModel.findOne({
         userID: INFORMATION.senderID,
       });
       INFORMATION["userInfoID"] = userInfo._id;
-      const information = await formModel
-        .create(INFORMATION)
-        .populate("userInfoID");
+      await formModel.create(INFORMATION).then(async (result) => {
+        information = await formModel
+          .findById(result._id)
+          .populate("userInfoID");
+      });
+      console.log(information);
       await userInfoModel.updateOne(
         { _id: userInfo._id },
         { $push: { forms: information._id } }

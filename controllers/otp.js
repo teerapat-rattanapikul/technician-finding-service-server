@@ -45,14 +45,17 @@ module.exports = {
   },
   test: async () => {
     const INFORMATION = {
-      formID: "600eb4ae50bb2e00225b607d",
-      technician: {
-        tech: "5ffed875c2aad77514888d94",
-        minPrice: 100,
-        maxPrice: 400,
+      senderID: "5ffed875c2aad77514888d92",
+      detail: "hello GG",
+      image: [],
+      date: "2021-01-24T01:40Z",
+      techType: "ช่างซ่อมคอมพิวเตอร์",
+      location: {
+        lat: 18.7873648,
+        lon: 98.9521941,
       },
     };
-    const result = await formController.acceptForm({ INFORMATION });
+    const result = await formController.addForm({ INFORMATION });
     return true;
   },
 };
