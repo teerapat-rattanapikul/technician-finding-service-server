@@ -61,7 +61,7 @@ module.exports = (app, io, db) => {
         lon: data.location.lon,
         date: data.date,
       });
-      console.log(tech);
+      console.log(form);
       await technicianController.saveNewForm({
         technician: tech.technician,
         formID: form._id,
