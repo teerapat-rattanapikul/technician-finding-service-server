@@ -49,6 +49,7 @@ module.exports = {
         INFORMATION["comment"] = [];
         INFORMATION["newForm"] = [];
         INFORMATION["acceptForm"] = [];
+        INFORMATION["waitingForm"] = [];
         console.log(INFORMATION);
         data.forEach(async (APTITUDE) => {
           var value = {
