@@ -304,7 +304,7 @@ module.exports = {
     try {
       args.technician.forEach(async (tech) => {
         await technicianInfoModel.updateOne(
-          { _id: tech._id },
+          { userID: tech.userID },
           { $push: { newForm: args.formID } }
         );
       });
@@ -313,12 +313,25 @@ module.exports = {
       throw error;
     }
   },
-  saveAcceptForm: async (args) => {
-    console.log(args);
+  saveWaitingForm: async (args) => {
     try {
       await technicianInfoModel.updateOne(
-        { _id: args.technicianID },
-        { $push: { acceptForm: args.formID } }
+        { userID: args.userID },
+        { $push: { waitingForm: args.formID }, $pop: { newForm: args.formID } }
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  saveAcceptForm: async (args) => {
+    try {
+      await technicianInfoModel.updateOne(
+        { userID: args.userID },
+        {
+          $push: { acceptForm: args.formID },
+          $pop: { waitingForm: args.formID },
+        }
       );
       return true;
     } catch (error) {
