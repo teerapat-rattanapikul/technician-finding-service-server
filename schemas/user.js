@@ -97,7 +97,7 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:TECHNICIANINFO
         chatHistry: [ID]
-        forms:[ID]
+        forms:[FORM]
     }
     
     input USERLOGIN{
