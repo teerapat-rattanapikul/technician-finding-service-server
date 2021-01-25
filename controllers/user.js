@@ -25,7 +25,7 @@ module.exports = {
             technicianInfoID: userInfo.technicianInfoID,
             chatHistry: userInfo.chatHistry,
             avatar: userInfo.avatar,
-            notification: userInfo.notification,
+            forms: userInfo.forms,
           };
           const token = genJWT(returnObject);
           returnObject["token"] = token;
@@ -72,6 +72,7 @@ module.exports = {
         role: "user",
         notification: [],
         chatHistry: [],
+        forms: [],
       });
       // link user_information from user
       await userModel.updateOne(
@@ -89,7 +90,7 @@ module.exports = {
         technicianInfoID: userInfo.technicianInfoID,
         chatHistry: userInfo.chatHistry,
         avatar: userInfo.avatar,
-        notification: userInfo.notification,
+        forms: userInfo.forms,
       };
       const token = genJWT(returnObject);
       returnObject["token"] = token;
@@ -112,7 +113,7 @@ module.exports = {
           role: req.role,
           chatHistry: req.chatHistry,
           avatar: req.avatar,
-          notification: req.notification,
+          forms: req.forms,
           status: true,
         };
         if (req.role === "technician") {

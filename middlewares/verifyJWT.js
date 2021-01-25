@@ -27,7 +27,7 @@ module.exports = () => (req, res, next) => {
       req.technicianInfoID = user.technicianInfoID;
       req.chatHistry = user.chatHistry;
       req.avatar = user.avatar;
-      req.notification = user.notification;
+      req.forms = user.forms;
     }
 
     next();
