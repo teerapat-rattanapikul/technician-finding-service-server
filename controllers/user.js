@@ -22,7 +22,6 @@ module.exports = {
                 populate: { path: "userInfoID" },
               },
             });
-          console.log(userInfo);
           const returnObject = {
             userID: USER._id,
             username: USER.username,
