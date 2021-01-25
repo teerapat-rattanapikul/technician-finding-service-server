@@ -12,7 +12,9 @@ module.exports = {
         userID: INFORMATION.senderID,
       });
       INFORMATION["userInfoID"] = userInfo._id;
-      const information = await formModel.create(INFORMATION);
+      const information = await formModel
+        .create(INFORMATION)
+        .populate("userInfoID");
       await userInfoModel.updateOne(
         { _id: userInfo._id },
         { $push: { forms: information._id } }
