@@ -61,14 +61,14 @@ module.exports = (app, io, db) => {
         lon: data.location.lon,
         date: data.date,
       });
-      console.log(tech);
       await technicianController.saveNewForm({
         technician: tech.technician,
         formID: form._id,
       });
       tech.technician.map((item) => {
         if (clients[item.userID] !== undefined) {
-          socket.to(clients[item.userID].sid).emit("send_post_req", { form });
+          console.log(form);
+          //socket.to(clients[item.userID].sid).emit("send_post_req", { form });
         }
       });
       // socket
