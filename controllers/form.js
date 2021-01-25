@@ -60,10 +60,16 @@ module.exports = {
   },
   techAcceptForm: async ({ INFORMATION }) => {
     try {
+      const technician = await technicianModel
+        .findOne({
+          userID: INFORMATION.technician.tech,
+        })
+        .select("_id");
       const saveTech = await technicianController.saveWaitingForm({
         formID: INFORMATION.formID,
         userID: INFORMATION.technician.tech,
       });
+      INFORMATION.technician.tech = technician._id;
       if (saveTech) {
         const result = await formModel
           .findOneAndUpdate(
@@ -79,6 +85,7 @@ module.exports = {
               populate: { path: "userInfoID" },
             },
           });
+        console.log(result);
       }
 
       return true;
@@ -86,12 +93,23 @@ module.exports = {
       throw error;
     }
   },
+  userAcceptForm: async (args) => {
+    try {
+      const saveTech = await technicianController.saveAcceptForm({
+        formID: args.formID,
+        userID: INFORMATION.technician.tech,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
   ignoreForm: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         await technicianModel.updateOne(
           { userID: args.userID },
-          { $pop: { waitingForm: args.formID } }
+          { $pull: { waitingForm: { $in: args.formID } } }
         );
         return true;
       } else {

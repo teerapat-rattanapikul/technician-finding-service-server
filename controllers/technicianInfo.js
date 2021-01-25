@@ -318,7 +318,10 @@ module.exports = {
     try {
       await technicianInfoModel.updateOne(
         { userID: args.userID },
-        { $push: { waitingForm: args.formID }, $pop: { newForm: args.formID } }
+        {
+          $push: { waitingForm: args.formID },
+          $pull: { newForm: { $in: args.formID } },
+        }
       );
       return true;
     } catch (error) {
@@ -331,7 +334,7 @@ module.exports = {
         { userID: args.userID },
         {
           $push: { acceptForm: args.formID },
-          $pop: { waitingForm: args.formID },
+          $pull: { waitingForm: { $in: args.formID } },
         }
       );
       return true;
