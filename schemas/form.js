@@ -14,6 +14,7 @@ module.exports = buildSchema(`
         _id:ID
         minPrice: Int
         maxPrice: Int
+        location:LOCATIONIN
     }
     input TECHFORM{
         formID:ID
