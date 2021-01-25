@@ -61,6 +61,7 @@ module.exports = buildSchema(`
         date:String
         techType:String
         location:LOCATIONOUT
+        technician:[FORMNOTIC]
     }
     type TECHNICIANINFO{
         _id : ID
@@ -77,9 +78,8 @@ module.exports = buildSchema(`
         userInfoID: USERINFO
         count: Int
     }
-    type NOTIFICATION{
-        techFname:String
-        techLname:String
+    type FORMNOTIC{
+        tech:ID
         minPrice:Int
         maxPrice:Int
         location:LOCATIONOUT
@@ -97,7 +97,7 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:TECHNICIANINFO
         chatHistry: [ID]
-        notification:[NOTIFICATION]
+        forms:[ID]
     }
     
     input USERLOGIN{

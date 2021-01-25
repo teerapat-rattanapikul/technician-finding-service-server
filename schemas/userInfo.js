@@ -20,6 +20,7 @@ module.exports = buildSchema(`
         phone: String
         technicianInfoID:ID
         chatHistry:[ID]
+        forms:[ID]
     }
 
     input USERINFOINPUT{
