@@ -44,16 +44,15 @@ module.exports = {
     }
   },
   test: async () => {
-    const tech = await technicianController.fromSearchTech({
-      word: "หดส",
-      lat: 1.234,
-      lon: 1.234,
-      date: "2021-01-24T01:40Z",
-    });
-    const result = await technicianController.saveNewForm({
-      technician: tech.technician,
-      formID: "600d77ba7bd38a0022fcb5c5",
-    });
-    console.log(("result:", result));
+    const INFORMATION = {
+      formID: "600eb4ae50bb2e00225b607d",
+      technician: {
+        tech: "5ffed875c2aad77514888d94",
+        minPrice: 100,
+        maxPrice: 400,
+      },
+    };
+    const result = await formController.acceptForm({ INFORMATION });
+    return true;
   },
 };

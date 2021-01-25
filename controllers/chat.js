@@ -11,8 +11,7 @@ module.exports = {
         INFORMATION["userID"] = req.userID;
         INFORMATION["userAvatar"] = req.avatar;
         INFORMATION["userName"] = req.firstname + " " + req.lastname;
-        INFORMATION["technicianName"] =
-          technician.firstname + " " + technician.lastname;
+        INFORMATION["technicianName"] = technician.firstname;
         INFORMATION["technicianID"] = technician.userID;
         INFORMATION["technicianAvatar"] = technician.avatar;
         INFORMATION.message["sender"] = req.userID;

@@ -18,9 +18,14 @@ const formSchema = new mongoose.Schema({
   },
   technician: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "technicianInformations",
-      require: true,
+      _id: false,
+      tech: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "technicianInformations",
+        require: true,
+      },
+      minPrice: Number,
+      maxPrice: Number,
     },
   ],
 });
