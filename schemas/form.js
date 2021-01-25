@@ -1,7 +1,7 @@
 const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
-        deleteForm(INFORMATION:FORMINPUT):Boolean  
+        deleteForm(formID:ID):Boolean  
         getForm(formID:ID):FORM
     }
 
