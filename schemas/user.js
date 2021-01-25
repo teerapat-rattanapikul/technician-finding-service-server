@@ -79,7 +79,7 @@ module.exports = buildSchema(`
         count: Int
     }
     type FORMNOTIC{
-        tech:ID
+        tech:TECHNICIANINFO
         minPrice:Int
         maxPrice:Int
         location:LOCATIONOUT

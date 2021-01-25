@@ -15,7 +15,11 @@ module.exports = {
         if (password) {
           const userInfo = await userInfoModel
             .findOne({ userID: USER._id })
-            .populate("forms");
+            .populate({
+              path: "forms",
+              populate: { path: "tech", populate: { path: "userInfoID" } },
+            });
+          console.log(userInfo.technician);
           const returnObject = {
             userID: USER._id,
             username: USER.username,
