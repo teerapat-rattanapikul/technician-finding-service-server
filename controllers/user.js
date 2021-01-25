@@ -127,8 +127,7 @@ module.exports = {
                 path: "userInfoID",
               },
             })
-            .populate({ path: "acceptForm", populate: { path: "userInfoID" } });
-
+            .populate("userInfoID");
           result["technicianInfoID"] = technicianData;
         }
         return result;

@@ -5,6 +5,7 @@ module.exports = buildSchema(`
         searchTechnician(word:String):SEARCHOUTPUT
         getNearTechnician(ADDRESS:GETNEAR):SEARCHOUTPUT
         fromSearchTech(word:String,lat:Float,lon:Float,date:String):SEARCHOUTPUT
+        saveAcceptForm(formID:ID):Boolean
     }
 
     type Mutation{

@@ -314,13 +314,15 @@ module.exports = {
     }
   },
   saveAcceptForm: async (args) => {
+    console.log(args);
     try {
       await technicianInfoModel.updateOne(
-        { _id: uesrID },
-        { $push: { acceptForm: args.formID }, $set: { newForm: [] } }
+        { _id: args.technicianID },
+        { $push: { acceptForm: args.formID } }
       );
+      return true;
     } catch (error) {
-      throw error;
+      return false;
     }
   },
 };

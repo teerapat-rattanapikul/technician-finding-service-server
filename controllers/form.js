@@ -1,15 +1,20 @@
 const formModel = require("../models").forms;
 const userInfoModel = require("../models").userInfomations;
-const fs = require("fs");
+const technicianController = require("../controllers/technicianInfo");
+
 //add me
 module.exports = {
   addForm: async ({ INFORMATION }) => {
     try {
       INFORMATION["active"] = true;
+      INFORMATION["technician"] = [];
+      const userInfo = await userInfoModel.findOne({
+        userID: INFORMATION.senderID,
+      });
       const information = await formModel.create(INFORMATION);
       await userInfoModel.updateOne(
-        { userID: INFORMATION.senderID },
-        { $push: { $forms: information._id } }
+        { userID: userInfo._id },
+        { $push: { forms: information._id } }
       );
       return information;
     } catch (error) {
@@ -43,6 +48,34 @@ module.exports = {
       }
     } catch (error) {
       return false;
+    }
+  },
+  acceptForm: async ({ INFORMATION }) => {
+    try {
+      const saveTech = await technicianController.saveAcceptForm({
+        formID: INFORMATION.formID,
+        technicianID: INFORMATION.technician.tech,
+      });
+      if (saveTech) {
+        const result = await formModel
+          .findOneAndUpdate(
+            { _id: INFORMATION.formID },
+            { $push: { technician: INFORMATION.technician } },
+            { new: true }
+          )
+          .populate({
+            path: "technician",
+            populate: {
+              path: "tech",
+              select: "userInfoID",
+              populate: { path: "userInfoID" },
+            },
+          });
+      }
+
+      return true;
+    } catch (error) {
+      throw error;
     }
   },
 };

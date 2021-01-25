@@ -7,7 +7,19 @@ module.exports = buildSchema(`
 
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
+        acceptForm(INFORMATION:TECHFORM):Boolean
         
+    }
+    input TECH{
+        _id:ID
+        minPrice: Int
+        maxPrice: Int
+        techFname: String
+        techLname: String
+    }
+    input TECHFORM{
+        formID:ID
+        technician:TECH
     }
     type LOCATIONOUT{
         lat:Float
@@ -36,6 +48,7 @@ module.exports = buildSchema(`
         lon:Float
     }
     input FORMINPUT{
+        senderID:ID
         detail:String
         image:[String]
         date:String
