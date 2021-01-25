@@ -1,5 +1,6 @@
 const formModel = require("../models").forms;
 const userInfoModel = require("../models").userInfomations;
+const technicianModel = require("../models").technicianInformations;
 const technicianController = require("../controllers/technicianInfo");
 
 //add me
@@ -57,11 +58,11 @@ module.exports = {
       return false;
     }
   },
-  acceptForm: async ({ INFORMATION }) => {
+  techAcceptForm: async ({ INFORMATION }) => {
     try {
-      const saveTech = await technicianController.saveAcceptForm({
+      const saveTech = await technicianController.saveWaitingForm({
         formID: INFORMATION.formID,
-        technicianID: INFORMATION.technician.tech,
+        userID: INFORMATION.technician.tech,
       });
       if (saveTech) {
         const result = await formModel
@@ -83,6 +84,21 @@ module.exports = {
       return true;
     } catch (error) {
       throw error;
+    }
+  },
+  ignoreForm: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        await technicianModel.updateOne(
+          { userID: args.userID },
+          { $pop: { waitingForm: args.formID } }
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
     }
   },
 };

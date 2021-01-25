@@ -28,6 +28,13 @@ const technicianInfoSchema = new mongoose.Schema({
       require: true,
     },
   ],
+  waitingForm: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "forms",
+      require: true,
+    },
+  ],
   newForm: [
     {
       type: mongoose.Schema.Types.ObjectId,
