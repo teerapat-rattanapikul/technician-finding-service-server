@@ -11,6 +11,7 @@ module.exports = {
       const userInfo = await userInfoModel.findOne({
         userID: INFORMATION.senderID,
       });
+      INFORMATION["userInfoID"] = userInfo._id;
       const information = await formModel.create(INFORMATION);
       await userInfoModel.updateOne(
         { userID: userInfo._id },
