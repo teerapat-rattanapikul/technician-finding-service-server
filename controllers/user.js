@@ -125,8 +125,14 @@ module.exports = {
           status: true,
         };
         const userInfo = await userInfoModel
-          .find({ _id: req.userInfoID })
-          .populate({ path: "forms", populate: { path: "technician.tech" } });
+          .findOne({ _id: req.userInfoID })
+          .populate({
+            path: "forms",
+            populate: {
+              path: "technician.tech",
+              populate: { path: "userInfoID" },
+            },
+          });
 
         console.log(userInfo);
         result["forms"] = userInfo.forms;
