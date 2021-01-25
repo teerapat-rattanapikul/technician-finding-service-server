@@ -13,7 +13,9 @@ module.exports = {
       const password = bcrypt.compareSync(LOGIN.password, USER.password);
       try {
         if (password) {
-          const userInfo = await userInfoModel.findOne({ userID: USER._id });
+          const userInfo = await userInfoModel
+            .findOne({ userID: USER._id })
+            .populate("forms");
           const returnObject = {
             userID: USER._id,
             username: USER.username,
