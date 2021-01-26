@@ -3,7 +3,9 @@ module.exports = buildSchema(`
     type Query{
         deleteForm(formID:ID):Boolean  
         getForm(formID:ID):FORM
-        ignoreForm(fromID:ID,techID:ID):Boolean
+        userIgnoreForm(fromID:ID,userID:ID):Boolean
+        techIgnoreForm(formID:ID,userID:ID):Boolean
+        userAcceptForm(formID:ID,userID:ID):Boolean
     }
 
     type Mutation{
