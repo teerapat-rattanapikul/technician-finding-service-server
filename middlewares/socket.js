@@ -76,11 +76,13 @@ module.exports = (app, io, db) => {
       //   .emit("send_post_req", { data });
     });
 
-    socket.on("accepted_req", ({ sendTo, payload }) => {
-      console.log(sendTo);
-      console.log(payload);
-      if (clients[sendTo] !== undefined) {
-        socket.to(clients[sendTo].sid).emit("accepted_req", payload);
+    socket.on("accepted_req", async (data) => {
+      console.log("data", data);
+      const INFORMATION = data;
+      const result = await formController.techAcceptForm({ INFORMATION });
+      console.log("result", result);
+      if (clients[result.senderID] !== undefined) {
+        socket.to(clients[result.senderID].sid).emit("accepted_req", result);
       }
     });
   });

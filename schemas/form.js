@@ -10,14 +10,13 @@ module.exports = buildSchema(`
 
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
-        techAcceptForm(INFORMATION:TECHFORM):Boolean
+        techAcceptForm(INFORMATION:TECHFORM):FORM
         
     }
     input TECH{
         _id:ID
         minPrice: Int
         maxPrice: Int
-        location:LOCATIONIN
     }
     input TECHFORM{
         formID:ID
