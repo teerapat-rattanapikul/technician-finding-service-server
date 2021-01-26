@@ -77,9 +77,10 @@ module.exports = (app, io, db) => {
     });
 
     socket.on("accepted_req", async (data) => {
+      console.log("data", data);
       const INFORMATION = data;
       const result = await formController.techAcceptForm({ INFORMATION });
-      console.log(result);
+      console.log("result", result);
       if (clients[result.senderID] !== undefined) {
         socket.to(clients[result.senderID].sid).emit("accepted_req", result);
       }
