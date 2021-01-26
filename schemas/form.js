@@ -41,6 +41,7 @@ module.exports = buildSchema(`
         role:String
         phone: String
         technicianInfoID:ID
+        forms:[FORM]
     }
     type FORMNOTIC{
         tech:TECHNICIANINFO

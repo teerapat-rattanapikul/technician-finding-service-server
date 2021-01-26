@@ -2,8 +2,12 @@ const userInfoModel = require("../models").userInfomations;
 module.exports = {
   getInformation: async (args, req) => {
     try {
+      console.log(req.userID);
       if (req.role !== null && req.role !== undefined) {
-        const result = await userInfoModel.findOne({ _id: req.userInfoID });
+        const result = await userInfoModel
+          .findOne({ _id: req.userInfoID })
+          .populate("forms");
+        console.log(result);
         return result;
       }
     } catch (error) {
