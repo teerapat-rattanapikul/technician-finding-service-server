@@ -73,8 +73,9 @@ module.exports = {
         lat: technician.address.lat,
         lon: technician.address.lon,
       };
+      var result = {};
       if (saveTech) {
-        const result = await formModel
+        result = await formModel
           .findOneAndUpdate(
             { _id: INFORMATION.formID },
             { $push: { technician: INFORMATION.technician } },
@@ -88,10 +89,9 @@ module.exports = {
               populate: { path: "userInfoID" },
             },
           });
-        console.log(result);
       }
 
-      return true;
+      return result;
     } catch (error) {
       throw error;
     }

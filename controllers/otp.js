@@ -50,10 +50,6 @@ module.exports = {
         tech: "5ffed875c2aad77514888d92",
         minPrice: 700,
         maxPrice: 1000,
-        location: {
-          lat: 1.234,
-          lon: 1.234,
-        },
       },
     };
     const result = await formController.techAcceptForm({ INFORMATION });
