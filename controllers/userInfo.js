@@ -3,7 +3,7 @@ module.exports = {
   getInformation: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        const result = await userInfoModel.findById({ _id: req.userInfo });
+        const result = await userInfoModel.findOne({ _id: req.userInfoID });
         return result;
       }
     } catch (error) {
