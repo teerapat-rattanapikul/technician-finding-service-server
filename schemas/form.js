@@ -4,8 +4,8 @@ module.exports = buildSchema(`
         deleteForm(formID:ID):Boolean  
         getForm(formID:ID):FORM
         userIgnoreForm(fromID:ID,userID:ID):Boolean
-        techIgnoreForm(formID,userID:ID):Boolean
-        userAcceptForm(formID,userID:ID)Boolean
+        techIgnoreForm(formID:ID,userID:ID):Boolean
+        userAcceptForm(formID:ID,userID:ID):Boolean
     }
 
     type Mutation{
