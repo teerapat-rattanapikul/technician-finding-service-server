@@ -60,16 +60,19 @@ module.exports = {
   },
   techAcceptForm: async ({ INFORMATION }) => {
     try {
-      const technician = await technicianModel
-        .findOne({
-          userID: INFORMATION.technician.tech,
-        })
-        .select("_id");
+      const technician = await technicianModel.findOne({
+        userID: INFORMATION.technician.tech,
+      });
+
       const saveTech = await technicianController.saveWaitingForm({
         formID: INFORMATION.formID,
         userID: INFORMATION.technician.tech,
       });
       INFORMATION.technician.tech = technician._id;
+      INFORMATION.technician["location"] = {
+        lat: technician.address.lat,
+        lon: technician.address.lon,
+      };
       if (saveTech) {
         const result = await formModel
           .findOneAndUpdate(
