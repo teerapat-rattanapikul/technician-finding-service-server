@@ -93,18 +93,29 @@ module.exports = {
       throw error;
     }
   },
+  techIgnoreForm: async (args) => {
+    try {
+      const ignoreTech = await technicianController.ignoreForm({
+        formID: args.formID,
+        userID: args.userID,
+      });
+      return ignoreTech;
+    } catch (error) {
+      return false;
+    }
+  },
   userAcceptForm: async (args) => {
     try {
       const saveTech = await technicianController.saveAcceptForm({
         formID: args.formID,
-        userID: INFORMATION.technician.tech,
+        userID: args.technician.tech,
       });
       return true;
     } catch (error) {
       return false;
     }
   },
-  ignoreForm: async (args, req) => {
+  userIgnoreForm: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         await technicianModel.updateOne(

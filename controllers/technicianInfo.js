@@ -342,4 +342,15 @@ module.exports = {
       return false;
     }
   },
+  ignoreForm: async (args) => {
+    try {
+      await technicianInfoModel.updateOne(
+        { userID: args.userID },
+        { $pull: { $in: args.formID } }
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
 };
