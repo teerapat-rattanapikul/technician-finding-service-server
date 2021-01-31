@@ -12,6 +12,7 @@ module.exports = buildSchema(`
         techAcceptForm(INFORMATION:TECHFORM):FORM
         deleteForm(formID:ID):Boolean  
         formActiveFalse(formID:ID):Boolean
+        clearForm:Boolean
         
     }
     input TECH{

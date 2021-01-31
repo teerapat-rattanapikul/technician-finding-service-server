@@ -1,6 +1,6 @@
 const formModel = require("../models").forms;
 const userInfoModel = require("../models").userInfomations;
-const technicianModel = require("../models").technicianInformations;
+const technicianInfoModel = require("../models").technicianInformations;
 const technicianController = require("../controllers/technicianInfo");
 
 //add me
@@ -45,7 +45,6 @@ module.exports = {
   formActiveFalse: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         await formModel.updateOne(
           {
             _id: args.formID,
@@ -61,19 +60,62 @@ module.exports = {
   deleteForm: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        await formModel.deleteOne({
-          _id: args.formID,
-        });
+        await formModel.deleteOne(
+          {
+            _id: args.formID,
+          },
+          { new: true }
+        );
+        await userInfoModel.updateOne(
+          {
+            forms: args.formID,
+          },
+          { $pull: { forms: { $in: args.formID } } }
+        );
+        await technicianInfoModel.updateMany(
+          {
+            $or: [
+              { newForm: args.formID },
+              { waitingForm: args.formID },
+              { acceptForm: args.formID },
+            ],
+          },
+          {
+            $pull: {
+              newForm: { $in: args.formID },
+              waitingForm: { $in: args.formID },
+              acceptForm: { $in: args.formID },
+            },
+          }
+        );
+
         return true;
       }
     } catch (error) {
       return false;
     }
   },
+  clearForm: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        await formModel.deleteMany();
+        await userInfoModel.updateMany({}, { $set: { forms: [] } });
+        await technicianInfoModel.updateMany(
+          {},
+          { $set: { newForm: [], waitingForm: [], acceptForm: [] } }
+        );
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
   techAcceptForm: async ({ INFORMATION }) => {
     try {
-      const technician = await technicianModel.findOne({
+      const technician = await technicianInfoModel.findOne({
         userID: INFORMATION.technician.tech,
       });
 
@@ -134,7 +176,7 @@ module.exports = {
   userIgnoreForm: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        await technicianModel.updateOne(
+        await technicianInfoModel.updateOne(
           { userID: args.userID },
           { $pull: { waitingForm: { $in: args.formID } } }
         );
