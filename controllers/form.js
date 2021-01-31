@@ -42,7 +42,7 @@ module.exports = {
       return error;
     }
   },
-  deleteForm: async (args, req) => {
+  formActiveFalse: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
@@ -52,6 +52,19 @@ module.exports = {
           },
           { $set: { active: false } }
         );
+        return true;
+      }
+    } catch (error) {
+      return false;
+    }
+  },
+  deleteForm: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+        await formModel.deleteOne({
+          _id: args.formID,
+        });
         return true;
       }
     } catch (error) {

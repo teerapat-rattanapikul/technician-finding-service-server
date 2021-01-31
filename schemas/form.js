@@ -1,7 +1,6 @@
 const { buildSchema } = require("graphql");
 module.exports = buildSchema(`
     type Query{
-        deleteForm(formID:ID):Boolean  
         getForm(formID:ID):FORM
         userIgnoreForm(fromID:ID,userID:ID):Boolean
         techIgnoreForm(formID:ID,userID:ID):Boolean
@@ -11,6 +10,8 @@ module.exports = buildSchema(`
     type Mutation{
         addForm(INFORMATION:FORMINPUT):FORM
         techAcceptForm(INFORMATION:TECHFORM):FORM
+        deleteForm(formID:ID):Boolean  
+        formActiveFalse(formID:ID):Boolean
         
     }
     input TECH{
