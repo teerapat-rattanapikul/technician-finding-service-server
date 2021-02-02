@@ -9,6 +9,7 @@ const chatSchema = new mongoose.Schema({
   technicianAvatar: String,
   readStatus: Boolean,
   recentMessage: {
+    _id: false,
     sender: mongoose.Schema.Types.ObjectId,
     message: String,
     msgType: String,
@@ -19,6 +20,7 @@ const chatSchema = new mongoose.Schema({
   },
   history: [
     {
+      _id: false,
       sender: mongoose.Schema.Types.ObjectId,
       message: String,
       msgType: String,
