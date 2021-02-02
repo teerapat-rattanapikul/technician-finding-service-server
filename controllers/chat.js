@@ -49,6 +49,7 @@ module.exports = {
           );
           return chat;
         } else {
+          INFORMATION.message["sender"] = req.userID;
           const chat = await chatModel.findOneAndUpdate(
             {
               $or: [
