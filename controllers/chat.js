@@ -9,11 +9,11 @@ module.exports = {
           $or: [
             {
               technicianID: INFORMATION.technicianID,
-              userID: INFORMATION.message.sender,
+              userID: req.userID,
             },
             {
               userID: INFORMATION.technicianID,
-              technicianID: INFORMATION.message.sender,
+              technicianID: req.userID,
             },
           ],
         });
@@ -26,7 +26,7 @@ module.exports = {
           INFORMATION["userAvatar"] = req.avatar;
           INFORMATION["userName"] = req.firstname + " " + req.lastname;
           INFORMATION["technicianName"] = technician.firstname;
-          INFORMATION["technicianID"] = technician.userID;
+          INFORMATION["technicianID"] = INFORMATION.technicianID;
           INFORMATION["technicianAvatar"] = technician.avatar;
           INFORMATION.message["sender"] = req.userID;
           INFORMATION["recentMessage"] = INFORMATION.message;
@@ -54,11 +54,11 @@ module.exports = {
               $or: [
                 {
                   technicianID: INFORMATION.technicianID,
-                  userID: INFORMATION.message.sender,
+                  userID: req.userID,
                 },
                 {
                   userID: INFORMATION.technicianID,
-                  technicianID: INFORMATION.message.sender,
+                  technicianID: req.userID,
                 },
               ],
             },
@@ -96,7 +96,9 @@ module.exports = {
   getChatRoom: async (args, req) => {
     if (req.role !== null && req.role !== undefined) {
       const user = await userInfoModel
-        .findOne({ userID: args.userID })
+        .findOne({
+          userID: args.userID,
+        })
         .populate({ path: "chatHistry", select: "-history" });
       return user.chatHistry;
     }
@@ -107,8 +109,16 @@ module.exports = {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         const chat = await chatModel.findOneAndUpdate(
           {
-            userID: INFORMATION.userID,
-            technicianID: INFORMATION.technicianID,
+            $or: [
+              {
+                userID: req.userID,
+                technicianID: INFORMATION.technicianID,
+              },
+              {
+                userID: INFORMATION.technicianID,
+                technicianID: req.userID,
+              },
+            ],
           },
           {
             $set: { recentMessage: INFORMATION.message, readStatus: false },

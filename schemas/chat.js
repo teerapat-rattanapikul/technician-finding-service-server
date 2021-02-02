@@ -34,7 +34,6 @@ module.exports = buildSchema(`
     }
 
     input messageIn{
-        sender: ID,
         message: String,
         msgType: String,
     }
@@ -45,7 +44,6 @@ module.exports = buildSchema(`
     }
 
     input CHATINPUT{
-        userID:ID,
         technicianID: ID,
         message:messageIn
     }
