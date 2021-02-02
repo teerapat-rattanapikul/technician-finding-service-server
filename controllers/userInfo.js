@@ -18,7 +18,7 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         const result = await userInfoModel.findOne({
-          technicianInfoID: args.userID,
+          userID: args.userID,
         });
         return result;
       }
