@@ -17,7 +17,9 @@ module.exports = {
   getUserInfo: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        const result = await userInfoModel.findOne({ userID: args.userID });
+        const result = await userInfoModel.findOne({
+          technicianInfoID: args.userID,
+        });
         return result;
       }
     } catch (error) {
