@@ -49,6 +49,7 @@ module.exports = {
           );
           return chat;
         } else {
+          INFORMATION.message["sender"] = req.userID;
           const chat = await chatModel.findOneAndUpdate(
             {
               $or: [
@@ -120,6 +121,7 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+        INFORMATION.message["sender"] = req.userID;
         const chat = await chatModel.findOneAndUpdate(
           {
             $or: [
