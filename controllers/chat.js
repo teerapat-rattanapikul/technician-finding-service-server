@@ -93,6 +93,19 @@ module.exports = {
       return { status: false };
     }
   },
+  getChatInformationByID: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        const chatInformation = await chatModel.findOne({
+          _id: args.chatID,
+        });
+        chatInformation["status"] = true;
+        return chatInformation;
+      }
+    } catch (error) {
+      return { status: false };
+    }
+  },
   getChatRoom: async (args, req) => {
     if (req.role !== null && req.role !== undefined) {
       const user = await userInfoModel
