@@ -251,7 +251,7 @@ module.exports = {
       const MINUTE = new Date(args.date).getMinutes();
       var area = 0.05;
       var searchData = [];
-      while (searchData.length <= 1 && area < 2.0) {
+      while (searchData.length <= 1 && area < 0.3) {
         const Tech = await technicianInfoModel
           .find({
             $text: { $search: args.word },
@@ -267,7 +267,11 @@ module.exports = {
           .populate("userInfoID");
         //searchData = Tech;
         searchData = Tech.filter((tech) => {
-          console.log(area);
+          console.log("area: ", area);
+          console.log("DAY: ", DAY);
+          console.log("HOUR: ", HOUR);
+          console.log("MINUTE: ", MINUTE);
+          console.log("--------------------------------");
           return (
             tech.workDay.includes(DAY) &&
             checkWorkActive(
