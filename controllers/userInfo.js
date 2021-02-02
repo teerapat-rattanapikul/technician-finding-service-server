@@ -14,6 +14,16 @@ module.exports = {
       throw error;
     }
   },
+  getUserInfo: async (args, req) => {
+    try {
+      if (req.role !== null && req.role !== undefined) {
+        const result = await userInfoModel.findOne({ userID: args.userID });
+        return result;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
   getAllInformation: async () => {
     try {
       const result = await userInfoModel.find();

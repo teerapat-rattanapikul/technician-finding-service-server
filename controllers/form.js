@@ -59,37 +59,36 @@ module.exports = {
   },
   deleteForm: async (args) => {
     try {
-        await formModel.deleteOne(
-          {
-            _id: args.formID,
+      await formModel.deleteOne(
+        {
+          _id: args.formID,
+        },
+        { new: true }
+      );
+      await userInfoModel.updateOne(
+        {
+          forms: args.formID,
+        },
+        { $pull: { forms: { $in: args.formID } } }
+      );
+      await technicianInfoModel.updateMany(
+        {
+          $or: [
+            { newForm: args.formID },
+            { waitingForm: args.formID },
+            { acceptForm: args.formID },
+          ],
+        },
+        {
+          $pull: {
+            newForm: { $in: args.formID },
+            waitingForm: { $in: args.formID },
+            acceptForm: { $in: args.formID },
           },
-          { new: true }
-        );
-        await userInfoModel.updateOne(
-          {
-            forms: args.formID,
-          },
-          { $pull: { forms: { $in: args.formID } } }
-        );
-        await technicianInfoModel.updateMany(
-          {
-            $or: [
-              { newForm: args.formID },
-              { waitingForm: args.formID },
-              { acceptForm: args.formID },
-            ],
-          },
-          {
-            $pull: {
-              newForm: { $in: args.formID },
-              waitingForm: { $in: args.formID },
-              acceptForm: { $in: args.formID },
-            },
-          }
-        );
+        }
+      );
 
-        return true;
-      
+      return true;
     } catch (error) {
       return false;
     }
@@ -112,64 +111,75 @@ module.exports = {
       throw error;
     }
   },
-  techAcceptForm: async ({ INFORMATION }) => {
+  techAcceptForm: async ({ INFORMATION }, req) => {
     try {
-      const technician = await technicianInfoModel.findOne({
-        userID: INFORMATION.technician.tech,
-      });
+      if (req.role !== null && req.role !== undefined) {
+        const technician = await technicianInfoModel.findOne({
+          userID: INFORMATION.technician.tech,
+        });
 
-      const saveTech = await technicianController.saveWaitingForm({
-        formID: INFORMATION.formID,
-        userID: INFORMATION.technician.tech,
-      });
-      INFORMATION.technician.tech = technician._id;
-      INFORMATION.technician["location"] = {
-        lat: technician.address.lat,
-        lon: technician.address.lon,
-      };
-      var result = {};
-      if (saveTech) {
-        result = await formModel
-          .findOneAndUpdate(
-            { _id: INFORMATION.formID },
-            { $push: { technician: INFORMATION.technician } },
-            { new: true }
-          )
-          .populate({
-            path: "technician",
-            populate: {
-              path: "tech",
-              select: "userInfoID",
-              populate: { path: "userInfoID" },
-            },
-          });
+        const saveTech = await technicianController.saveWaitingForm({
+          formID: INFORMATION.formID,
+          userID: INFORMATION.technician.tech,
+        });
+        INFORMATION.technician.tech = technician._id;
+        INFORMATION.technician["location"] = {
+          lat: technician.address.lat,
+          lon: technician.address.lon,
+        };
+        var result = {};
+        if (saveTech) {
+          result = await formModel
+            .findOneAndUpdate(
+              { _id: INFORMATION.formID },
+              { $push: { technician: INFORMATION.technician } },
+              { new: true }
+            )
+            .populate({
+              path: "technician",
+              populate: {
+                path: "tech",
+                select: "userInfoID",
+                populate: { path: "userInfoID" },
+              },
+            });
+        }
+        return result;
+      } else {
+        return null;
       }
-
-      return result;
     } catch (error) {
       throw error;
     }
   },
-  techIgnoreForm: async (args) => {
+  techIgnoreForm: async (args, req) => {
     try {
-      const ignoreTech = await technicianController.ignoreForm({
-        formID: args.formID,
-        userID: args.userID,
-      });
-      return ignoreTech;
+      if (req.role !== null && req.role !== undefined) {
+        const ignoreTech = await technicianController.ignoreForm({
+          formID: args.formID,
+          userID: args.userID,
+        });
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      return false;
+      throw error;
     }
   },
-  userAcceptForm: async (args) => {
+  userAcceptForm: async (args, req) => {
     try {
-      const saveTech = await technicianController.saveAcceptForm({
-        formID: args.formID,
-        userID: args.technician.tech,
-      });
-      return true;
+      if (req.role !== null && req.role !== undefined) {
+        const saveTech = await technicianController.saveAcceptForm({
+          formID: args.formID,
+          userID: args.technician.tech,
+        });
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      return false;
+      throw error;
     }
   },
   userIgnoreForm: async (args, req) => {
@@ -184,7 +194,7 @@ module.exports = {
         return false;
       }
     } catch (error) {
-      return false;
+      throw error;
     }
   },
 };
