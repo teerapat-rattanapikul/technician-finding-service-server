@@ -5,34 +5,35 @@ module.exports = {
     try {
       if (req.role !== null && req.role !== undefined) {
         INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-        const technician = await userInfoModel.findOne({
-          userID: INFORMATION.technicianID,
-        });
-        INFORMATION["userID"] = req.userID;
-        INFORMATION["userAvatar"] = req.avatar;
-        INFORMATION["userName"] = req.firstname + " " + req.lastname;
-        INFORMATION["technicianName"] = technician.firstname;
-        INFORMATION["technicianID"] = technician.userID;
-        INFORMATION["technicianAvatar"] = technician.avatar;
-        INFORMATION.message["sender"] = req.userID;
-        INFORMATION["recentMessage"] = INFORMATION.message;
-        INFORMATION["readStatus"] = false;
-        INFORMATION["history"] = [];
-        INFORMATION["history"].push(INFORMATION.message);
-        delete INFORMATION.message;
-        const chat = await chatModel.create(INFORMATION);
-        chat["status"] = true;
+        console.log(INFORMATION);
+        // const technician = await userInfoModel.findOne({
+        //   userID: INFORMATION.technicianID,
+        // });
+        // INFORMATION["userID"] = req.userID;
+        // INFORMATION["userAvatar"] = req.avatar;
+        // INFORMATION["userName"] = req.firstname + " " + req.lastname;
+        // INFORMATION["technicianName"] = technician.firstname;
+        // INFORMATION["technicianID"] = technician.userID;
+        // INFORMATION["technicianAvatar"] = technician.avatar;
+        // INFORMATION.message["sender"] = req.userID;
+        // INFORMATION["recentMessage"] = INFORMATION.message;
+        // INFORMATION["readStatus"] = false;
+        // INFORMATION["history"] = [];
+        // INFORMATION["history"].push(INFORMATION.message);
+        // delete INFORMATION.message;
+        // const chat = await chatModel.create(INFORMATION);
+        // chat["status"] = true;
 
-        await userInfoModel.updateOne(
-          { userID: INFORMATION.userID },
-          { $push: { chatHistry: chat._id } }
-        );
-        await userInfoModel.updateOne(
-          {
-            userID: technician.userID,
-          },
-          { $push: { chatHistry: chat._id } }
-        );
+        // await userInfoModel.updateOne(
+        //   { userID: INFORMATION.userID },
+        //   { $push: { chatHistry: chat._id } }
+        // );
+        // await userInfoModel.updateOne(
+        //   {
+        //     userID: technician.userID,
+        //   },
+        //   { $push: { chatHistry: chat._id } }
+        // );
         return chat;
       }
     } catch (error) {
