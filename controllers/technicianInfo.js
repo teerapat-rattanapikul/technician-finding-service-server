@@ -265,13 +265,8 @@ module.exports = {
             },
           })
           .populate("userInfoID");
-        //searchData = Tech;
+
         searchData = Tech.filter((tech) => {
-          console.log("area: ", area);
-          console.log("DAY: ", DAY);
-          console.log("HOUR: ", HOUR);
-          console.log("MINUTE: ", MINUTE);
-          console.log("--------------------------------");
           return (
             tech.workDay.includes(DAY) &&
             checkWorkActive(
@@ -282,22 +277,6 @@ module.exports = {
             )
           );
         });
-
-        // searchData = Tech.filter((tech) => {
-        //   console.log(tech);
-        //   return tech.filter((TIME) => {
-        //     console.log(TIME);
-        //     return (
-        //       TIME.workDay.includes(DAY) &&
-        //       checkWorkActive(
-        //         TIME.workTime.start,
-        //         TIME.workTime.end,
-        //         HOUR,
-        //         MINUTE
-        //       )
-        //     );
-        //   });
-        // });
 
         area += 0.05;
       }
