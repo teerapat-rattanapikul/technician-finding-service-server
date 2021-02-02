@@ -240,7 +240,7 @@ module.exports = {
       }
       return { status: false };
     } catch (error) {
-      return error;
+      throw error;
     }
   },
   fromSearchTech: async (args) => {
@@ -309,7 +309,7 @@ module.exports = {
       );
       return true;
     } catch (error) {
-      return false;
+      throw error;
     }
   },
   saveAcceptForm: async (args) => {
@@ -323,7 +323,7 @@ module.exports = {
       );
       return true;
     } catch (error) {
-      return false;
+      throw error;
     }
   },
   ignoreForm: async (args) => {
@@ -334,7 +334,7 @@ module.exports = {
       );
       return true;
     } catch (error) {
-      return false;
+      throw error;
     }
   },
 };

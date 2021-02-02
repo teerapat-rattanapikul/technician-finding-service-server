@@ -3,7 +3,7 @@ module.exports = buildSchema(`
     type Query{
         getAllInformation: [USERINFO]
         getInformation: USERINFO
-       
+        getUserInfo(userID:ID):USERINFO
     }
 
     type Mutation{
