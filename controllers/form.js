@@ -57,9 +57,8 @@ module.exports = {
       return false;
     }
   },
-  deleteForm: async (args, req) => {
+  deleteForm: async (args) => {
     try {
-      if (req.role !== null && req.role !== undefined) {
         await formModel.deleteOne(
           {
             _id: args.formID,
@@ -90,7 +89,7 @@ module.exports = {
         );
 
         return true;
-      }
+      
     } catch (error) {
       return false;
     }
