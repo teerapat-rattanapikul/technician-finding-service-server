@@ -330,7 +330,7 @@ module.exports = {
     try {
       await technicianInfoModel.updateOne(
         { userID: args.userID },
-        { $pull: { $in: args.formID } }
+        { $pull: { newForm: { $in: args.formID } } }
       );
       return true;
     } catch (error) {
