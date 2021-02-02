@@ -266,9 +266,8 @@ module.exports = {
           })
           .populate("userInfoID");
         //searchData = Tech;
-        console.log("tech from find: ", Tech);
         searchData = Tech.filter((tech) => {
-          console.log("tech from filter: ", tech);
+          console.log(area);
           return (
             tech.workDay.includes(DAY) &&
             checkWorkActive(
