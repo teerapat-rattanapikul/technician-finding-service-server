@@ -1,6 +1,7 @@
 var clients = [];
 const formController = require("../controllers/form");
 const technicianController = require("../controllers/technicianInfo");
+const chatModel = require('../models').chats
 module.exports = (app, io, db) => {
 
     //-------------------- START AUTHENTICATION ----------------------------------
@@ -41,15 +42,37 @@ module.exports = (app, io, db) => {
     //-------------------- START CHAT ----------------------------------
 
     socket.on("send_message", function (data) {
-      if (clients[data.receiver] !== undefined) {
-        socket.to(clients[data.receiver].sid).emit("receive_message", {
-          message : {
-            ...data.message
-          }
-        });
-      } else {
-        console.log("not available");
-      }
+      chatModel.updateOne(
+        {
+          $or: [
+            {
+              userID: data.message.sender,
+              technicianID: data.receiver,
+            },
+            {
+              userID: data.receiver,
+              technicianID: data.message.sender,
+            },
+          ],
+        },
+        {
+          $set: { recentMessage: data.message, readStatus: false },
+          $push: { history: data.message },
+        }
+      ).then( () => {
+        if (clients[data.receiver] !== undefined) {
+  
+          socket.to(clients[data.receiver].sid).emit("receive_message", {
+            message : {
+              ...data.message
+            }
+          });
+        } else {
+          console.log("not available");
+        }
+      }).catch( () => {
+          console.log('cannot send message');
+      })
     });
 
     //-------------------- END CHAT ----------------------------------
