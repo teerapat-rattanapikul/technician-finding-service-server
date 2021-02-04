@@ -1,18 +1,18 @@
 const chatModel = require("../models").chats;
 const userInfoModel = require("../models").userInfomations;
 module.exports = {
-  createChatRoom: async ({ INFORMATION }, req) => {
+  createChatRoom: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
       const chatInformation = await chatModel.findOne({
         $or: [
           {
             technicianID: INFORMATION.technicianID,
-            userID: INFORMATION.message.sender,
+            userID: INFORMATION.userID,
           },
           {
             userID: INFORMATION.technicianID,
-            technicianID: INFORMATION.message.sender,
+            technicianID: INFORMATION.userID,
           },
         ],
       });
@@ -22,18 +22,15 @@ module.exports = {
           userID: INFORMATION.technicianID,
         });
         const user = await userInfoModel.findOne({
-          userID: INFORMATION.message.sender,
+          userID: INFORMATION.userID,
         });
-        INFORMATION["userID"] = user.userID;
         INFORMATION["userAvatar"] = user.avatar;
-        INFORMATION["userName"] = user.firstname + " " + user.lastname;
+        INFORMATION["userName"] = user.firstname;
         INFORMATION["technicianName"] = technician.firstname;
         INFORMATION["technicianID"] = INFORMATION.technicianID;
         INFORMATION["technicianAvatar"] = technician.avatar;
-        INFORMATION["recentMessage"] = INFORMATION.message;
         INFORMATION["readStatus"] = false;
-        INFORMATION["history"] = [INFORMATION.message];
-        delete INFORMATION.message;
+        INFORMATION["history"] = [];
         const chat = await chatModel.create(INFORMATION);
         chat["status"] = true;
 
@@ -48,31 +45,10 @@ module.exports = {
           { $push: { chatHistry: chat._id } }
         );
         return chat;
-      } else {
-        const chat = await chatModel.findOneAndUpdate(
-          {
-            $or: [
-              {
-                technicianID: INFORMATION.technicianID,
-                userID: INFORMATION.message.sender,
-              },
-              {
-                userID: INFORMATION.technicianID,
-                technicianID: INFORMATION.message.sender,
-              },
-            ],
-          },
-          {
-            $set: { recentMessage: INFORMATION.message, readStatus: false },
-            $push: { history: INFORMATION.message },
-          },
-          { new: true }
-        );
-        chat["status"] = true;
-        return chat;
       }
+      return true;
     } catch (error) {
-      return { status: false };
+      return false;
     }
   },
   getChatInformation: async (args, req) => {
@@ -114,7 +90,7 @@ module.exports = {
       return user.chatHistry;
     }
   },
-  chat: async ({ INFORMATION }, req) => {
+  chat: async ({ INFORMATION }) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
       const chat = await chatModel.updateOne(

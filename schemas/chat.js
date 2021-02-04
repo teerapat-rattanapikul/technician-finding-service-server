@@ -10,7 +10,7 @@ module.exports = buildSchema(`
     }
 
     type Mutation{
-        createChatRoom(INFORMATION:createChatInput):CHAT
+        createChatRoom(INFORMATION:createChatInput):Boolean
         chat(INFORMATION:CHATINPUT):Boolean
     }
 
@@ -42,7 +42,7 @@ module.exports = buildSchema(`
 
     input createChatInput{
         technicianID: ID,
-        message:messageIn
+        userID:ID
     }
 
     input CHATINPUT{
