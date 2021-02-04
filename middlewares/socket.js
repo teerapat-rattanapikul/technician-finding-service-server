@@ -2,6 +2,9 @@ var clients = [];
 const formController = require("../controllers/form");
 const technicianController = require("../controllers/technicianInfo");
 module.exports = (app, io, db) => {
+
+    //-------------------- START AUTHENTICATION ----------------------------------
+
   io.on("connection", function (socket) {
     console.log(`${socket.id} connected`);
     socket.on("join", ({ uid }) => {
@@ -32,17 +35,27 @@ module.exports = (app, io, db) => {
       }
     });
 
+    //-------------------- END AUTHENTICATION ----------------------------------
+
+
+    //-------------------- START CHAT ----------------------------------
+
     socket.on("send_message", function (data) {
       if (clients[data.receiver] !== undefined) {
         socket.to(clients[data.receiver].sid).emit("receive_message", {
-          message: data.message,
-          sender: data.sender,
+          message : {
+            ...data.message
+          }
         });
       } else {
         console.log("not available");
       }
     });
 
+    //-------------------- END CHAT ----------------------------------
+
+
+    //-------------------- START POST REQUEST ----------------------------------
     socket.on("send_post_req", async function (data) {
       const INFORMATION = data;
       const form = await formController.addForm({ INFORMATION });
@@ -86,6 +99,7 @@ module.exports = (app, io, db) => {
       })
     })
 
+    //-------------------- END POST REQUEST ----------------------------------
 
 
   });
