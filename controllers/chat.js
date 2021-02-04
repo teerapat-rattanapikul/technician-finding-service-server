@@ -117,7 +117,7 @@ module.exports = {
   chat: async ({ INFORMATION }, req) => {
     try {
       INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
-      const chat = await chatModel.findOneAndUpdate(
+      const chat = await chatModel.updateOne(
         {
           $or: [
             {
@@ -133,13 +133,11 @@ module.exports = {
         {
           $set: { recentMessage: INFORMATION.message, readStatus: false },
           $push: { history: INFORMATION.message },
-        },
-        { new: true }
+        }
       );
-      chat["status"] = true;
-      return chat;
+      return true;
     } catch (error) {
-      return { status: false };
+      return false;
     }
   },
 };
