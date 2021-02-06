@@ -14,6 +14,7 @@ const mergedSchema = mergeSchemas({
     schema.formSchema,
     schema.otpSchema,
     schema.chatSchema,
+    schema.wordGuideSchema,
   ],
 });
 
