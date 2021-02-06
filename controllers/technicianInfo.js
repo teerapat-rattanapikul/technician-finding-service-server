@@ -1,6 +1,7 @@
 const technicianInfoModel = require("../models").technicianInformations;
 const userInfoModel = require("../models").userInfomations;
 const userModel = require("../models").users;
+const wordGuideModel = require("../models").words;
 const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
 const checkWorkActive = require("../helppers/checkWorkActive");
@@ -28,6 +29,13 @@ module.exports = {
           );
         });
         technicianInfo["status"] = true;
+        await wordGuideModel.findOneAndUpdate(
+          {
+            word: { $ne: INFORMATION.aptitude },
+          },
+          { $push: { word: INFORMATION.aptitude } },
+          { new: true }
+        );
         return technicianInfo;
       } else {
         return { status: false };
@@ -64,13 +72,16 @@ module.exports = {
         });
         console.log(INFORMATION);
         technicianInfo = await technicianInfoModel.create(INFORMATION);
-        await userInfoModel.updateOne(
+        const userInfo = await userInfoModel.findOneAndUpdate(
           { _id: req.userInfoID },
           {
             $set: {
               role: "technician",
               technicianInfoID: technicianInfo._id,
             },
+          },
+          {
+            new: true,
           }
         );
         await userModel.updateOne(
@@ -79,6 +90,22 @@ module.exports = {
         );
         afterCreate = true;
         technicianInfo["status"] = true;
+        await wordGuideModel.findOneAndUpdate(
+          {
+            word: { $ne: INFORMATION.aptitude },
+          },
+          {
+            $push: {
+              word: {
+                $each: [
+                  INFORMATION.aptitude,
+                  userInfo.firstname + " " + userInfo.lastname,
+                ],
+              },
+            },
+          },
+          { new: true }
+        );
         return technicianInfo;
       }
     } catch (error) {
