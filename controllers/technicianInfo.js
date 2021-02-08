@@ -30,10 +30,10 @@ module.exports = {
         });
         technicianInfo["status"] = true;
         const findSameWord = await wordGuideModel.findOne({
-          word: INFORMATION.aptitude,
+          word: INFORMATION.description,
         });
         if (findSameWord === null) {
-          await wordGuideModel.create({ word: INFORMATION.aptitude });
+          await wordGuideModel.create({ word: INFORMATION.description });
         }
         return technicianInfo;
       } else {
