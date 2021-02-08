@@ -29,13 +29,12 @@ module.exports = {
           );
         });
         technicianInfo["status"] = true;
-        await wordGuideModel.findOneAndUpdate(
-          {
-            word: { $ne: INFORMATION.aptitude },
-          },
-          { $push: { word: INFORMATION.aptitude } },
-          { new: true }
-        );
+        const findSameWord = await wordGuideModel.findOne({
+          word: INFORMATION.aptitude,
+        });
+        if (findSameWord === null) {
+          await wordGuideModel.create({ word: INFORMATION.aptitude });
+        }
         return technicianInfo;
       } else {
         return { status: false };
@@ -90,22 +89,16 @@ module.exports = {
         );
         afterCreate = true;
         technicianInfo["status"] = true;
-        await wordGuideModel.findOneAndUpdate(
-          {
-            word: { $ne: INFORMATION.aptitude },
-          },
-          {
-            $push: {
-              word: {
-                $each: [
-                  INFORMATION.aptitude,
-                  userInfo.firstname + " " + userInfo.lastname,
-                ],
-              },
-            },
-          },
-          { new: true }
-        );
+
+        await wordGuideModel.create({
+          word: userInfo.firstname + " " + userInfo.lastname,
+        });
+        const findSameWord = await wordGuideModel.findOne({
+          word: INFORMATION.description,
+        });
+        if (findSameWord === null) {
+          await wordGuideModel.create({ word: INFORMATION.description });
+        }
         return technicianInfo;
       }
     } catch (error) {
