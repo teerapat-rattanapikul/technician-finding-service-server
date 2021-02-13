@@ -113,41 +113,37 @@ module.exports = {
   },
   techAcceptForm: async ({ INFORMATION }, req) => {
     try {
-      if (req.role !== null && req.role !== undefined) {
-        const technician = await technicianInfoModel.findOne({
-          userID: INFORMATION.technician.tech,
-        });
+      const technician = await technicianInfoModel.findOne({
+        userID: INFORMATION.technician.tech,
+      });
 
-        const saveTech = await technicianController.saveWaitingForm({
-          formID: INFORMATION.formID,
-          userID: INFORMATION.technician.tech,
-        });
-        INFORMATION.technician.tech = technician._id;
-        INFORMATION.technician["location"] = {
-          lat: technician.address.lat,
-          lon: technician.address.lon,
-        };
-        var result = {};
-        if (saveTech) {
-          result = await formModel
-            .findOneAndUpdate(
-              { _id: INFORMATION.formID },
-              { $push: { technician: INFORMATION.technician } },
-              { new: true }
-            )
-            .populate({
-              path: "technician",
-              populate: {
-                path: "tech",
-                select: "userInfoID",
-                populate: { path: "userInfoID" },
-              },
-            });
-        }
-        return result;
-      } else {
-        return null;
+      const saveTech = await technicianController.saveWaitingForm({
+        formID: INFORMATION.formID,
+        userID: INFORMATION.technician.tech,
+      });
+      INFORMATION.technician.tech = technician._id;
+      INFORMATION.technician["location"] = {
+        lat: technician.address.lat,
+        lon: technician.address.lon,
+      };
+      var result = {};
+      if (saveTech) {
+        result = await formModel
+          .findOneAndUpdate(
+            { _id: INFORMATION.formID },
+            { $push: { technician: INFORMATION.technician } },
+            { new: true }
+          )
+          .populate({
+            path: "technician",
+            populate: {
+              path: "tech",
+              select: "userInfoID",
+              populate: { path: "userInfoID" },
+            },
+          });
       }
+      return result;
     } catch (error) {
       throw error;
     }

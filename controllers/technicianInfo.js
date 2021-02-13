@@ -179,29 +179,25 @@ module.exports = {
   },
   getNearTechnician: async ({ ADDRESS }, req) => {
     try {
-      if (req.role !== null && req.role !== undefined) {
-        ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
-        var area = 0.05;
-        var searchData = [];
-        while (searchData.length <= 2 && area < 4.0) {
-          searchData = await technicianInfoModel
-            .find({
-              "address.lat": {
-                $gte: ADDRESS.address.lat - area,
-                $lt: ADDRESS.address.lat + area,
-              },
-              "address.lon": {
-                $gte: ADDRESS.address.lon - area,
-                $lt: ADDRESS.address.lon + area,
-              },
-            })
-            .populate("userInfoID");
-          area += 0.05;
-        }
-        return { technician: searchData, status: true };
-      } else {
-        return { status: false };
+      ADDRESS = JSON.parse(JSON.stringify(ADDRESS));
+      var area = 0.05;
+      var searchData = [];
+      while (searchData.length <= 2 && area < 4.0) {
+        searchData = await technicianInfoModel
+          .find({
+            "address.lat": {
+              $gte: ADDRESS.address.lat - area,
+              $lt: ADDRESS.address.lat + area,
+            },
+            "address.lon": {
+              $gte: ADDRESS.address.lon - area,
+              $lt: ADDRESS.address.lon + area,
+            },
+          })
+          .populate("userInfoID");
+        area += 0.05;
       }
+      return { technician: searchData, status: true };
     } catch (error) {
       return { status: false };
     }
