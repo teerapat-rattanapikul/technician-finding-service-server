@@ -25,6 +25,7 @@ module.exports = buildSchema(`
         recentMessage:HISTORY,
         history: [HISTORY],
         status:Boolean
+        readStatus:Boolean
     }
 
     type HISTORY{
