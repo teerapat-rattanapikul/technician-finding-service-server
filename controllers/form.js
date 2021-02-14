@@ -165,15 +165,15 @@ module.exports = {
   },
   userAcceptForm: async (args, req) => {
     try {
-      if (req.role !== null && req.role !== undefined) {
-        const saveTech = await technicianController.saveAcceptForm({
-          formID: args.formID,
-          userID: args.technician.tech,
-        });
-        return true;
-      } else {
-        return false;
-      }
+      await technicianController.saveAcceptForm({
+        formID: args.formID,
+        userID: args.technician.tech,
+      });
+      await formModel.updateOne(
+        { _id: args.formID },
+        { $set: { active: false } }
+      );
+      return true;
     } catch (error) {
       throw error;
     }
