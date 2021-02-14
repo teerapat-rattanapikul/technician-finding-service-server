@@ -44,15 +44,11 @@ module.exports = {
     }
   },
   test: async () => {
-    const INFORMATION = {
-      formID: "600ed49c282ef60022d1c6d1",
-      technician: {
-        tech: "5ffed875c2aad77514888d92",
-        minPrice: 700,
-        maxPrice: 1000,
-      },
-    };
-    const result = await formController.techAcceptForm({ INFORMATION });
+    const result = await formController.userAcceptForm({
+      formID: "60190d33c9a673218e2d7859",
+      userID: "600890275aa3af18f0f3fe37",
+      techID: "5ffed8b7c2aad77514888d96",
+    });
     return true;
   },
 };

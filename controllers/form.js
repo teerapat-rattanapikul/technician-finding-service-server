@@ -148,14 +148,13 @@ module.exports = {
     }
   },
   userAcceptForm: async (args, req) => {
-    console.log("userAccepts: ", args);
     try {
       await technicianController.saveAcceptForm({
         formID: args.formID,
         userID: args.techID,
       });
       await userInfoModel.updateOne(
-        { _id: args.userID },
+        { userID: args.userID },
         {
           $push: { acceptForms: args.formID },
           $pull: { forms: { $in: args.formID } },
