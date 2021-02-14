@@ -66,8 +66,6 @@ module.exports = buildSchema(`
         amountOfvoteStar: Int
         amountOfcomment: Int
         voteID:[ID]
-        workDay:[Int]
-        workTime:WORKTIMEOUT
     }
     type TECHNICIANINFO{
         _id : ID
@@ -82,6 +80,8 @@ module.exports = buildSchema(`
         address:AddressOUT
         description: String
         userInfoID: USERINFO
+        workDay:[Int]
+        workTime:WORKTIMEOUT
         count: Int
     }
     type FORM{
