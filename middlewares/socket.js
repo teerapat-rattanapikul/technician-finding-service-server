@@ -1,10 +1,9 @@
 var clients = [];
 const formController = require("../controllers/form");
 const technicianController = require("../controllers/technicianInfo");
-const chatModel = require('../models').chats
+const chatModel = require("../models").chats;
 module.exports = (app, io, db) => {
-
-    //-------------------- START AUTHENTICATION ----------------------------------
+  //-------------------- START AUTHENTICATION ----------------------------------
 
   io.on("connection", function (socket) {
     console.log(`${socket.id} connected`);
@@ -38,45 +37,45 @@ module.exports = (app, io, db) => {
 
     //-------------------- END AUTHENTICATION ----------------------------------
 
-
     //-------------------- START CHAT ----------------------------------
 
     socket.on("send_message", function (data) {
-      chatModel.updateOne(
-        {
-          $or: [
-            {
-              userID: data.message.sender,
-              technicianID: data.receiver,
-            },
-            {
-              userID: data.receiver,
-              technicianID: data.message.sender,
-            },
-          ],
-        },
-        {
-          $set: { recentMessage: data.message, readStatus: false },
-          $push: { history: data.message },
-        }
-      ).then( () => {
-        if (clients[data.receiver] !== undefined) {
-  
-          socket.to(clients[data.receiver].sid).emit("receive_message", {
-            message : {
-              ...data.message
-            }
-          });
-        } else {
-          console.log("not available");
-        }
-      }).catch( () => {
-          console.log('cannot send message');
-      })
+      chatModel
+        .updateOne(
+          {
+            $or: [
+              {
+                userID: data.message.sender,
+                technicianID: data.receiver,
+              },
+              {
+                userID: data.receiver,
+                technicianID: data.message.sender,
+              },
+            ],
+          },
+          {
+            $set: { recentMessage: data.message, readStatus: false },
+            $push: { history: data.message },
+          }
+        )
+        .then(() => {
+          if (clients[data.receiver] !== undefined) {
+            socket.to(clients[data.receiver].sid).emit("receive_message", {
+              message: {
+                ...data.message,
+              },
+            });
+          } else {
+            console.log("not available");
+          }
+        })
+        .catch(() => {
+          console.log("cannot send message");
+        });
     });
 
     //-------------------- END CHAT ----------------------------------
-
 
     //-------------------- START POST REQUEST ----------------------------------
     socket.on("send_post_req", async function (data) {
@@ -95,7 +94,9 @@ module.exports = (app, io, db) => {
       socket.emit("update_user_response", { form });
       tech.technician.map((item) => {
         if (clients[item.userID] !== undefined) {
-          socket.to(clients[item.userID].sid).emit("update_tech_order", { form });
+          socket
+            .to(clients[item.userID].sid)
+            .emit("update_tech_order", { form });
         }
       });
       // socket
@@ -108,28 +109,27 @@ module.exports = (app, io, db) => {
       const INFORMATION = data;
       const result = await formController.techAcceptForm({ INFORMATION });
       console.log("result", result);
-      socket.emit('update_tech_order')
+      socket.emit("update_tech_order");
       if (clients[result.senderID] !== undefined) {
-        socket.to(clients[result.senderID].sid).emit("update_user_response", result);
+        socket
+          .to(clients[result.senderID].sid)
+          .emit("update_user_response", result);
       }
     });
 
-    socket.on('cancel_request' , ({formID}) => {
-      formController.deleteForm({formID})
-      .then(res => {
+    socket.on("cancel_request", ({ formID }) => {
+      formController.deleteForm({ formID }).then((res) => {
         console.log(`cancel form ${formID} ${res}`);
-        socket.emit('update_user_response' , { status : res})
-      })
-    })
+        socket.emit("update_user_response", { status: res });
+      });
+    });
 
-    socket.on('confirm_technician' , ({formID , userID}) => {
-      console.log(formID , userID);
-      formController.userAcceptForm({formID , userID})
-      socket.emit('update_user_response')
-    })
+    socket.on("confirm_technician", async ({ formID, userID, techID }) => {
+      console.log(formID, userID, techID);
+      await formController.userAcceptForm({ formID, userID, techID });
+      socket.emit("update_user_response");
+    });
 
     //-------------------- END POST REQUEST ----------------------------------
-
-
   });
 };
