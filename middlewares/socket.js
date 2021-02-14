@@ -104,7 +104,7 @@ module.exports = (app, io, db) => {
     });
 
     socket.on("accepted_req", async (data) => {
-      console.log("data", data);
+      // console.log("data", data);
       const INFORMATION = data;
       const result = await formController.techAcceptForm({ INFORMATION });
       console.log("result", result);
@@ -120,6 +120,12 @@ module.exports = (app, io, db) => {
         console.log(`cancel form ${formID} ${res}`);
         socket.emit('update_user_response' , { status : res})
       })
+    })
+
+    socket.on('confirm_technician' , ({formID , userID}) => {
+      console.log(formID , userID);
+      formController.userAcceptForm({formID , userID})
+      socket.emit('update_user_response')
     })
 
     //-------------------- END POST REQUEST ----------------------------------
