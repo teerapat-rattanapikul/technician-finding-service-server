@@ -167,7 +167,7 @@ module.exports = {
     try {
       await technicianController.saveAcceptForm({
         formID: args.formID,
-        userID: args.technician.tech,
+        userID: args.userID,
       });
       await formModel.updateOne(
         { _id: args.formID },
