@@ -21,7 +21,15 @@ module.exports = {
                 path: "technician.tech",
                 populate: { path: "userInfoID" },
               },
+            })
+            .populate({
+              path: "acceptForms",
+              populate: {
+                path: "technician.tech",
+                populate: { path: "userInfoID" },
+              },
             });
+          console.log(userInfo);
           const returnObject = {
             userID: USER._id,
             username: USER.username,
@@ -36,6 +44,7 @@ module.exports = {
           };
           const token = genJWT(returnObject);
           returnObject["forms"] = userInfo.forms;
+          returnObject["acceptForms"] = userInfo.acceptForms;
           returnObject["token"] = token;
           returnObject["status"] = true;
           return returnObject;
@@ -140,12 +149,22 @@ module.exports = {
             .findOne({
               _id: req.technicianInfoID,
             })
-            .populate({
-              path: "newForm",
-              populate: {
-                path: "userInfoID",
+            .populate(
+              {
+                path: "forms",
+                populate: {
+                  path: "technician.tech",
+                  populate: { path: "userInfoID" },
+                },
               },
-            })
+              {
+                path: "acceptForms",
+                populate: {
+                  path: "technician.tech",
+                  populate: { path: "userInfoID" },
+                },
+              }
+            )
             .populate("userInfoID");
           result["technicianInfoID"] = technicianData;
         }

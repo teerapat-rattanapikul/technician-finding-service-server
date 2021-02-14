@@ -44,8 +44,6 @@ module.exports = buildSchema(`
         amountOfvoteStar: Int
         amountOfcomment: Int
         voteID:[ID]
-        workDay:[Int]
-        workTime:WORKTIMEOUT
     }
     type LOCATIONOUT{
         lat:Float
@@ -77,6 +75,8 @@ module.exports = buildSchema(`
         description: String
         userInfoID: USERINFO
         count: Int
+        workDay:[Int]
+        workTime:WORKTIMEOUT
     }
     type FORMNOTIC{
         tech:TECHNICIANINFO
@@ -98,6 +98,7 @@ module.exports = buildSchema(`
         technicianInfoID:TECHNICIANINFO
         chatHistry: [ID]
         forms:[FORM]
+        acceptForms:[FORM]
     }
     
     input USERLOGIN{
