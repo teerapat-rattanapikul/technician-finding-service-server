@@ -29,7 +29,6 @@ module.exports = {
                 populate: { path: "userInfoID" },
               },
             });
-          console.log(userInfo);
           const returnObject = {
             userID: USER._id,
             username: USER.username,
@@ -140,33 +139,39 @@ module.exports = {
               path: "technician.tech",
               populate: { path: "userInfoID" },
             },
+          })
+          .populate({
+            path: "acceptForms",
+            populate: {
+              path: "technician.tech",
+              populate: { path: "userInfoID" },
+            },
           });
 
-        console.log(userInfo);
         result["forms"] = userInfo.forms;
+        result["acceptForms"] = userInfo.acceptForms;
         if (req.role === "technician") {
           const technicianData = await technicianInfoModel
             .findOne({
               _id: req.technicianInfoID,
             })
-            .populate(
-              {
-                path: "forms",
-                populate: {
-                  path: "technician.tech",
-                  populate: { path: "userInfoID" },
-                },
+            .populate({
+              path: "forms",
+              populate: {
+                path: "technician.tech",
+                populate: { path: "userInfoID" },
               },
-              {
-                path: "acceptForms",
-                populate: {
-                  path: "technician.tech",
-                  populate: { path: "userInfoID" },
-                },
-              }
-            )
+            })
+            .populate({
+              path: "acceptForms",
+              populate: {
+                path: "technician.tech",
+                populate: { path: "userInfoID" },
+              },
+            })
             .populate("userInfoID");
           result["technicianInfoID"] = technicianData;
+          console.log(result);
         }
         return result;
       } else {
