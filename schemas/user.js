@@ -98,6 +98,7 @@ module.exports = buildSchema(`
         technicianInfoID:TECHNICIANINFO
         chatHistry: [ID]
         forms:[FORM]
+        acceptForms:[FORM]
     }
     
     input USERLOGIN{

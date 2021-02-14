@@ -167,11 +167,14 @@ module.exports = {
     try {
       await technicianController.saveAcceptForm({
         formID: args.formID,
-        userID: args.userID,
+        userID: args.techID,
       });
-      await formModel.updateOne(
-        { _id: args.formID },
-        { $set: { active: false } }
+      await userInfoModel.updateOne(
+        { _id: args.userID },
+        {
+          $push: { acceptForms: args.formID },
+          $pull: { forms: { $in: args.formID } },
+        }
       );
       return true;
     } catch (error) {

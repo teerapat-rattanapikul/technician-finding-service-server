@@ -22,6 +22,13 @@ const userInfoSchema = new mongoose.Schema({
       require: true,
     },
   ],
+  acceptForms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "forms",
+      require: true,
+    },
+  ],
   role: String,
   chatHistry: [
     {

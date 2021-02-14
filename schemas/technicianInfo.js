@@ -62,6 +62,8 @@ module.exports = buildSchema(`
         userInfoID: USERINFO
         count: Int
         status:Boolean
+        workDay:[Int]
+        workTime:WORKTIMEOUT
     }
     type TIMEOUT{
         hour:Int
@@ -78,8 +80,6 @@ module.exports = buildSchema(`
         amountOfvoteStar: Int
         amountOfcomment: Int
         voteID:[ID]
-        workDay:[Int]
-        workTime:WORKTIMEOUT
     }
 
     type SEARCHOUTPUT{

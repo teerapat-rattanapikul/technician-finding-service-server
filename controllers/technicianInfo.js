@@ -137,7 +137,7 @@ module.exports = {
           })
           .populate("userInfoID");
         TECHNICIANINFO["status"] = true;
-
+        console.log(TECHNICIANINFO.aptitude[0].workDay);
         return TECHNICIANINFO;
       } else {
         return { status: false };
