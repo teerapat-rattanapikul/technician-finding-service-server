@@ -1,4 +1,5 @@
 const formModel = require("../models").forms;
+
 const userInfoModel = require("../models").userInfomations;
 const technicianInfoModel = require("../models").technicianInformations;
 const technicianController = require("../controllers/technicianInfo");
@@ -7,7 +8,6 @@ const technicianController = require("../controllers/technicianInfo");
 module.exports = {
   addForm: async ({ INFORMATION }) => {
     try {
-      INFORMATION["active"] = true;
       INFORMATION["technician"] = [];
       var information = {};
       const userInfo = await userInfoModel.findOne({
@@ -34,27 +34,11 @@ module.exports = {
       if (req.role !== null && req.role !== undefined) {
         const form = await formModel.findOne({
           _id: args.formID,
-          active: true,
         });
         return form;
       }
     } catch (error) {
       return error;
-    }
-  },
-  formActiveFalse: async (args, req) => {
-    try {
-      if (req.role !== null && req.role !== undefined) {
-        await formModel.updateOne(
-          {
-            _id: args.formID,
-          },
-          { $set: { active: false } }
-        );
-        return true;
-      }
-    } catch (error) {
-      return false;
     }
   },
   deleteForm: async (args) => {
