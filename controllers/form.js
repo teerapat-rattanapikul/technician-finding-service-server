@@ -148,6 +148,7 @@ module.exports = {
     }
   },
   userAcceptForm: async (args, req) => {
+    console.log("userAccepts: ", args);
     try {
       await technicianController.saveAcceptForm({
         formID: args.formID,
