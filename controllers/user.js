@@ -89,6 +89,7 @@ module.exports = {
         notification: [],
         chatHistry: [],
         forms: [],
+        acceptForms: [],
       });
       // link user_information from user
       await userModel.updateOne(
@@ -156,20 +157,13 @@ module.exports = {
               _id: req.technicianInfoID,
             })
             .populate({
-              path: "forms",
-              populate: {
-                path: "technician.tech",
-                populate: { path: "userInfoID" },
-              },
+              path: "newForm",
+              populate: "userInfoID",
             })
             .populate({
-              path: "acceptForms",
-              populate: {
-                path: "technician.tech",
-                populate: { path: "userInfoID" },
-              },
-            })
-            .populate("userInfoID");
+              path: "acceptForm",
+              populate: "userInfoID",
+            });
           result["technicianInfoID"] = technicianData;
           console.log(result);
         }
