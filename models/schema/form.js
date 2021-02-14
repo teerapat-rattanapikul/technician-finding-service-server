@@ -11,7 +11,6 @@ const formSchema = new mongoose.Schema({
   image: [String],
   date: String,
   techType: String,
-  active: Boolean,
   location: {
     lat: Number,
     lon: Number,
