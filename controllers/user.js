@@ -76,7 +76,7 @@ module.exports = {
     var USER = {};
     try {
       //add username and password
-      if (REGISTER.facebookID !== undefined) {
+      if (REGISTER.username.includes("fb?")) {
         const hashFbID = bcrypt.hashSync(REGISTER.facebookID, salt);
         USER = await userModel.create({
           username: hashFbID,
@@ -193,7 +193,7 @@ module.exports = {
   facebookLogin: async (args) => {
     try {
       const userCheck = await fblinkModel.findOne({
-        facebookID: args.facebookID,
+        facebookID: "fb?" + args.facebookID,
       });
       if (userCheck === null) {
         return { status: false };
