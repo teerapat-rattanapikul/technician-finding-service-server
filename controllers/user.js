@@ -77,13 +77,13 @@ module.exports = {
     try {
       //add username and password
       if (REGISTER.username.includes("fb?")) {
-        const hashFbID = bcrypt.hashSync(REGISTER.facebookID, salt);
+        const hashFbID = bcrypt.hashSync(REGISTER.username, salt);
         USER = await userModel.create({
-          username: hashFbID,
+          username: REGISTER.username,
           password: hashFbID,
         });
         await fblinkModel.create({
-          facebookID: REGISTER.facebookID,
+          facebookID: REGISTER.username,
           userID: USER._id,
         });
       } else {

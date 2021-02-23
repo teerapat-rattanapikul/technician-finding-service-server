@@ -109,7 +109,6 @@ module.exports = buildSchema(`
 
     
     input USERREGISTER{
-        facebookID:String
         username: String
         password: String
         firstname: String
