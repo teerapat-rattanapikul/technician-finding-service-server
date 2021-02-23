@@ -72,11 +72,10 @@ module.exports = {
   },
   register: async ({ REGISTER }) => {
     REGISTER = JSON.parse(JSON.stringify(REGISTER));
-    console.log(REGISTER);
     var USER = {};
     try {
       //add username and password
-      if (REGISTER.username.includes("fb?")) {
+      if (REGISTER.username.substring(0, 3).includes("fb?")) {
         const hashFbID = bcrypt.hashSync(REGISTER.username, salt);
         USER = await userModel.create({
           username: REGISTER.username,
