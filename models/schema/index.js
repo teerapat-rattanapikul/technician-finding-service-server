@@ -4,6 +4,7 @@ const technicianInfoSchema = require("./technicianInfo");
 const formSchema = require("./form");
 const chatSchema = require("./chat");
 const wordGuideSchema = require("./wordGuide");
+const facebookLinkSchema = require("./facebookLink");
 module.exports = {
   userSchema,
   userInfoSchema,
@@ -11,4 +12,5 @@ module.exports = {
   formSchema,
   chatSchema,
   wordGuideSchema,
+  facebookLinkSchema,
 };

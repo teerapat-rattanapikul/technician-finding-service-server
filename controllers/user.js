@@ -1,6 +1,7 @@
 const userModel = require("../models").users;
 const userInfoModel = require("../models").userInfomations;
 const technicianInfoModel = require("../models").technicianInformations;
+const fblinkModel = require("../models").fbLink;
 var bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
 const genJWT = require("../services/genJWT");
@@ -71,13 +72,27 @@ module.exports = {
   },
   register: async ({ REGISTER }) => {
     REGISTER = JSON.parse(JSON.stringify(REGISTER));
+    console.log(REGISTER);
+    var USER = {};
     try {
       //add username and password
-      REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
-      const USER = await userModel.create({
-        username: REGISTER.username,
-        password: REGISTER.password,
-      });
+      if (REGISTER.facebookID !== undefined) {
+        const hashFbID = bcrypt.hashSync(REGISTER.facebookID, salt);
+        USER = await userModel.create({
+          username: hashFbID,
+          password: hashFbID,
+        });
+        await fblinkModel.create({
+          facebookID: REGISTER.facebookID,
+          userID: USER._id,
+        });
+      } else {
+        REGISTER.password = bcrypt.hashSync(REGISTER.password, salt);
+        USER = await userModel.create({
+          username: REGISTER.username,
+          password: REGISTER.password,
+        });
+      }
       // add user_information and link user from sser_information
       const userInfo = await userInfoModel.create({
         firstname: REGISTER.firstname,
@@ -173,6 +188,54 @@ module.exports = {
       }
     } catch (error) {
       return error;
+    }
+  },
+  facebookLogin: async (args) => {
+    try {
+      const userCheck = await fblinkModel.findOne({
+        facebookID: args.facebookID,
+      });
+      if (userCheck === null) {
+        return { status: false };
+      } else {
+        const userInfo = await userInfoModel
+          .findOne({ userID: userCheck.userID })
+          .populate({
+            path: "forms",
+            populate: {
+              path: "technician.tech",
+              populate: { path: "userInfoID" },
+            },
+          })
+          .populate({
+            path: "acceptForms",
+            populate: {
+              path: "technician.tech",
+              populate: { path: "userInfoID" },
+            },
+          });
+
+        const returnObject = {
+          userID: userCheck.userID,
+          username: "",
+          userInfoID: userInfo._id,
+          firstname: userInfo.firstname,
+          lastname: userInfo.lastname,
+          role: userInfo.role,
+          phone: userInfo.phone,
+          technicianInfoID: userInfo.technicianInfoID,
+          chatHistry: userInfo.chatHistry,
+          avatar: userInfo.avatar,
+        };
+        const token = genJWT(returnObject);
+        returnObject["forms"] = userInfo.forms;
+        returnObject["acceptForms"] = userInfo.acceptForms;
+        returnObject["token"] = token;
+        returnObject["status"] = true;
+        return returnObject;
+      }
+    } catch (error) {
+      throw error;
     }
   },
 };

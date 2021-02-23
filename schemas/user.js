@@ -6,8 +6,9 @@ module.exports = buildSchema(`
     }
 
     type Mutation{
-        register(REGISTER:UESRREGISTER):TOKEN    
+        register(REGISTER:USERREGISTER):TOKEN    
         login(LOGIN:USERLOGIN):TOKEN
+        facebookLogin(facebookID:ID):TOKEN
     }
     type USER{
         username: String,
@@ -107,7 +108,8 @@ module.exports = buildSchema(`
     }
 
     
-    input UESRREGISTER{
+    input USERREGISTER{
+        facebookID:String
         username: String
         password: String
         firstname: String
