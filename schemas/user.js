@@ -3,12 +3,12 @@ module.exports = buildSchema(`
     type Query{
         usernameCheck(username:String):Boolean
         tokenCheck:TOKEN
+        login(LOGIN:USERLOGIN):TOKEN
+        facebookLogin(facebookID:ID):TOKEN
     }
 
     type Mutation{
         register(REGISTER:USERREGISTER):TOKEN    
-        login(LOGIN:USERLOGIN):TOKEN
-        facebookLogin(facebookID:ID):TOKEN
     }
     type USER{
         username: String,
