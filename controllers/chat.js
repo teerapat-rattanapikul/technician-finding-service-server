@@ -54,12 +54,18 @@ module.exports = {
   getChatInformation: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        const chatInformation = await chatModel.findOne({
-          $or: [
-            { technicianID: args.technicianID, userID: args.userID },
-            { userID: args.technicianID, technicianID: args.userID },
-          ],
-        });
+        const chatInformation = await chatModel.findOneAndUpdate(
+          {
+            $or: [
+              { technicianID: args.technicianID, userID: args.userID },
+              { userID: args.technicianID, technicianID: args.userID },
+            ],
+          },
+          {
+            $set: { readStatus: true },
+          },
+          { new: true }
+        );
         chatInformation["status"] = true;
         return chatInformation;
       }
@@ -70,9 +76,15 @@ module.exports = {
   getChatInformationByID: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        const chatInformation = await chatModel.findOne({
-          _id: args.chatID,
-        });
+        const chatInformation = await chatModel.findOneAndUpdate(
+          {
+            _id: args.chatID,
+          },
+          {
+            $set: { readStatus: true },
+          },
+          { new: true }
+        );
         chatInformation["status"] = true;
         return chatInformation;
       }
