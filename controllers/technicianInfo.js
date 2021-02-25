@@ -29,9 +29,13 @@ module.exports = {
           );
         });
         technicianInfo["status"] = true;
-        const findSameWord = await wordGuideModel.findOne({
+        var findSameWord = await wordGuideModel.findOne({
           word: INFORMATION.description,
         });
+        findSameWord = await wordGuideModel.findOne({ word: INFORMATION.bio });
+        if (findSameWord === null) {
+          await wordGuideModel.create({ word: INFORMATION.bio });
+        }
         if (findSameWord === null) {
           await wordGuideModel.create({ word: INFORMATION.description });
         }
@@ -93,11 +97,16 @@ module.exports = {
         await wordGuideModel.create({
           word: userInfo.firstname + " " + userInfo.lastname,
         });
-        const findSameWord = await wordGuideModel.findOne({
+        var findSameWord = await wordGuideModel.findOne({
           word: INFORMATION.description,
         });
+        console.log("findword: ", findSameWord);
         if (findSameWord === null) {
           await wordGuideModel.create({ word: INFORMATION.description });
+        }
+        findSameWord = await wordGuideModel.findOne({ word: INFORMATION.bio });
+        if (findSameWord === null) {
+          await wordGuideModel.create({ word: INFORMATION.bio });
         }
         return technicianInfo;
       }

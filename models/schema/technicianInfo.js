@@ -43,11 +43,13 @@ const technicianInfoSchema = new mongoose.Schema({
     },
   ],
   onSite: Boolean,
+  frontStore: Boolean,
   address: {
     lat: Number,
     lon: Number,
   },
   description: String,
+  bio: String,
   count: Number,
   star: Number,
   amount: Number,
@@ -72,5 +74,6 @@ const technicianInfoSchema = new mongoose.Schema({
 technicianInfoSchema.index({
   "aptitude.aptitude": "text",
   description: "text",
+  bio: "text",
 });
 module.exports = technicianInfoSchema;

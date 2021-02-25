@@ -51,6 +51,7 @@ module.exports = buildSchema(`
         _id : ID
         userID:ID
         aptitude: [TECHNICIANVALUE]
+        frontStore:Boolean
         onSite: Boolean
         comment:[COMMENT]
         acceptForm:[FORM]
@@ -59,6 +60,7 @@ module.exports = buildSchema(`
         amount:Int
         address:AddressOUT
         description: String
+        bio:String
         userInfoID: USERINFO
         count: Int
         status:Boolean
@@ -106,14 +108,18 @@ module.exports = buildSchema(`
     input TECHNICIANINFOINPUT{
         aptitude: [String]
         workTime:WORKTIMEIN
+        frontStore:Boolean!
         onSite: Boolean!
         address:AddressIN
         description: String
+        bio: String
     }
     input TECHNICIANUPDATE{
         technicianID:ID!
+        frontStore:Boolean!
         onSite: Boolean!
         description: String
+        bio:String
         address:AddressIN
     }
 

@@ -59,6 +59,7 @@ module.exports = buildSchema(`
         _id : ID
         userID:ID
         aptitude: [TECHNICIANVALUE]
+        frontStore:Boolean
         onSite: Boolean
         comment:[COMMENT]
         acceptForm:[FORM]
@@ -67,10 +68,12 @@ module.exports = buildSchema(`
         amount:Int
         address:AddressOUT
         description: String
+        bio:String
         userInfoID: USERINFO
+        count: Int
+        status:Boolean
         workDay:[Int]
         workTime:WORKTIMEOUT
-        count: Int
     }
     type AddressOUT{
         lat:Float
