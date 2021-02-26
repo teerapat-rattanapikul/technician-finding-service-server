@@ -10,7 +10,7 @@ module.exports = buildSchema(`
     }
 
     type Mutation{
-        insertTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
+        insertTechnicianInfo(aptitude: [String]): TECHNICIANINFO
         createTechnicianInfo(INFORMATION:TECHNICIANINFOINPUT): TECHNICIANINFO
         updateTechnicianInfo(INFORMATION:TECHNICIANUPDATE): TECHNICIANINFO  
         userVote(userID:ID,aptitude:String,voteStar:Int):TECHNICIANINFO
@@ -116,7 +116,6 @@ module.exports = buildSchema(`
         bio: String
     }
     input TECHNICIANUPDATE{
-        technicianID:ID!
         frontStore:Boolean!
         onSite: Boolean!
         description: String
