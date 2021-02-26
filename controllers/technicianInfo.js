@@ -6,39 +6,27 @@ const vote = require("../helppers/vote");
 const sortTechnician = require("../helppers/sortTechnician");
 const checkWorkActive = require("../helppers/checkWorkActive");
 module.exports = {
-  insertTechnicianInfo: async ({ INFORMATION }, req) => {
+  insertTechnicianInfo: async (args, req) => {
     try {
       if (req.role !== null && req.role !== undefined) {
-        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
         var value = {};
         var technicianInfo = {};
-        const loop = INFORMATION.aptitude;
+        const loop = args.aptitude;
         value["amountOfvoteStar"] = 0;
         value["amountOfcomment"] = 0;
         value["star"] = 0;
         value["voteID"] = [];
-        value["workTime"] = INFORMATION.workTime;
         loop.forEach(async (APTITUDE) => {
           value["aptitude"] = APTITUDE;
-          INFORMATION.aptitude = [value];
+          args.aptitude = [value];
           technicianInfo = await technicianInfoModel.updateOne(
             {
               userInfoID: req.userInfoID,
             },
-            { $push: { aptitude: INFORMATION.aptitude } }
+            { $push: { aptitude: args.aptitude } }
           );
         });
         technicianInfo["status"] = true;
-        var findSameWord = await wordGuideModel.findOne({
-          word: INFORMATION.description,
-        });
-        findSameWord = await wordGuideModel.findOne({ word: INFORMATION.bio });
-        if (findSameWord === null) {
-          await wordGuideModel.create({ word: INFORMATION.bio });
-        }
-        if (findSameWord === null) {
-          await wordGuideModel.create({ word: INFORMATION.description });
-        }
         return technicianInfo;
       } else {
         return { status: false };
@@ -115,12 +103,12 @@ module.exports = {
   },
   updateTechnicianInfo: async ({ INFORMATION }, req) => {
     try {
-      if (req.role === "technician") {
-        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+      INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+      const userInfo = await userInfoModel.findOne({ userID: req.userID });
+      if (userInfo.role === "technician") {
         const updateInformation = await technicianInfoModel.findOneAndUpdate(
           {
-            userInfoID: req.userInfoID,
-            _id: INFORMATION.technicianID,
+            userID: req.userID,
           },
           {
             $set: INFORMATION,
