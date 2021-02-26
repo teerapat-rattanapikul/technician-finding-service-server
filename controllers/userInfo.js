@@ -1,26 +1,27 @@
-const { buildSchema, GraphQLObjectType, GraphQLFloat } = require("graphql");
 const userInfoModel = require("../models").userInfomations;
-const userModel = require("../models").users;
-
 module.exports = {
-  insertInformation: async ({ INFORMATION }) => {
-    INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+  getInformation: async (args, req) => {
     try {
-      const information = await userInfoModel.create(INFORMATION);
-      console.log(information);
-      await userModel.updateOne(
-        { _id: INFORMATION.userID },
-        { $set: { userInfoID: information._id } }
-      );
-      return information;
+      console.log(req.userID);
+      if (req.role !== null && req.role !== undefined) {
+        const result = await userInfoModel
+          .findOne({ _id: req.userInfoID })
+          .populate("forms");
+        console.log(result);
+        return result;
+      }
     } catch (error) {
       throw error;
     }
   },
-  getInformation: async (args, req) => {
+  getUserInfo: async (args, req) => {
     try {
-      const result = await userInfoModel.findById({ _id: req.userInfo });
-      return result;
+      if (req.role !== null && req.role !== undefined) {
+        const result = await userInfoModel.findOne({
+          userID: args.userID,
+        });
+        return result;
+      }
     } catch (error) {
       throw error;
     }
@@ -34,16 +35,18 @@ module.exports = {
     }
   },
   updateInformation: async ({ INFORMATION }, req) => {
-    INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
     try {
-      const updateInformation = await userInfoModel.findOneAndUpdate(
-        {
-          userID: req.userID,
-        },
-        { $set: INFORMATION },
-        { new: true }
-      );
-      return updateInformation;
+      if (req.role !== null && req.role !== undefined) {
+        INFORMATION = JSON.parse(JSON.stringify(INFORMATION));
+        const updateInformation = await userInfoModel.findOneAndUpdate(
+          {
+            userID: req.userID,
+          },
+          { $set: INFORMATION },
+          { new: true }
+        );
+        return updateInformation;
+      }
     } catch (error) {
       throw error;
     }

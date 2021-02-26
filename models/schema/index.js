@@ -1,15 +1,16 @@
 const userSchema = require("./user");
 const userInfoSchema = require("./userInfo");
-const technicianSchema = require("./technicianInfo");
-const otpSchema = require("./otp");
+const technicianInfoSchema = require("./technicianInfo");
 const formSchema = require("./form");
-const imageSchema = require("./image");
-
+const chatSchema = require("./chat");
+const wordGuideSchema = require("./wordGuide");
+const facebookLinkSchema = require("./facebookLink");
 module.exports = {
   userSchema,
   userInfoSchema,
-  technicianSchema,
-  otpSchema,
+  technicianInfoSchema,
   formSchema,
-  imageSchema,
+  chatSchema,
+  wordGuideSchema,
+  facebookLinkSchema,
 };
