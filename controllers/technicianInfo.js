@@ -69,7 +69,6 @@ module.exports = {
             star: 0,
             aptitude: APTITUDE,
             voteID: [],
-            workTime: INFORMATION.workTime,
           };
           INFORMATION.aptitude.push(value);
         });

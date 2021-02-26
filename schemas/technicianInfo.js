@@ -108,6 +108,7 @@ module.exports = buildSchema(`
     input TECHNICIANINFOINPUT{
         aptitude: [String]
         workTime:WORKTIMEIN
+        workDay : [Int]
         frontStore:Boolean!
         onSite: Boolean!
         address:AddressIN
